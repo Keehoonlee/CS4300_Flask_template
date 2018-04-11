@@ -1,6 +1,7 @@
 from . import *
 from app.irsystem.models.helpers import *
 from app.irsystem.models.helpers import NumpyEncoder as NumpyEncoder
+from app.irsystem.models import sentiment_analysis
 
 project_name = "Foodies : The Food Hunters of NYC"
 net_id = "Jae Min Cha : jc988, Woo Kyung Lee : wl357, Jung Yun Park : jp862, Kee Hoon Lee : kl546"
