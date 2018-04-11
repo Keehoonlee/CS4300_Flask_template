@@ -13,7 +13,7 @@ def compute_sentiment_intensity(text):
     Positive scores = positive sentiment
     0               = neutral sentiment
 
-    text: string"""
+    text: string """
 
     analyzer = SentimentIntensityAnalyzer()
 
