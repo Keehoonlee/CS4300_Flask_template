@@ -46,11 +46,10 @@ def compare_timelimit_timeposted(time_limit, time_posted):
 
 #######################################FILTERING REVIEWS############################################
 def filter_reviews(j, neighborhood, credibility, time_limit):
-	"""Filter the reviews that match with user inputs.
+    """Filter the reviews that match with user inputs.
     ***ASSUMES THAT JSON OBJECT HAS SAME TYPE AS THE INPUTS***
 
     Returns a list of reviews"""
-
     filtered_out_reviews = []
 
     #Checking if the user has inputted correct neighborhood in the city file of [j]
@@ -132,7 +131,7 @@ def filter_category(category_lst):
               "scandinavian", "scottish", "seafood", "singaporean", "soup", "southern", "syrian", "taiwanese", "vietnamese"]
 
     categories = [african, american, dessert, central_american, east_european, asian_fusion, brunch_diners, british, cafes, \
-                  caribbean, chinese, fast_food, french, italian, japanese, latin_american, mediterranean, mexican, middle_eastern \
+                  caribbean, chinese, fast_food, french, italian, japanese, latin_american, mediterranean, mexican, middle_eastern, \
                   sandwiches, spanish, steakhouses, tapas, thai, vegan, others]
     category_names = ["african", "american", "dessert", "central american", "east european", "asian fusion", "brunch/diners", "british", \
                       "cafes", "caribbean", "chinese", "fast food", "french", "italian", "japanese", "latin american", "mediterranean", \
