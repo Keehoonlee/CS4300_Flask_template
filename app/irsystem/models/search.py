@@ -5,7 +5,6 @@ from datetime import datetime
 
 
 ##########################################HELPERS#################################################
-CATEGORIES = []
 DEFAULT = 0
 
 def load_json(cityname):
@@ -45,14 +44,6 @@ def compare_timelimit_timeposted(time_limit, time_posted):
     else:
         return False
 
-def convert_zipcode_to_neighborhood(cityname,neighborhood):
-    """Checks if [neighborhood] is zipcode (int) or neighborhood (string).
-    If zipcode, converts the user's input zipcode to appropriate matching neighborhood"""
-    try:
-        zipcode = int(neighborhood)
-    if cityname == "Pittsburgh":
-
-
 #######################################FILTERING REVIEWS############################################
 def filter_reviews(j, neighborhood, credibility, time_limit):
 	"""Filter the reviews that match with user inputs.
@@ -62,11 +53,12 @@ def filter_reviews(j, neighborhood, credibility, time_limit):
 
     filtered_out_reviews = []
 
-    #Checking if the user has inputted zipcode or neighborhood
-    neighborhood = convert_zipcode_to_neighborhood(neighborhood)
+    #Checking if the user has inputted correct neighborhood in the city file of [j]
+    #neighborhood = convert_zipcode_to_neighborhood(neighborhood)
 
     for review in j["reviews"]:
-        if (review["business"]["neighborhood"] == neighborhood):
+        if (review["business"]["neighborhood"].lower() == neighborhood.lower()):
+            #credibility = DEFAULT if credibility == 0 else 1
             #cond1 = ((credibility != DEFAULT) and (review["elite_years"]["year"] >= credibility)) or (credibility == DEFAULT)
             #NEEDS TO HAVE A FUNCTION THAT COMPARES THIS TWO
             cond2 = ((time_limit != DEFAULT) and (compare_timelimit_timeposted(time_limit, review["date"]))) or (time_limit == DEFAULT)
@@ -105,11 +97,58 @@ def filter_neg_reviews(reviews):
 
 ###############################COMPUTING PERCENTAGES OF EACH category##################################
 def filter_category(category_lst):
-    """Returns a list of categories that are accepted as defined above"""
+    """Returns a list of categories of a restaurant that are accepted"""
+
+    african = ["african", "senegalese", "south african"]
+    american = ["american (new)", "american (traditional)", "chicken wings", "soul food", "comfort food"]
+    dessert = ["creperies", "waffles"]
+    central_american = ["honduran", "nicaraguan"]
+    east_european = ["hungarian", "polish", "russian", "ukrainian", "slovakian", "german", "bulgarian"]
+    asian_fusion = ["asian fusion", "pan asian"]
+    brunch_diners = ["breakfast & brunch", "diners"]
+    british = ["british", "fish & chips"]
+    cafes = ["cafes", "themed cafes", "cafeteria", "hong kong style cafe"]
+    caribbean = ["caribbean", "dominican", "haitian", "puerto rican", "trinidadian"]
+    chinese = ["chinese", "dim sum", "hot pot", "cantonese", "hainan", "shanghainese", "szechuan"]
+    fast_food = ["hot dogs", "food stands", "burgers", "pizza"]
+    french = ["french", "mauritius", "reunion"]
+    italian = ["italian", "calabrian", "sardinian", "sicilian", "tuscan"]
+    japanese = ["japanese", "sushi bars", "izakaya", "japanese curry", "ramen", "teppanyaki"]
+    latin_american = ["latin american", "colombian", "salvadoran", "venezuelan"]
+    mediterranean = ["mediterranean", "falafel"]
+    mexican = ["mexican", "tacos", "new mexican cuisine", "tex-mex"]
+    middle_eastern = ["middle eastern", "egyptian", "lebanese", "turkish"]
+    sandwiches = ["sandwiches", "wraps", "delis"]
+    spanish = ["spanish", "catalan"]
+    steakhouses = ["steakhouses", "cheesesteaks", "game meat"]
+    tapas = ["tapas bars", "tapas/small plates"]
+    thai = ["thai", "laotian"]
+    vegan = ["vegan", "vegetarian", "salad"]
+    others = ["afghan", "arabian", "argentine", "armenian", "australian", "austrian", "bangladeshi", \
+              "barbeque", "cajun/creole", "cambodian", "cuban", "czech", "ethiopian", "filipino", "gastropubs", \
+              "gluten-free", "greek", "guamanian", "halal", "hawaiian", "himalayan/nepalese", "iberian", "indian", \
+              "indonesian", "irish", "kebab", "korean", "kosher", "malaysian", "modern european", "mongolian", \
+              "moroccan", "noodles", "pakistani", "persian/iranian", "peruvian", "portuguese", "poutineries", \
+              "scandinavian", "scottish", "seafood", "singaporean", "soup", "southern", "syrian", "taiwanese", "vietnamese"]
+
+    categories = [african, american, dessert, central_american, east_european, asian_fusion, brunch_diners, british, cafes, \
+                  caribbean, chinese, fast_food, french, italian, japanese, latin_american, mediterranean, mexican, middle_eastern \
+                  sandwiches, spanish, steakhouses, tapas, thai, vegan, others]
+    category_names = ["african", "american", "dessert", "central american", "east european", "asian fusion", "brunch/diners", "british", \
+                      "cafes", "caribbean", "chinese", "fast food", "french", "italian", "japanese", "latin american", "mediterranean", \
+                      "mexican", "middle eastern", "sandwiches", "spanish", "steakhouses", "tapas", "thai", "vegan", "others"]
     output = []
+    #for each t in category_lst
     for t in category_lst:
-        if t in CATEGORIES:
-            output.append(t)
+        #go through possible categories to see which category t fits into
+        for idx,category in enumerate(categories):
+            if t.lower() in category:
+                #If t belongs in [other], t keeps its category name
+                if category_names[idx] == "others":
+                    output.append(t.lower())
+                #If t does not belong in [other], grouped name is added
+                else:
+                    output.append(category_names[idx])
 
     return output
 
