@@ -1,27 +1,78 @@
-import sentiment_analysis
 from collections import defaultdict
+import sentiment_analysis
+import json
+from datetime import datetime
+
+
+##########################################HELPERS#################################################
+CATEGORIES = []
+DEFAULT = 0
+
+def load_json(cityname):
+    file_name = "../../../"+cityname.lower()+".json"
+    with open(file_name) as json_file:
+        json_data = json.load(json_file)
+
+    return json_data
+
+def apply_delta(date,delta):
+    """Returns datetime object after applying delta on date"""
+    month = (date.month+delta)%12
+    year = (date.month+delta-1)//12
+    if month == 0: month = 12
+
+    day = min(date.day, [31,29 if y%4==0 and not y%400==0 else 28,31,30,31,30,31,31,30,31,30,31][month-1])
+
+    return date.replace(year=year, month=month, day=day)
 
 def compare_timelimit_timeposted(time_limit, time_posted):
-    """Returns true if the review's time posted satisfies the user input's time limit"""
-    if time_limit == None:
-        return 0
+    """Returns true if the review's time posted satisfies the user input's time limit
+
+    time_posted: 'yyyy-mm-dd hh:mm:ss'"""
+    today = datetime.now()
+
+    #Expressing the today - time_limit in form of datetime object
+    time_limit_date = apply_delta(today, time_limit)
+
+    #Expressing the time_posted in form of datetime object
+    time_posted_yr = int(time_posted[:4])
+    time_posted_m = int(time_posted[:7])
+    time_posted_d = int(time_posted[:10])
+    time_posted = datetime(time_posted_yr, time_posted_m, time_posted_d)
+
+    if time_limit_date <= time_posted_date:
+        return True
+    else:
+        return False
+
+def convert_zipcode_to_neighborhood(cityname,neighborhood):
+    """Checks if [neighborhood] is zipcode (int) or neighborhood (string).
+    If zipcode, converts the user's input zipcode to appropriate matching neighborhood"""
+    try:
+        zipcode = int(neighborhood)
+    if cityname == "Pittsburgh":
+
 
 #######################################FILTERING REVIEWS############################################
-def filter_reviews(j, zipcode, credibility=None, time_limit=None, price_range=None):
+def filter_reviews(j, neighborhood, credibility, time_limit):
 	"""Filter the reviews that match with user inputs.
     ***ASSUMES THAT JSON OBJECT HAS SAME TYPE AS THE INPUTS***
 
     Returns a list of reviews"""
 
     filtered_out_reviews = []
-    for review in j["reviews"]:
-        if (review["restaurant_zipcode"] == zipcode):
-            cond1 = ((credibility != None) and (review["reviewer_credit"] == credibility)) or (credibility == None)
-            #NEEDS TO HAVE A FUNCTION THAT COMPARES THIS TWO
-            cond2 = ((time_limit != None) and (compare_timelimit_timeposted(time_limit, review["time_posted"]))) or (time_limit == None)
-            cond3 = ((price_range != None) and (review["restaurant_price_range"] == price_range)) or (price_range == None)
 
-            if (cond1 and cond2 and cond3):
+    #Checking if the user has inputted zipcode or neighborhood
+    neighborhood = convert_zipcode_to_neighborhood(neighborhood)
+
+    for review in j["reviews"]:
+        if (review["business"]["neighborhood"] == neighborhood):
+            #cond1 = ((credibility != DEFAULT) and (review["elite_years"]["year"] >= credibility)) or (credibility == DEFAULT)
+            #NEEDS TO HAVE A FUNCTION THAT COMPARES THIS TWO
+            cond2 = ((time_limit != DEFAULT) and (compare_timelimit_timeposted(time_limit, review["date"]))) or (time_limit == DEFAULT)
+            #cond3 = ((price_range != None) and (review["restaurant_price_range"] == price_range)) or (price_range == None)
+
+            if (cond2):
                 filtered_out_reviews.append(review)
 
     return filtered_out_reviews
@@ -52,63 +103,87 @@ def filter_neg_reviews(reviews):
 
     return neg_reviews
 
-###############################COMPUTING PERCENTAGES OF EACH TYPE##################################
-def compute_percentage_per_type(reviews):
-    """Computes the percentages of the reviews for each type
+###############################COMPUTING PERCENTAGES OF EACH category##################################
+def filter_category(category_lst):
+    """Returns a list of categories that are accepted as defined above"""
+    output = []
+    for t in category_lst:
+        if t in CATEGORIES:
+            output.append(t)
 
-    Returns a dictionary in format {\cuisine type: percentage}
+    return output
+
+def compute_percentage_per_category(reviews):
+    """Computes the percentages of the reviews for each category.
+    ***NOTE: Single restaurant can be assigned multiple categories.
+    ***NOTE: Review might not have a category key.
+
+    Returns a dictionary in format {\ category: percentage}
 
     [reviews]: list of JSON objects"""
 
     n_reviews = len(reviews)
     percentage_dict = defaultdict(int)
 
+    #Iterating through every review and see which category the review belongs to
     for review in reviews:
-        percentage_dict[review["restaurant_type"]] += 1
+        #Single restaurant can be assigned multiple categories
+        #Review might not have a category key
+        try:
+            rest_category_lst = filter_category(review["business"]["category"])
+            for t in rest_category_lst:
+                percentage_dict[t] += 1
+        except KeyError:
+            pass
 
-    for type in percentage_dict.keys():
-        percentage_dict[type] /= n_reviews
+    for rest_category in percentage_dict.keys():
+        percentage_dict[rest_category] /= n_reviews
 
     return percentage_dict
 
-###############################COMPUTING TOP RESTAURANTS PER TYPE##################################
-def filter_reviews_type(reviews,type):
-    """Filter [reviews] by [type].
+###############################COMPUTING TOP RESTAURANTS PER category##################################
+def filter_reviews_category(reviews,category):
+    """Filter [reviews] by [category].
     Returns a list of JSON objects."""
 
-    reviews_of_type = []
+    reviews_of_category = []
     for review in reviews:
-        if (review["restaurant_type"]==type):
-            reviews_of_type.append(review)
+        #Review might not have a category key
+        try:
+            rest_category_lst = filter_category(review["business"]["category"])
+            if (category in rest_category_lst):
+                reviews_of_category.append(review)
+        except KeyError:
+            pass
 
-    return reviews_of_type
+    return reviews_of_category
 
 def compute_top_rest(reviews):
     """Computes the top restaurant for [reviews].
-    Returns a sorted list of restaurants in the order of decreasing popularity."""
+    Returns a sorted list of top 5 restaurants in the order of decreasing popularity."""
 
     rest_stars_dict = defaultdict(int)
 
     for review in reviews:
-        rest_stars_dict[review["restaurant"]] += review["stars_given"]
+        rest_stars_dict[review["business"]["name"]] += review["stars"]
 
     ranked_rest_lst = [k for k in sorted(rest_stars_dict, key=rest_stars_dict.get, reverse=True)]
 
-    return ranked_rest_lst
+    return ranked_rest_lst[:5]
 
-def compute_top_rest_per_type(reviews):
-    """Computes the top restaurant list for each type in [reviews] that has
+def compute_top_rest_per_category(reviews):
+    """Computes the top restaurant list for each category in [reviews] that has
     review percentage over 1%
 
-    Returns a dicitonary in format {\cuisine type: lst of restaurants}"""
+    Returns a dicitonary in format {\cuisine category: lst of top 5 restaurants}"""
 
-    rest_per_type_dict = defaultdict(list)
-    percentages = compute_percentage_per_type(reviews)
+    rest_per_category_dict = defaultdict(list)
+    percentages = compute_percentage_per_category(reviews)
 
-    for type in percentages.keys():
-        if percentages[type] >= 0.01:
-            reviews_of_type = filter_reviews_type(reviews,type)
-            top_rest_list = compute_top_rest(reviews_of_type)
-            rest_per_type_dict[type] = top_rest_list
+    for category in percentages.keys():
+        if percentages[category] >= 0.05:
+            reviews_of_category = filter_reviews_category(reviews,category)
+            top_rest_list = compute_top_rest(reviews_of_category)
+            rest_per_category_dict[category] = top_rest_list
 
     return rest_dict
