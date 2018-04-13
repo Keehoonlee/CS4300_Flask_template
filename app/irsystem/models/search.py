@@ -161,7 +161,7 @@ def compute_percentage_per_category(reviews):
     [reviews]: list of JSON objects"""
 
     n_reviews = len(reviews)
-    percentage_dict = defaultdict(int)
+    percentage_dict = defaultdict(float)
 
     #Iterating through every review and see which category the review belongs to
     for review in reviews:
@@ -170,14 +170,15 @@ def compute_percentage_per_category(reviews):
         try:
             rest_category_lst = filter_category(review["business"]["category"])
             for t in rest_category_lst:
-                percentage_dict[t] += 1
+                percentage_dict[t] += 1.0
         except KeyError:
             pass
 
     for rest_category in percentage_dict.keys():
-        percentage_dict[rest_category] /= n_reviews
+        percentage_dict[rest_category] = round(percentage_dict[rest_category]/n_reviews,2)
 
-    return percentage_dict
+    output = sorted(percentage_dict.items(), key=lambda x: x[1], reverse=True)
+    return output
 
 ###############################COMPUTING TOP RESTAURANTS PER category##################################
 def filter_reviews_category(reviews,category):
@@ -203,7 +204,7 @@ def compute_top_rest(reviews):
     rest_stars_dict = defaultdict(int)
 
     for review in reviews:
-        rest_stars_dict[review["business"]["name"]] += review["stars"]
+        rest_stars_dict[review["business"]["name"]] += int(review["stars"])
 
     ranked_rest_lst = [k for k in sorted(rest_stars_dict, key=rest_stars_dict.get, reverse=True)]
 
@@ -218,10 +219,10 @@ def compute_top_rest_per_category(reviews):
     rest_per_category_dict = defaultdict(list)
     percentages = compute_percentage_per_category(reviews)
 
-    for category in percentages.keys():
-        if percentages[category] >= 0.05:
+    for category,percentage in percentages:
+        if percentage >= 0.05:
             reviews_of_category = filter_reviews_category(reviews,category)
             top_rest_list = compute_top_rest(reviews_of_category)
             rest_per_category_dict[category] = top_rest_list
 
-    return rest_dict
+    return rest_per_category_dict
