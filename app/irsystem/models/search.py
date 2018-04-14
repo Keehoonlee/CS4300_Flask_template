@@ -1,5 +1,5 @@
 from collections import defaultdict
-import sentiment_analysis
+#import sentiment_analysis
 import json
 from datetime import datetime
 
@@ -17,10 +17,11 @@ def load_json(cityname):
 def apply_delta(date,delta):
     """Returns datetime object after applying delta on date"""
     month = (date.month+delta)%12
-    year = (date.month+delta-1)//12
+    year = date.year + (date.month+delta-1)//12
+
     if month == 0: month = 12
 
-    day = min(date.day, [31,29 if y%4==0 and not y%400==0 else 28,31,30,31,30,31,31,30,31,30,31][month-1])
+    day = min(date.day, [31,29 if year%4==0 and not year%400==0 else 28,31,30,31,30,31,31,30,31,30,31][month-1])
 
     return date.replace(year=year, month=month, day=day)
 
@@ -31,13 +32,13 @@ def compare_timelimit_timeposted(time_limit, time_posted):
     today = datetime.now()
 
     #Expressing the today - time_limit in form of datetime object
-    time_limit_date = apply_delta(today, time_limit)
+    time_limit_date = apply_delta(today, -time_limit)
 
     #Expressing the time_posted in form of datetime object
     time_posted_yr = int(time_posted[:4])
-    time_posted_m = int(time_posted[:7])
-    time_posted_d = int(time_posted[:10])
-    time_posted = datetime(time_posted_yr, time_posted_m, time_posted_d)
+    time_posted_m = int(time_posted[5:7])
+    time_posted_d = int(time_posted[8:10])
+    time_posted_date = datetime(time_posted_yr, time_posted_m, time_posted_d)
 
     if time_limit_date <= time_posted_date:
         return True
@@ -56,6 +57,7 @@ def filter_reviews(j, neighborhood, credibility, time_limit):
     #neighborhood = convert_zipcode_to_neighborhood(neighborhood)
 
     for review in j["reviews"]:
+        #if neighborhood.lower()
         if (review["business"]["neighborhood"].lower() == neighborhood.lower()):
             #credibility = DEFAULT if credibility == 0 else 1
             #cond1 = ((credibility != DEFAULT) and (review["elite_years"]["year"] >= credibility)) or (credibility == DEFAULT)
@@ -76,7 +78,7 @@ def filter_pos_reviews(reviews):
 
     pos_reviews = []
     for review in reviews:
-        if (sentiment_analysis.compute_sentiment_intensity(review["text"])>=0.1):
+        if (review["sentiment_score"]>=0.1):
             pos_reviews.append(review)
 
     return pos_reviews
@@ -89,7 +91,7 @@ def filter_neg_reviews(reviews):
 
     neg_reviews = []
     for review in reviews:
-        if (sentiment_analysis.compute_sentiment_intensity(review["text"])<=0.1):
+        if (review["sentiment_score"]<=0.1):
             neg_reviews.append(review)
 
     return neg_reviews
@@ -226,3 +228,11 @@ def compute_top_rest_per_category(reviews):
             rest_per_category_dict[category] = top_rest_list
 
     return rest_per_category_dict
+
+# j = load_json("pittsburgh")
+# all_reviews = filter_reviews(j, "shadyside", 0, 0)
+# percentages_all_reviews = compute_percentage_per_category(all_reviews)
+# top_rest_all_reviews = compute_top_rest_per_category(all_reviews)
+#
+# print(percentages_all_reviews)
+# print(top_rest_all_reviews)
