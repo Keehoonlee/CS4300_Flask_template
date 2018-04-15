@@ -1,6 +1,6 @@
-venv
+.DS_Store
 *.pyc
-migrations 
-vagrant/.vagrant
-vagrant/site.retry
-vagrant/a4keypair.pem
+.env
+venv/
+.gitignore
+.bashrc
