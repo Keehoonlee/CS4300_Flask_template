@@ -7,7 +7,7 @@ import os
 
 ##########################################HELPERS#################################################
 DEFAULT = 0
-LIMIT = 0.08
+LIMIT = 0.05
 
 def format_for_html(percentages, top_rest):
     others = 0
@@ -17,14 +17,15 @@ def format_for_html(percentages, top_rest):
     for category, percentage in percentages:
         if percentage >= LIMIT:
             labels.append(category)
-            data.append(percentage*100)
+            data.append(percentage)
         else:
-            others += percentage*100
+            others += percentage
 
     #Normalize each percentage by the number of others
-    normalize = (100-others)
-    for percentage in data:
-        percentage = (percentage/normalize)*100
+    normalize = (1-others)
+
+    for idx, percentage in enumerate(data):
+        data[idx] = round((percentage/normalize)*100)
 
     return (labels,data)
 
@@ -99,7 +100,7 @@ def filter_pos_reviews(reviews):
 
     pos_reviews = []
     for review in reviews:
-        if (review["sentiment_score"]>=0.6):
+        if (review["sentiment_score"]>=0.8):
             pos_reviews.append(review)
 
     return pos_reviews
@@ -183,7 +184,7 @@ def compute_percentage_per_category(reviews):
 
     [reviews]: list of JSON objects"""
 
-    n_reviews = len(reviews)
+    n_reviews = 0
     percentage_dict = defaultdict(float)
 
     #Iterating through every review and see which category the review belongs to
@@ -192,13 +193,14 @@ def compute_percentage_per_category(reviews):
         #Review might not have a category key
         try:
             rest_category_lst = filter_category(review["business"]["category"])
+            n_reviews += len(rest_category_lst)
             for t in rest_category_lst:
                 percentage_dict[t] += 1.0
         except KeyError:
             pass
 
     for rest_category in percentage_dict.keys():
-        percentage_dict[rest_category] = round(percentage_dict[rest_category]/n_reviews,2)
+        percentage_dict[rest_category] = (percentage_dict[rest_category]/n_reviews)
 
     output = sorted(percentage_dict.items(), key=lambda x: x[1], reverse=True)
     return output
