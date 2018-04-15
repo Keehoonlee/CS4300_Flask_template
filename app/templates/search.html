@@ -10,12 +10,12 @@
   Import
   -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-  <link href="../static/style.css" rel="stylesheet">
+  <link href="{{url_for('static', filename='style.css')}}" rel="stylesheet">
   <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-  <link rel="shortcut icon" type="image/x-icon" href="../image/iconletter.png">
+  <link rel="shortcut icon" type="image/x-icon" href="{{url_for('static', filename='image/iconletter.png')}}">
 </head>
 
 <body>
@@ -23,7 +23,7 @@
     <div class="nav-container">
       <div class="navbar-header">
         <a class="navbar-brand" href="#">
-          <img src="../image/icon.png" alt="asdf">
+          <img src="{{url_for('static', filename='image/icon.png')}}" alt="asdf">
         </a>
       </div>
     </div>
@@ -32,7 +32,7 @@
     <div class="search-slide" id="search-slide">
       <div class="container" style="padding-top:20vh">
         <div class="text-center">
-          <img src="../image/logo2.png" style="width: inherit; height: auto">
+          <img src="{{url_for('static', filename='image/logo2.png')}}" style="width: inherit; height: auto">
           <!-- <h3 style="font-size: 120px; color: white">
             FOODIES
           </h3> -->
@@ -45,9 +45,9 @@
                   <!-- <span class="input-group-addon" id="basic-addon1"></span> -->
                   <select class="form-control" name = "city">
                     <option value="" selected disabled hidden>Choose Your City</option>
-                    <option value="SF">San Francisco</option>
-                    <option value="LV">Las Vegas</option>
-                    <option value="PT">Pittsburgh</option>
+                    <option value="san_francisco">San Francisco</option>
+                    <option value="las_vegas">Las Vegas</option>
+                    <option value="pittsburgh">Pittsburgh</option>
                   </select>
                 </div>
                 <div class = "input-group">
@@ -77,8 +77,8 @@
                 <div class = "input-group">
                   <!-- <span class="input-group-addon" id="basic-addon1">@</span> -->
                   <select class="form-control" name = "cred">
-                    <option value="0">All Users</option>
-                    <option value="elite">Only Elite</option>
+                    <option value="All Users">All Users</option>
+                    <option value="Elite Users">Only Elite</option>
                   </select>
                 </div>
                 <!-- <input id="input" type="text" name="time" class="form-control" placeholder="Recent"> -->
@@ -95,7 +95,7 @@
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-  <script src="../static/main.js" type="text/javascript"></script>
+  <script src="{{url_for('static', filename='main.js')}}" type="text/javascript"></script>
 
 </body>
 

@@ -2,14 +2,36 @@ from collections import defaultdict
 #import sentiment_analysis
 import json
 from datetime import datetime
+import os
 
 
 ##########################################HELPERS#################################################
 DEFAULT = 0
+LIMIT = 0.08
+
+def format_for_html(percentages, top_rest):
+    others = 0
+    labels = []
+    data = []
+
+    for category, percentage in percentages:
+        if percentage >= LIMIT:
+            labels.append(category)
+            data.append(percentage*100)
+        else:
+            others += percentage*100
+
+    #Normalize each percentage by the number of others
+    normalize = (100-others)
+    for percentage in data:
+        percentage = (percentage/normalize)*100
+
+    return (labels,data)
 
 def load_json(cityname):
-    file_name = "../../../"+cityname.lower()+".json"
-    with open(file_name) as json_file:
+    MYDIR = os.path.dirname(__file__)
+    file_name = cityname.lower()+".json"
+    with open(os.path.join(MYDIR,file_name)) as json_file:
         json_data = json.load(json_file)
 
     return json_data
@@ -53,14 +75,13 @@ def filter_reviews(j, neighborhood, credibility, time_limit):
     Returns a list of reviews"""
     filtered_out_reviews = []
 
-    #Checking if the user has inputted correct neighborhood in the city file of [j]
-    #neighborhood = convert_zipcode_to_neighborhood(neighborhood)
+    time_limit = int(time_limit)
 
     for review in j["reviews"]:
         #if neighborhood.lower()
         if (review["business"]["neighborhood"].lower() == neighborhood.lower()):
             #credibility = DEFAULT if credibility == 0 else 1
-            #cond1 = ((credibility != DEFAULT) and (review["elite_years"]["year"] >= credibility)) or (credibility == DEFAULT)
+            #cond1 = ((credibility != "All Users") and (review["elite_years"]["year"] >= (how YELP does it))) or (credibility == "All Users")
             #NEEDS TO HAVE A FUNCTION THAT COMPARES THIS TWO
             cond2 = ((time_limit != DEFAULT) and (compare_timelimit_timeposted(time_limit, review["date"]))) or (time_limit == DEFAULT)
             #cond3 = ((price_range != None) and (review["restaurant_price_range"] == price_range)) or (price_range == None)
@@ -78,7 +99,7 @@ def filter_pos_reviews(reviews):
 
     pos_reviews = []
     for review in reviews:
-        if (review["sentiment_score"]>=0.1):
+        if (review["sentiment_score"]>=0.6):
             pos_reviews.append(review)
 
     return pos_reviews
@@ -91,7 +112,7 @@ def filter_neg_reviews(reviews):
 
     neg_reviews = []
     for review in reviews:
-        if (review["sentiment_score"]<=0.1):
+        if (review["sentiment_score"]<=-0.3):
             neg_reviews.append(review)
 
     return neg_reviews
@@ -234,5 +255,8 @@ def compute_top_rest_per_category(reviews):
 # percentages_all_reviews = compute_percentage_per_category(all_reviews)
 # top_rest_all_reviews = compute_top_rest_per_category(all_reviews)
 #
+# label, data = format_for_html(percentages_all_reviews, top_rest_all_reviews)
 # print(percentages_all_reviews)
 # print(top_rest_all_reviews)
+# print(label)
+# print(data)

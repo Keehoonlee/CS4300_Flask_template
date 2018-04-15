@@ -10,73 +10,134 @@
   Import
   -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-  <link href="../static/style.css" rel="stylesheet">
+  <link href="{{url_for('static', filename='style.css')}}" rel="stylesheet">
   <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
 
-  <link rel="shortcut icon" type="image/x-icon" href="../image/iconletter.png">
+  <link rel="shortcut icon" type="image/x-icon" href="{{url_for('static', filename='image/iconletter.png')}}">
 </head>
 
 <body>
-  <nav class="navbar navbar-inverse navbar-fixed-top" style="background: #69b74e; border: none; height: 70px; opacity:0.9;">
+  <!-- <nav class="navbar navbar-inverse navbar-fixed-top" style="background: #FFFFFF; border: none; height: 70px; opacity:0.9;">
     <div class="nav-container">
       <div class="navbar-header">
-        <a class="navbar-brand" href="search.html">
-          <img src="../image/icon.png" alt="asdf">
+        <a class="navbar-brand" onclick='history.back(-1)'>
+          <img src="{{url_for('static', filename='image/icon.png')}}" alt="asdf">
         </a>
       </div>
     </div>
   </nav>
-  <div style="height:70px;"> </div>
+  <div style="height:70px;"> </div> -->
+
+  <a class="navbar-brand" onclick='history.back(-1)'>
+    <img src="{{url_for('static', filename='image/icon.png')}}" alt="asdf">
+  </a> <br /><br /><br /><br />
 
   <div class="text-center">
-    <h1> You've searched for ... </h1>
-    <h2> output placehodler </h2>
+    <font size="5" color="black" face="Arial Black">SEARCHED </font> <br />
+    <font size="3" color="grey" face="Courier New">CITY: </font>
+    <font size="3" color="black" face="Courier New">{{city}} </font> <br />
+    <font size="3" color="grey" face="Courier New">NEIGHBORHOOD: </font>
+    <font size="3" color="black" face="Courier New">{{neighborhood}} </font> <br />
+    <font size="3" color="grey" face="Courier New">DATE POSTED: </font>
+    <font size="3" color="black" face="Courier New">upto {{time}} months old </font> <br />
+    <font size="3" color="grey" face="Courier New">CREDIBILITY: </font>
+    <font size="3" color="black" face="Courier New">{{credibility}} </font> <br /><br /><br />
   </div>
-
 
   <div class="container" id="output">
     <div class="row">
       <div class="col-md-4 col-md-offset-4">
-        <canvas id="pie-chart" width="800" height="450"></canvas>
+        <canvas id="pie-chart" width="5000" height="3000"></canvas>
 
-        {% if data %}
-            <h1>{{output_message}}</h1>
-            {% for d in data %}
-                <br>
-                <p>{{d}}</p>
-            {% endfor %}
-        {% endif %}
       </div>
+    </div>
   </div>
 
+  <div class="container" id="output">
+    <div class="row">
+      <div class="col-md-4 col-md-offset-4">
+        <canvas id="pie-chart_pos" width="5000" height="3000"></canvas>
 
+      </div>
+    </div>
+  </div>
+
+  <div class="container" id="output">
+    <div class="row">
+      <div class="col-md-4 col-md-offset-4">
+        <canvas id="pie-chart_neg" width="5000" height="3000"></canvas>
+
+      </div>
+    </div>
+  </div>
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-  <script src="../static/main.js" type="text/javascript"></script>
+  <script src="{{url_for('static', filename='main.js')}}" type="text/javascript"></script>
   <script>
   new Chart(document.getElementById("pie-chart"), {
     type: 'pie',
     data: {
-      labels: ["Chinese", "American", "Halal", "Other"],
+      labels: [{% for item in labels %}
+                  "{{item}}",
+               {% endfor %}],
       datasets: [{
         label: "Percentage",
-        backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850"],
-        data: [40,30,25,5]
+        backgroundColor: [{% for item in labels %} '#'+(Math.random()*0xFFFFFF<<0).toString(16), {% endfor %}],
+        data:[{% for item in data %} "{{item}}", {% endfor %}]
       }]
     },
     options: {
       title: {
         display: true,
-        text: 'Pittsburgh Neighborhood'
+        text: 'Pittsburgh Neighborhood (All Reviews)'
       }
     }
-});
+  });
 
+  new Chart(document.getElementById("pie-chart_pos"), {
+    type: 'pie',
+    data: {
+      labels: [{% for item in labels_pos %}
+                  "{{item}}",
+               {% endfor %}],
+      datasets: [{
+        label: "Percentage",
+        backgroundColor: [{% for item in labels_pos %} '#'+(Math.random()*0xFFFFFF<<0).toString(16), {% endfor %}],
+        data:[{% for item in data_pos %} "{{item}}", {% endfor %}]
+      }]
+    },
+    options: {
+      title: {
+        display: true,
+        text: 'Pittsburgh Neighborhood (Positive Reviews)'
+      }
+    }
+  });
+
+  new Chart(document.getElementById("pie-chart_neg"), {
+    type: 'pie',
+    data: {
+      labels: [{% for item in labels_neg %}
+                  "{{item}}",
+               {% endfor %}],
+      datasets: [{
+        label: "Percentage",
+        backgroundColor: [{% for item in labels_neg %} '#'+(Math.random()*0xFFFFFF<<0).toString(16), {% endfor %}],
+        data:[{% for item in data_neg %} "{{item}}", {% endfor %}]
+      }]
+    },
+    options: {
+      title: {
+        display: true,
+        text: 'Pittsburgh Neighborhood (Negative Reviews)'
+      }
+    }
+  });
 
   </script>
 

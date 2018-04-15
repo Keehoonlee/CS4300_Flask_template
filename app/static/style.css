@@ -50,5 +50,5 @@ nav .navbar .navbar-inverse .navbar-fixed-top{
   height: inherit;
   background-size: cover;
   background-position: center;
-  background-image:url(../image/demo-pic.jpeg)
+  background-image: url({{ url_for('static', filename='image/demo-pic.jpeg') }})
 }
