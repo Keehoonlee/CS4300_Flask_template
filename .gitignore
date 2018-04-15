@@ -1,6 +1,7 @@
 venv
 *.pyc
-migrations 
+migrations
 vagrant/.vagrant
 vagrant/site.retry
 vagrant/a4keypair.pem
+.env
