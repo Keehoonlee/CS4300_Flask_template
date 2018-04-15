@@ -112,7 +112,7 @@ def filter_neg_reviews(reviews):
 
     neg_reviews = []
     for review in reviews:
-        if (review["sentiment_score"]<=-0.3):
+        if (review["sentiment_score"]<=-0.2):
             neg_reviews.append(review)
 
     return neg_reviews
