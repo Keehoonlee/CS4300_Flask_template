@@ -100,7 +100,7 @@ def filter_pos_reviews(reviews):
 
     pos_reviews = []
     for review in reviews:
-        if (review["sentiment_score"]>=0.8):
+        if (review["sentiment_score"]>=0.75):
             pos_reviews.append(review)
 
     return pos_reviews
@@ -245,7 +245,7 @@ def compute_top_rest_per_category(reviews):
     percentages = compute_percentage_per_category(reviews)
 
     for category,percentage in percentages:
-        if percentage >= 0.05:
+        if percentage >= LIMIT:
             reviews_of_category = filter_reviews_category(reviews,category)
             top_rest_list = compute_top_rest(reviews_of_category)
             rest_per_category_dict[category] = top_rest_list

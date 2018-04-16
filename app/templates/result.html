@@ -43,7 +43,7 @@
     <font size="3" color="grey" face="Courier New">NEIGHBORHOOD: </font>
     <font size="3" color="black" face="Courier New">{{neighborhood}} </font> <br />
     <font size="3" color="grey" face="Courier New">DATE POSTED: </font>
-    <font size="3" color="black" face="Courier New">upto {{time}} months old </font> <br />
+    <font size="3" color="black" face="Courier New">{% if time == "0" %} All Reviews {% else %} upto {{time}} months old {% endif %}</font> <br />
     <font size="3" color="grey" face="Courier New">CREDIBILITY: </font>
     <font size="3" color="black" face="Courier New">{{credibility}} </font> <br /><br /><br />
   </div>
@@ -56,6 +56,7 @@
       </div>
     </div>
   </div>
+  <br /><br />
 
   <div class="container" id="output">
     <div class="row">
@@ -65,6 +66,7 @@
       </div>
     </div>
   </div>
+  <br /><br />
 
   <div class="container" id="output">
     <div class="row">
@@ -87,7 +89,7 @@
                {% endfor %}],
       datasets: [{
         label: "Percentage",
-        backgroundColor: [{% for item in labels %} '#'+(Math.random()*0xFFFFFF<<0).toString(16), {% endfor %}],
+        backgroundColor: ["#F48B8B", "#F8A451", "#F9F274", "#C7E753", "#84EB7B", "#67E4DD", "#84CEF9", "#84AEF9", "#C58AF1", "#EE7AA4","#C58AF1", "#EE7AA4","#C58AF1", "#EE7AA4"],
         data:[{% for item in data %} "{{item}}", {% endfor %}]
       }]
     },
@@ -107,7 +109,7 @@
                {% endfor %}],
       datasets: [{
         label: "Percentage",
-        backgroundColor: [{% for item in labels_pos %} '#'+(Math.random()*0xFFFFFF<<0).toString(16), {% endfor %}],
+        backgroundColor: ["#00004d", "#000066", "#000099", "#0000cc", "#0000ff", "#3333ff", "#6666ff", "#8080ff", "#9999ff", "#b3b3ff", "#ccccff", "e6e6ff", "#ccccff", "e6e6ff"],
         data:[{% for item in data_pos %} "{{item}}", {% endfor %}]
       }]
     },
@@ -127,7 +129,7 @@
                {% endfor %}],
       datasets: [{
         label: "Percentage",
-        backgroundColor: [{% for item in labels_neg %} '#'+(Math.random()*0xFFFFFF<<0).toString(16), {% endfor %}],
+        backgroundColor: ["#4d0000", "#660000", "#800000", "#b30000", "#e60000", "#ff1a1a", "#ff4d4d", "#ff6666", "#ff8080", "#ff9999", "#ffb3b3", "#ffcccc", "#ffe6e6"],
         data:[{% for item in data_neg %} "{{item}}", {% endfor %}]
       }]
     },
