@@ -51,8 +51,25 @@
   <div class="container" id="output">
     <div class="row">
       <div class="col-md-4 col-md-offset-4">
-        <canvas id="pie-chart" width="5000" height="3000"></canvas>
+          <canvas id="pie-chart" width="360" height="300">
 
+      </div>
+    </div>
+  </div>
+  <br />
+
+  <div class="container" id="output">
+    <div class="row">
+      <div class="col-md-4 col-md-offset-4">
+        <canvas id="pie-chart" width="5000" height="10"></canvas>
+        <div class="panel panel-default">
+          <div class="panel-heading"><font size="3" color="grey" face="Courier New"><center>Top 5 Restaurants for {{labels[0]}}</center></font></div>
+          <div class="panel-body">
+            {% for restaurant in top_rest[labels[0].lower()] %}
+              <font size="3" color="black" face="Courier New"><center>{{restaurant}}</center></font>
+            {% endfor %}
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -61,8 +78,25 @@
   <div class="container" id="output">
     <div class="row">
       <div class="col-md-4 col-md-offset-4">
-        <canvas id="pie-chart_pos" width="5000" height="3000"></canvas>
+        <canvas id="pie-chart_pos" width="360" height="300"></canvas>
 
+      </div>
+    </div>
+  </div>
+  <br />
+
+  <div class="container" id="output">
+    <div class="row">
+      <div class="col-md-4 col-md-offset-4">
+        <canvas id="pie-chart" width="5000" height="10"></canvas>
+        <div class="panel panel-default">
+          <div class="panel-heading"><font size="3" color="grey" face="Courier New"><center>Top 5 Restaurants for {{labels_pos[0]}}</center></font></div>
+          <div class="panel-body">
+            {% for restaurant in top_rest_pos[labels_pos[0].lower()] %}
+              <font size="3" color="black" face="Courier New"><center>{{restaurant}}</center></font>
+            {% endfor %}
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -71,8 +105,25 @@
   <div class="container" id="output">
     <div class="row">
       <div class="col-md-4 col-md-offset-4">
-        <canvas id="pie-chart_neg" width="5000" height="3000"></canvas>
+        <canvas id="pie-chart_neg" width="360" height="300"></canvas>
 
+      </div>
+    </div>
+  </div>
+  <br />
+
+  <div class="container" id="output">
+    <div class="row">
+      <div class="col-md-4 col-md-offset-4">
+        <canvas id="pie-chart" width="5000" height="10"></canvas>
+        <div class="panel panel-default">
+          <div class="panel-heading"><font size="3" color="grey" face="Courier New"><center>Top 5 Restaurants for {{labels_neg[0]}}</center></font></div>
+          <div class="panel-body">
+            {% for restaurant in top_rest_neg[labels_neg[0].lower()] %}
+              <font size="3" color="black" face="Courier New"><center>{{restaurant}}</center></font>
+            {% endfor %}
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -97,7 +148,8 @@
       title: {
         display: true,
         text: 'Pittsburgh Neighborhood (All Reviews)'
-      }
+      },
+      responsive: false
     }
   });
 
@@ -109,7 +161,7 @@
                {% endfor %}],
       datasets: [{
         label: "Percentage",
-        backgroundColor: ["#000066", "#000080", "#000099", "#0000cc", "#0000ff", "#3333ff", "#6666ff", "#8080ff", "#9999ff", "#b3b3ff", "#ccccff", "e6e6ff", "#ccccff", "e6e6ff"],
+        backgroundColor: ["#1B4F72", "#21618C", "#2874A6", "#2E86C1", "#3498DB", "#5DADE2", "#85C1E9", "#AED6F1", "#D6EAF8", "#EBF5FB", "#D6EAF8", "EBF5FB", "#D6EAF8", "EBF5FB"],
         data:[{% for item in data_pos %} "{{item}}", {% endfor %}]
       }]
     },

@@ -50,11 +50,13 @@ def search():
 		# 	return render_template('empty.html')
 		# else:
 
-		labels, data = format_for_html(percentages_all_reviews, top_rest_all_reviews)
-		labels_pos, data_pos = format_for_html(percentages_pos_reviews, top_rest_pos_reviews)
-		labels_neg, data_neg = format_for_html(percentages_neg_reviews, top_rest_neg_reviews)
+		labels, data = format_percentage_for_html(percentages_all_reviews)
+		labels_pos, data_pos = format_percentage_for_html(percentages_pos_reviews)
+		labels_neg, data_neg = format_percentage_for_html(percentages_neg_reviews)
 
 		neighborhood = neighborhood[0].capitalize() + neighborhood[1:]
 		city = city[0].capitalize() + city[1:]
-		return render_template('result.html', output_message = output_message, labels = labels, data = data, labels_pos = labels_pos, data_pos = data_pos, labels_neg = labels_neg, data_neg = data_neg, \
-							    neighborhood = neighborhood, time = time, credibility = credibility, city = city)
+		return render_template('result.html', output_message = output_message, labels = labels, data = data, \
+								labels_pos = labels_pos, data_pos = data_pos, labels_neg = labels_neg, data_neg = data_neg, \
+							    neighborhood = neighborhood, time = time, credibility = credibility, city = city, \
+								top_rest = top_rest_all_reviews, top_rest_pos = top_rest_pos_reviews, top_rest_neg = top_rest_neg_reviews)

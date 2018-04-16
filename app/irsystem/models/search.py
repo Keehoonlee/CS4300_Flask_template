@@ -9,14 +9,15 @@ import os
 DEFAULT = 0
 LIMIT = 0.05
 
-def format_for_html(percentages, top_rest):
+def format_percentage_for_html(percentages):
     others = 0
     labels = []
     data = []
 
     for category, percentage in percentages:
         if percentage >= LIMIT:
-            labels.append(category)
+            formatted_category = category[0].capitalize() + category[1:]
+            labels.append(formatted_category)
             data.append(percentage)
         else:
             others += percentage
@@ -231,7 +232,12 @@ def compute_top_rest(reviews):
     for review in reviews:
         rest_stars_dict[review["business"]["name"]] += int(review["stars"])
 
-    ranked_rest_lst = [k for k in sorted(rest_stars_dict, key=rest_stars_dict.get, reverse=True)]
+    ranked_rest_lst = []
+    for k in sorted(rest_stars_dict, key=rest_stars_dict.get, reverse=True):
+        try:
+            ranked_rest_lst.append(k.encode('ascii'))
+        except:
+            pass
 
     return ranked_rest_lst[:5]
 
