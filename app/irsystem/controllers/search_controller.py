@@ -41,22 +41,22 @@ def search():
 			percentages_neg_reviews = compute_percentage_per_category(neg_reviews)
 
 			#Calculating the top ranked restaurants per category
-			top_rest_all_reviews = compute_top_rest_per_category(all_reviews)
-			top_rest_pos_reviews = compute_top_rest_per_category(pos_reviews)
-			top_rest_neg_reviews = compute_top_rest_per_category(neg_reviews)
+			top_rest_all_reviews = compute_top_rest_per_category(all_reviews, False)
+			top_rest_pos_reviews = compute_top_rest_per_category(pos_reviews, False)
+			top_rest_neg_reviews = compute_top_rest_per_category(neg_reviews, True)
 
 		#If no reviews available, then return unfortunate page
-		# if all_reviews == []:
-		# 	return render_template('empty.html')
-		# else:
+		if all_reviews == []:
+		 	return render_template('no_result.html')
+		else:
 
-		labels, data = format_percentage_for_html(percentages_all_reviews)
-		labels_pos, data_pos = format_percentage_for_html(percentages_pos_reviews)
-		labels_neg, data_neg = format_percentage_for_html(percentages_neg_reviews)
+			labels, data = format_percentage_for_html(percentages_all_reviews)
+			labels_pos, data_pos = format_percentage_for_html(percentages_pos_reviews)
+			labels_neg, data_neg = format_percentage_for_html(percentages_neg_reviews)
 
-		neighborhood = neighborhood[0].capitalize() + neighborhood[1:]
-		city = city[0].capitalize() + city[1:]
-		return render_template('result.html', output_message = output_message, labels = labels, data = data, \
-								labels_pos = labels_pos, data_pos = data_pos, labels_neg = labels_neg, data_neg = data_neg, \
-							    neighborhood = neighborhood, time = time, credibility = credibility, city = city, \
-								top_rest = top_rest_all_reviews, top_rest_pos = top_rest_pos_reviews, top_rest_neg = top_rest_neg_reviews)
+			neighborhood = neighborhood[0].capitalize() + neighborhood[1:]
+			city = city[0].capitalize() + city[1:]
+			return render_template('result.html', output_message = output_message, labels = labels, data = data, \
+									labels_pos = labels_pos, data_pos = data_pos, labels_neg = labels_neg, data_neg = data_neg, \
+								    neighborhood = neighborhood, time = time, credibility = credibility, city = city, \
+									top_rest = top_rest_all_reviews, top_rest_pos = top_rest_pos_reviews, top_rest_neg = top_rest_neg_reviews)

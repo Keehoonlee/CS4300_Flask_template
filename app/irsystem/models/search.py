@@ -223,17 +223,22 @@ def filter_reviews_category(reviews,category):
 
     return reviews_of_category
 
-def compute_top_rest(reviews):
+def compute_top_rest(reviews, neg):
     """Computes the top restaurant for [reviews].
-    Returns a sorted list of top 5 restaurants in the order of decreasing popularity."""
+    Returns a sorted list of 5 restaurants in the order of decreasing popularity."""
 
     rest_stars_dict = defaultdict(int)
 
     for review in reviews:
         rest_stars_dict[review["business"]["name"]] += int(review["stars"])
 
+    #normalizing
+    for restaurant, stars in rest_stars_dict.items():
+        rest_stars_dict[restaurant] /= len(reviews)
+
     ranked_rest_lst = []
-    for k in sorted(rest_stars_dict, key=rest_stars_dict.get, reverse=True):
+    srted_lst = (sorted(rest_stars_dict, key=rest_stars_dict.get) if neg else sorted(rest_stars_dict, key=rest_stars_dict.get, reverse=True))
+    for k in srted_lst:
         try:
             ranked_rest_lst.append(k.encode('ascii'))
         except:
@@ -241,11 +246,13 @@ def compute_top_rest(reviews):
 
     return ranked_rest_lst[:5]
 
-def compute_top_rest_per_category(reviews):
+def compute_top_rest_per_category(reviews, neg):
     """Computes the top restaurant list for each category in [reviews] that has
     review percentage over 1%
 
-    Returns a dicitonary in format {\cuisine category: lst of top 5 restaurants}"""
+    Returns a dicitonary in format {\cuisine category: lst of top 5 restaurants}
+
+    If neg == True, then finding the bottom 5 restaurants"""
 
     rest_per_category_dict = defaultdict(list)
     percentages = compute_percentage_per_category(reviews)
@@ -253,7 +260,7 @@ def compute_top_rest_per_category(reviews):
     for category,percentage in percentages:
         if percentage >= LIMIT:
             reviews_of_category = filter_reviews_category(reviews,category)
-            top_rest_list = compute_top_rest(reviews_of_category)
+            top_rest_list = compute_top_rest(reviews_of_category,neg)
             rest_per_category_dict[category] = top_rest_list
 
     return rest_per_category_dict

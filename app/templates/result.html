@@ -38,35 +38,34 @@
 
   <div class="text-center">
     <font size="5" color="black" face="Arial Black">SEARCHED </font> <br />
-    <font size="3" color="grey" face="Courier New">CITY: </font>
+    <font size="4" color="grey" face="Courier New">CITY: </font>
     <font size="3" color="black" face="Courier New">{{city}} </font> <br />
-    <font size="3" color="grey" face="Courier New">NEIGHBORHOOD: </font>
+    <font size="4" color="grey" face="Courier New">NEIGHBORHOOD: </font>
     <font size="3" color="black" face="Courier New">{{neighborhood}} </font> <br />
-    <font size="3" color="grey" face="Courier New">DATE POSTED: </font>
+    <font size="4" color="grey" face="Courier New">DATE POSTED: </font>
     <font size="3" color="black" face="Courier New">{% if time == "0" %} All Reviews {% else %} upto {{time}} months old {% endif %}</font> <br />
-    <font size="3" color="grey" face="Courier New">CREDIBILITY: </font>
+    <font size="4" color="grey" face="Courier New">CREDIBILITY: </font>
     <font size="3" color="black" face="Courier New">{{credibility}} </font> <br /><br /><br />
   </div>
 
   <div class="container" id="output">
     <div class="row">
       <div class="col-md-4 col-md-offset-4">
-          <canvas id="pie-chart" width="360" height="300">
+          <canvas id="pie-chart" width="354" height="300" style='display: block;margin: auto;'>
 
       </div>
     </div>
-  </div>
-  <br />
+  </div><br />
 
   <div class="container" id="output">
     <div class="row">
       <div class="col-md-4 col-md-offset-4">
-        <canvas id="pie-chart" width="5000" height="10"></canvas>
+        <canvas id="top_rest" width="5" height="3" style='display: block;margin: auto;'></canvas>
         <div class="panel panel-default">
-          <div class="panel-heading"><font size="3" color="grey" face="Courier New"><center>Top 5 Restaurants for {{labels[0]}}</center></font></div>
+          <div class="panel-heading"><font size="2" color="grey" face="Courier New"><center>Top 5 Restaurants for {{labels[0]}}</center></font></div>
           <div class="panel-body">
             {% for restaurant in top_rest[labels[0].lower()] %}
-              <font size="3" color="black" face="Courier New"><center>{{restaurant}}</center></font>
+              <font size="2" color="black" face="Courier New"><center>{{restaurant}}</center></font>
             {% endfor %}
           </div>
         </div>
@@ -78,22 +77,21 @@
   <div class="container" id="output">
     <div class="row">
       <div class="col-md-4 col-md-offset-4">
-        <canvas id="pie-chart_pos" width="360" height="300"></canvas>
+        <canvas id="pie-chart_pos" width="354" height="300" style='display: block;margin: auto;'></canvas>
 
       </div>
     </div>
-  </div>
-  <br />
+  </div><br />
 
   <div class="container" id="output">
     <div class="row">
       <div class="col-md-4 col-md-offset-4">
-        <canvas id="pie-chart" width="5000" height="10"></canvas>
+        <canvas id="top_rest_pos" width="5" height="3" style='display: block;margin: auto;'></canvas>
         <div class="panel panel-default">
-          <div class="panel-heading"><font size="3" color="grey" face="Courier New"><center>Top 5 Restaurants for {{labels_pos[0]}}</center></font></div>
+          <div class="panel-heading"><font size="2" color="grey" face="Courier New"><center>Top 5 Restaurants for {{labels_pos[0]}}</center></font></div>
           <div class="panel-body">
             {% for restaurant in top_rest_pos[labels_pos[0].lower()] %}
-              <font size="3" color="black" face="Courier New"><center>{{restaurant}}</center></font>
+              <font size="2" color="black" face="Courier New"><center>{{restaurant}}</center></font>
             {% endfor %}
           </div>
         </div>
@@ -105,22 +103,21 @@
   <div class="container" id="output">
     <div class="row">
       <div class="col-md-4 col-md-offset-4">
-        <canvas id="pie-chart_neg" width="360" height="300"></canvas>
+        <canvas id="pie-chart_neg" width="354" height="300" style='display: block;margin: auto;'></canvas>
 
       </div>
     </div>
-  </div>
-  <br />
+  </div><br />
 
   <div class="container" id="output">
     <div class="row">
       <div class="col-md-4 col-md-offset-4">
-        <canvas id="pie-chart" width="5000" height="10"></canvas>
+        <canvas id="top_rest_neg" width="5" height="3" style='display: block;margin: auto;'></canvas>
         <div class="panel panel-default">
-          <div class="panel-heading"><font size="3" color="grey" face="Courier New"><center>Top 5 Restaurants for {{labels_neg[0]}}</center></font></div>
+          <div class="panel-heading"><font size="2" color="grey" face="Courier New"><center>Bottom 5 Restaurants for {{labels_neg[0]}}</center></font></div>
           <div class="panel-body">
             {% for restaurant in top_rest_neg[labels_neg[0].lower()] %}
-              <font size="3" color="black" face="Courier New"><center>{{restaurant}}</center></font>
+              <font size="2" color="black" face="Courier New"><center>{{restaurant}}</center></font>
             {% endfor %}
           </div>
         </div>
@@ -147,7 +144,8 @@
     options: {
       title: {
         display: true,
-        text: 'Pittsburgh Neighborhood (All Reviews)'
+        text: 'All Reviews',
+        fontSize: 14
       },
       responsive: false
     }
@@ -168,7 +166,8 @@
     options: {
       title: {
         display: true,
-        text: 'Pittsburgh Neighborhood (Positive Reviews)'
+        text: 'Positive Reviews',
+        fontSize: 14
       }
     }
   });
@@ -188,7 +187,8 @@
     options: {
       title: {
         display: true,
-        text: 'Pittsburgh Neighborhood (Negative Reviews)'
+        text: 'Negative Reviews',
+        fontSize: 14
       }
     }
   });
