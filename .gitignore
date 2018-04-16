@@ -4,3 +4,4 @@ vagrant/.vagrant
 vagrant/site.retry
 vagrant/a4keypair.pem
 .env
+.DS_Store
