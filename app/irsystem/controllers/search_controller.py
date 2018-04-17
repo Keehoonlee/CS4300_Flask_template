@@ -32,8 +32,7 @@ def search():
 
 			#Getting the appropriate reviews
 			all_reviews = filter_reviews(json_data, neighborhood.lower(), credibility, time)
-			pos_reviews = filter_pos_reviews(all_reviews)
-			neg_reviews = filter_neg_reviews(all_reviews)
+			pos_reviews,neg_reviews = filter_reviews_sentiment(all_reviews)
 
 			#Calculating the percentages for the pie charts
 			percentages_all_reviews = compute_percentage_per_category(all_reviews)
@@ -41,9 +40,9 @@ def search():
 			percentages_neg_reviews = compute_percentage_per_category(neg_reviews)
 
 			#Calculating the top ranked restaurants per category
-			top_rest_all_reviews = compute_top_rest_per_category(all_reviews, False)
-			top_rest_pos_reviews = compute_top_rest_per_category(pos_reviews, False)
-			top_rest_neg_reviews = compute_top_rest_per_category(neg_reviews, True)
+			top_rest_all_reviews = compute_top_rest_per_category(all_reviews, False, percentages_all_reviews)
+			top_rest_pos_reviews = compute_top_rest_per_category(pos_reviews, False, percentages_pos_reviews)
+			top_rest_neg_reviews = compute_top_rest_per_category(neg_reviews, True, percentages_neg_reviews)
 
 		#If no reviews available, then return unfortunate page
 		if all_reviews == []:

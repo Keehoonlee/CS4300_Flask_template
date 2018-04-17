@@ -93,31 +93,22 @@ def filter_reviews(j, neighborhood, credibility, time_limit):
 
     return filtered_out_reviews
 
-def filter_pos_reviews(reviews):
-    """Filter the reviews that are positive from [reviews].
-    Review is considered positive if its sentiment intensity is >=0.1
-
-    [reviews]: list of JSON objects"""
-
-    pos_reviews = []
-    for review in reviews:
-        if (review["sentiment_score"]>=0.75):
-            pos_reviews.append(review)
-
-    return pos_reviews
-
-def filter_neg_reviews(reviews):
-    """Filter the reviews that are negative from [reviews].
+def filter_reviews_sentiment(reviews):
+    """Filter the reviews that are positive or negative from [reviews].
+    Review is considered positive if its sentiment intensity is >=0.75
     Review is considered negative if its sentiment intensity is <=-0.1
 
     [reviews]: list of JSON objects"""
 
+    pos_reviews = []
     neg_reviews = []
     for review in reviews:
+        if (review["sentiment_score"]>=0.75):
+            pos_reviews.append(review)
         if (review["sentiment_score"]<=-0.2):
             neg_reviews.append(review)
 
-    return neg_reviews
+    return pos_reviews,neg_reviews
 
 ###############################COMPUTING PERCENTAGES OF EACH category##################################
 def filter_category(category_lst):
@@ -246,7 +237,7 @@ def compute_top_rest(reviews, neg):
 
     return ranked_rest_lst[:5]
 
-def compute_top_rest_per_category(reviews, neg):
+def compute_top_rest_per_category(reviews, neg, percentages):
     """Computes the top restaurant list for each category in [reviews] that has
     review percentage over 1%
 
@@ -255,7 +246,6 @@ def compute_top_rest_per_category(reviews, neg):
     If neg == True, then finding the bottom 5 restaurants"""
 
     rest_per_category_dict = defaultdict(list)
-    percentages = compute_percentage_per_category(reviews)
 
     for category,percentage in percentages:
         if percentage >= LIMIT:
