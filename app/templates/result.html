@@ -110,7 +110,6 @@
     }
   });
 
-<<<<<<< HEAD
   // new Chart(document.getElementById("pie-chart_pos_neg"), {
   //   type: 'pie',
   //   data: {
@@ -173,149 +172,59 @@
         }
       });
 
-      var restaurants_infos_per_category = {{restaurants_infos_per_category}};
-      var text_body_for_top = "{% for restaurant,star,address in restaurants_infos_per_category[labels[0].lower()][0] %} <font size="2" color="black" face="Courier New"><center>{{restaurant}} {{star}}</center> <center>{{address}}</center> </br></font> {% endfor %}";
-      // if (idx == 0) {
-      //   {% if labels|length >=0 %}
-      //     text_body_for_top ='{% for restaurant,star,address in restaurants_infos_per_category[labels[0].lower()][0] %} <font size="2" color="black" face="Courier New"><center>{{restaurant}} {{star}}</center> <center>{{address}}</center> </br></font> {% endfor %}';
-      //   {% endif %}
-      // } else if (idx == 1 ) {
-      //   {% if labels|length >=1 %}
-      //     text_body_for_top ='{% for restaurant,star,address in restaurants_infos_per_category[labels[1].lower()][0] %} <font size="2" color="black" face="Courier New"><center>{{restaurant}} {{star}}</center> <center>{{address}}</center> </br></font> {% endfor %}';
-      //   {% endif %}
-      // } else if (idx == 2) {
-      //   {% if labels|length >=2 %}
-      //     text_body_for_top ='{% for restaurant,star,address in restaurants_infos_per_category[labels[2].lower()][0] %} <font size="2" color="black" face="Courier New"><center>{{restaurant}} {{star}}</center> <center>{{address}}</center> </br></font> {% endfor %}';
-      //   {% endif %}
-      // } else if (idx == 3) {
-      //   {% if labels|length >=3 %}
-      //     text_body_for_top ='{% for restaurant,star,address in restaurants_infos_per_category[labels[3].lower()][0] %} <font size="2" color="black" face="Courier New"><center>{{restaurant}} {{star}}</center> <center>{{address}}</center> </br></font> {% endfor %}';
-      //   {% endif %}
-      // } else if (idx == 4) {
-      //   {% if labels|length >=4 %}
-      //     text_body_for_top ='{% for restaurant,star,address in restaurants_infos_per_category[labels[4].lower()][0] %} <font size="2" color="black" face="Courier New"><center>{{restaurant}} {{star}}</center> <center>{{address}}</center> </br></font> {% endfor %}';
-      //   {% endif %}
-      // }
+      var restaurants_infos = {{restaurants_infos_per_category}};
+
+      if (idx == 0) {
+        {% if labels|length >=0 %}
+          text_body_for_top ='{% for restaurant,star,address in restaurants_infos[idx][0] %} <font size="2" color="black" face="Courier New"><center>{{restaurant}} {{star}}</center> <center>{{address}}</center> </br></font> {% endfor %}';
+        {% endif %}
+      } else if (idx == 1 ) {
+        {% if labels|length >=1 %}
+          text_body_for_top ='{% for restaurant,star,address in restaurants_infos_per_category[1][0] %} <font size="2" color="black" face="Courier New"><center>{{restaurant}} {{star}}</center> <center>{{address}}</center> </br></font> {% endfor %}';
+        {% endif %}
+      } else if (idx == 2) {
+        {% if labels|length >=2 %}
+          text_body_for_top ='{% for restaurant,star,address in restaurants_infos_per_category[2][0] %} <font size="2" color="black" face="Courier New"><center>{{restaurant}} {{star}}</center> <center>{{address}}</center> </br></font> {% endfor %}';
+        {% endif %}
+      } else if (idx == 3) {
+        {% if labels|length >=3 %}
+          text_body_for_top ='{% for restaurant,star,address in restaurants_infos_per_category[3][0] %} <font size="2" color="black" face="Courier New"><center>{{restaurant}} {{star}}</center> <center>{{address}}</center> </br></font> {% endfor %}';
+        {% endif %}
+      } else if (idx == 4) {
+        {% if labels|length >=4 %}
+          text_body_for_top ='{% for restaurant,star,address in restaurants_infos_per_category[4][0] %} <font size="2" color="black" face="Courier New"><center>{{restaurant}} {{star}}</center> <center>{{address}}</center> </br></font> {% endfor %}';
+        {% endif %}
+      }
 
       $("#top-popular-body").html(text_body_for_top);
 
       var text_body_for_bot = "";
       if (idx == 0) {
         {% if labels|length >=0 %}
-          text_body_for_bot ='{% for restaurant,star,address in restaurants_infos_per_category[labels[0].lower()][1] %} <font size="2" color="black" face="Courier New"><center>{{restaurant}} {{star}}</center> <center>{{address}}</center> </br></font> {% endfor %}';
+          text_body_for_bot ='{% for restaurant,star,address in restaurants_infos_per_category[0][1] %} <font size="2" color="black" face="Courier New"><center>{{restaurant}} {{star}}</center> <center>{{address}}</center> </br></font> {% endfor %}';
         {% endif %}
       } else if (idx == 1 ) {
         {% if labels|length >=1 %}
-          text_body_for_bot ='{% for restaurant,star,address in restaurants_infos_per_category[labels[1].lower()][1] %} <font size="2" color="black" face="Courier New"><center>{{restaurant}} {{star}}</center> <center>{{address}}</center> </br></font> {% endfor %}';
+          text_body_for_bot ='{% for restaurant,star,address in restaurants_infos_per_category[1][1] %} <font size="2" color="black" face="Courier New"><center>{{restaurant}} {{star}}</center> <center>{{address}}</center> </br></font> {% endfor %}';
         {% endif %}
       } else if (idx == 2) {
         {% if labels|length >=2 %}
-          text_body_for_bot ='{% for restaurant,star,address in restaurants_infos_per_category[labels[2].lower()][1] %} <font size="2" color="black" face="Courier New"><center>{{restaurant}} {{star}}</center> <center>{{address}}</center> </br></font> {% endfor %}';
+          text_body_for_bot ='{% for restaurant,star,address in restaurants_infos_per_category[2][1] %} <font size="2" color="black" face="Courier New"><center>{{restaurant}} {{star}}</center> <center>{{address}}</center> </br></font> {% endfor %}';
         {% endif %}
       } else if (idx == 3) {
         {% if labels|length >=3 %}
-          text_body_for_bot ='{% for restaurant,star,address in restaurants_infos_per_category[labels[3].lower()][1] %} <font size="2" color="black" face="Courier New"><center>{{restaurant}} {{star}}</center> <center>{{address}}</center> </br></font> {% endfor %}';
+          text_body_for_bot ='{% for restaurant,star,address in restaurants_infos_per_category[3][1] %} <font size="2" color="black" face="Courier New"><center>{{restaurant}} {{star}}</center> <center>{{address}}</center> </br></font> {% endfor %}';
         {% endif %}
       } else if (idx == 4) {
         {% if labels|length >=4 %}
-          text_body_for_bot ='{% for restaurant,star,address in restaurants_infos_per_category[labels[4].lower()][1] %} <font size="2" color="black" face="Courier New"><center>{{restaurant}} {{star}}</center> <center>{{address}}</center> </br></font> {% endfor %}';
+          text_body_for_bot ='{% for restaurant,star,address in restaurants_infos_per_category[4][1] %} <font size="2" color="black" face="Courier New"><center>{{restaurant}} {{star}}</center> <center>{{address}}</center> </br></font> {% endfor %}';
         {% endif %}
-=======
-  new Chart(document.getElementById("pie-chart_pos_neg"), {
-    type: 'pie',
-    data: {
-      labels: [{% for item in labels_pos %}
-                  "{{item}}",
-               {% endfor %}],
-      datasets: [{
-        label: "Percentage",
-        backgroundColor: ["#1B4F72", "#21618C", "#2874A6", "#2E86C1", "#3498DB", "#5DADE2", "#85C1E9", "#AED6F1", "#D6EAF8", "#EBF5FB", "#D6EAF8", "EBF5FB", "#D6EAF8", "EBF5FB"],
-        data:[{% for item in data_pos %} "{{item}}", {% endfor %}]
-      }]
-    },
-    options: {
-      title: {
-        display: true,
-        text: 'Positive vs Negative Reviews',
-        fontSize: 14
->>>>>>> 85e88be2006f4081082b4810413aef55dded672f
       }
 
-<<<<<<< HEAD
       $("#bottom-popular-body").html(text_body_for_bot);
-=======
-  canvas_all.onclick = function(evt) {
-    var activePoints = all_chart.getElementsAtEvent(evt);
-    if (activePoints[0]) {
-      var chartData = activePoints[0]['_chart'].config.data;
-      var idx = activePoints[0]['_index'];
 
-      var label = chartData.labels[idx];
-      var value = chartData.datasets[0].data[idx];
-
-      var text_heading = '<font size="2" color="grey" face="Courier New"><center>Top 5 Restaurants for ' + label;
-      $("#top-popular-heading").html(text_heading);
-
-      $("#pie-chart_pos_neg").remove();
-      $("div.pos_neg_chart").append('<canvas id="pie-chart_pos_neg" style="display: block; margin: auto; width: 50%; height: auto"></canvas>');
-      var ctx = document.getElementById("pie-chart_pos_neg").getContext("2d");
-      var pos_neg_chart = new Chart(ctx, {
-        type: 'pie',
-        data: {
-          labels: ["Positive", "Negative"]
-          // [{% for item in labels_pos %}
-          //             "{{item}}",
-          //          {% endfor %}]
-          ,
-          datasets:
-          [{
-            label: "Percentage",
-            backgroundColor: ["#F48B8B", "#85C1E9"],
-            data: ["55", "45"]//[{% for item in data_pos %} "{{item}}", {% endfor %}]
-          }]
-        },
-        options: {
-          title: {
-            display: true,
-            text: 'Positive vs Negative Reviews',
-            fontSize: 14
-          }
-        }
-      });
-
-
-
-      var text_body = "";
-      if (idx == 0) {
-        {% if labels|length >=0 %}
-          text_body ='{% for restaurant in top_rest[labels[0].lower()] %} <font size="2" color="black" face="Courier New"><center>{{restaurant}} ★★★★☆</center> <center>Address : Hi, Ithaca, NY</center> </br></font> {% endfor %}';
-        {% endif %}
-      } else if (idx == 1 ) {
-        {% if labels|length >=1 %}
-          text_body ='{% for restaurant in top_rest[labels[1].lower()] %} <font size="2" color="black" face="Courier New"><center>{{restaurant}} ★★★★☆</center> <center>Address : Hi, Ithaca, NY</center> </br></font> {% endfor %}';
-        {% endif %}
-      } else if (idx == 2) {
-        {% if labels|length >=2 %}
-          text_body ='{% for restaurant in top_rest[labels[2].lower()] %} <font size="2" color="black" face="Courier New"><center>{{restaurant}} ★★★★☆</center> <center>Address : Hi, Ithaca, NY</center> </br></font> {% endfor %}';
-        {% endif %}
-      } else if (idx == 3) {
-        {% if labels|length >=3 %}
-          text_body ='{% for restaurant in top_rest[labels[3].lower()] %} <font size="2" color="black" face="Courier New"><center>{{restaurant}} ★★★★☆</center> <center>Address : Hi, Ithaca, NY</center> </br></font> {% endfor %}';
-        {% endif %}
-      } else if (idx == 4) {
-        {% if labels|length >=4 %}
-          text_body ='{% for restaurant in top_rest[labels[4].lower()] %} <font size="2" color="black" face="Courier New"><center>{{restaurant}} ★★★★☆</center> <center>Address : Hi, Ithaca, NY</center> </br></font> {% endfor %}';
-        {% endif %}
-      }
-
-
-
-      $("#top-popular-body").html(text_body);
->>>>>>> 85e88be2006f4081082b4810413aef55dded672f
     }
   };
-
-
   </script>
 
 </body>
