@@ -7,9 +7,12 @@ import os
 
 ##########################################HELPERS#################################################
 DEFAULT = 0
+POS_SCORE_LIMIT = 0.3
+NEG_SCORE_LIMIT = -0.7
 LIMIT = 0.05
 
 def format_percentage_for_html(percentages):
+    """Normalizing the percentages so we take out categories that are lower than LIMIT"""
     others = 0
     labels = []
     data = []
@@ -72,7 +75,6 @@ def compare_timelimit_timeposted(time_limit, time_posted):
 #######################################FILTERING REVIEWS############################################
 def filter_reviews(j, neighborhood, credibility, time_limit):
     """Filter the reviews that match with user inputs.
-    ***ASSUMES THAT JSON OBJECT HAS SAME TYPE AS THE INPUTS***
 
     Returns a list of reviews"""
     filtered_out_reviews = []
@@ -80,188 +82,148 @@ def filter_reviews(j, neighborhood, credibility, time_limit):
     time_limit = int(time_limit)
 
     for review in j["reviews"]:
-        #if neighborhood.lower()
         if (review["business"]["neighborhood"].lower() == neighborhood.lower()):
             #credibility = DEFAULT if credibility == 0 else 1
             #cond1 = ((credibility != "All Users") and (review["elite_years"]["year"] >= (how YELP does it))) or (credibility == "All Users")
-            #NEEDS TO HAVE A FUNCTION THAT COMPARES THIS TWO
             cond2 = ((time_limit != DEFAULT) and (compare_timelimit_timeposted(time_limit, review["date"]))) or (time_limit == DEFAULT)
-            #cond3 = ((price_range != None) and (review["restaurant_price_range"] == price_range)) or (price_range == None)
 
             if (cond2):
                 filtered_out_reviews.append(review)
 
     return filtered_out_reviews
 
-def filter_reviews_sentiment(reviews):
-    """Filter the reviews that are positive or negative from [reviews].
-    Review is considered positive if its sentiment intensity is >=0.75
-    Review is considered negative if its sentiment intensity is <=-0.1
+###############################COMPUTING RESTAURANTS AND PERCENTAGES PER RESTAURANTS##################################
+def filter_reviews_calc_percentage_by_category(reviews):
+    """Filter [reviews] by category and Compute percentage for each category of [reviews].
+    Returns a dictionary in format {\category: list of reviews} and
+    a list of tuples [(category, percentage)] in a decreasing order
 
-    [reviews]: list of JSON objects"""
-
-    pos_reviews = []
-    neg_reviews = []
-    for review in reviews:
-        if (review["sentiment_score"]>=0.75):
-            pos_reviews.append(review)
-        if (review["sentiment_score"]<=-0.2):
-            neg_reviews.append(review)
-
-    return pos_reviews,neg_reviews
-
-###############################COMPUTING PERCENTAGES OF EACH category##################################
-def filter_category(category_lst):
-    """Returns a list of categories of a restaurant that are accepted"""
-
-    african = ["african", "senegalese", "south african"]
-    american = ["american (new)", "american (traditional)", "chicken wings", "soul food", "comfort food"]
-    dessert = ["creperies", "waffles"]
-    central_american = ["honduran", "nicaraguan"]
-    east_european = ["hungarian", "polish", "russian", "ukrainian", "slovakian", "german", "bulgarian"]
-    asian_fusion = ["asian fusion", "pan asian"]
-    brunch_diners = ["breakfast & brunch", "diners"]
-    british = ["british", "fish & chips"]
-    cafes = ["cafes", "themed cafes", "cafeteria", "hong kong style cafe"]
-    caribbean = ["caribbean", "dominican", "haitian", "puerto rican", "trinidadian"]
-    chinese = ["chinese", "dim sum", "hot pot", "cantonese", "hainan", "shanghainese", "szechuan"]
-    fast_food = ["hot dogs", "food stands", "burgers", "pizza"]
-    french = ["french", "mauritius", "reunion"]
-    italian = ["italian", "calabrian", "sardinian", "sicilian", "tuscan"]
-    japanese = ["japanese", "sushi bars", "izakaya", "japanese curry", "ramen", "teppanyaki"]
-    latin_american = ["latin american", "colombian", "salvadoran", "venezuelan"]
-    mediterranean = ["mediterranean", "falafel"]
-    mexican = ["mexican", "tacos", "new mexican cuisine", "tex-mex"]
-    middle_eastern = ["middle eastern", "egyptian", "lebanese", "turkish"]
-    sandwiches = ["sandwiches", "wraps", "delis"]
-    spanish = ["spanish", "catalan"]
-    steakhouses = ["steakhouses", "cheesesteaks", "game meat"]
-    tapas = ["tapas bars", "tapas/small plates"]
-    thai = ["thai", "laotian"]
-    vegan = ["vegan", "vegetarian", "salad"]
-    others = ["afghan", "arabian", "argentine", "armenian", "australian", "austrian", "bangladeshi", \
-              "barbeque", "cajun/creole", "cambodian", "cuban", "czech", "ethiopian", "filipino", "gastropubs", \
-              "gluten-free", "greek", "guamanian", "halal", "hawaiian", "himalayan/nepalese", "iberian", "indian", \
-              "indonesian", "irish", "kebab", "korean", "kosher", "malaysian", "modern european", "mongolian", \
-              "moroccan", "noodles", "pakistani", "persian/iranian", "peruvian", "portuguese", "poutineries", \
-              "scandinavian", "scottish", "seafood", "singaporean", "soup", "southern", "syrian", "taiwanese", "vietnamese"]
-
-    categories = [african, american, dessert, central_american, east_european, asian_fusion, brunch_diners, british, cafes, \
-                  caribbean, chinese, fast_food, french, italian, japanese, latin_american, mediterranean, mexican, middle_eastern, \
-                  sandwiches, spanish, steakhouses, tapas, thai, vegan, others]
-    category_names = ["african", "american", "dessert", "central american", "east european", "asian fusion", "brunch/diners", "british", \
-                      "cafes", "caribbean", "chinese", "fast food", "french", "italian", "japanese", "latin american", "mediterranean", \
-                      "mexican", "middle eastern", "sandwiches", "spanish", "steakhouses", "tapas", "thai", "vegan", "others"]
-    output = []
-    #for each t in category_lst
-    for t in category_lst:
-        #go through possible categories to see which category t fits into
-        for idx,category in enumerate(categories):
-            if t.lower() in category:
-                #If t belongs in [other], t keeps its category name
-                if category_names[idx] == "others":
-                    output.append(t.lower())
-                #If t does not belong in [other], grouped name is added
-                else:
-                    output.append(category_names[idx])
-
-    return output
-
-def compute_percentage_per_category(reviews):
-    """Computes the percentages of the reviews for each category.
     ***NOTE: Single restaurant can be assigned multiple categories.
-    ***NOTE: Review might not have a category key.
-
-    Returns a dictionary in format {\ category: percentage}
-
-    [reviews]: list of JSON objects"""
+    ***NOTE: Review might not have a category key."""
 
     n_reviews = 0
-    percentage_dict = defaultdict(float)
+    percentage_per_category_dict = defaultdict(float)
+    reviews_per_category = defaultdict(list)
 
-    #Iterating through every review and see which category the review belongs to
     for review in reviews:
-        #Single restaurant can be assigned multiple categories
-        #Review might not have a category key
         try:
-            rest_category_lst = filter_category(review["business"]["category"])
+            #Creating a lst of reviews per category
+            rest_category_lst = review["business"]["category"]
+            for category in rest_category_lst:
+                reviews_per_category[category] += [review]
+
+            #Computing percentages
             n_reviews += len(rest_category_lst)
-            for t in rest_category_lst:
-                percentage_dict[t] += 1.0
+            for category in rest_category_lst:
+                percentage_per_category_dict[category] += 1.0
+
         except KeyError:
             pass
 
-    for rest_category in percentage_dict.keys():
-        percentage_dict[rest_category] = (percentage_dict[rest_category]/n_reviews)
+    #Computing percentages
+    for rest_category in percentage_per_category_dict.keys():
+        percentage_per_category_dict[rest_category] = (percentage_per_category_dict[rest_category]/n_reviews)
 
-    output = sorted(percentage_dict.items(), key=lambda x: x[1], reverse=True)
-    return output
+    srted_category_percentages_lst = sorted(percentage_per_category_dict.items(), key=lambda x: x[1], reverse=True)
 
-###############################COMPUTING TOP RESTAURANTS PER category##################################
-def filter_reviews_category(reviews,category):
-    """Filter [reviews] by [category].
-    Returns a list of JSON objects."""
+    return reviews_per_category, srted_category_percentages_lst
 
-    reviews_of_category = []
+def compute_rest_infos(reviews):
+    """Computes the top 3 and bottom 3 restaurants and respective stars and address for [reviews]."""
+
+    rest_infos_dict = defaultdict(float)
+    review_count_per_business = defaultdict(float)
+    address_dict = defaultdict()
+
+    #Counting the stars given to the business
     for review in reviews:
-        #Review might not have a category key
-        try:
-            rest_category_lst = filter_category(review["business"]["category"])
-            if (category in rest_category_lst):
-                reviews_of_category.append(review)
-        except KeyError:
-            pass
+        rest_infos_dict[review["business"]["name"]] += float(review["stars"])
+        review_count_per_business[review["business"]["name"]] += 1
+        address_dict[review["business"]["name"]] = review["business"]["address"]
 
-    return reviews_of_category
+    #Normalizing the stars
+    for restaurant, stars in rest_infos_dict.items():
+        rest_infos_dict[restaurant] = round(rest_infos_dict[restaurant]/review_count_per_business[restaurant],1)
 
-def compute_top_rest(reviews, neg):
-    """Computes the top restaurant for [reviews].
-    Returns a sorted list of 5 restaurants in the order of decreasing popularity."""
+    srted_rest_infos_lst = []
 
-    rest_stars_dict = defaultdict(int)
+    #Creating a list of (restaurant, star)
+    for rest in sorted(rest_infos_dict, key=rest_infos_dict.get, reverse=True):
+        srted_rest_infos_lst.append((rest, rest_infos_dict[rest], address_dict[rest]))
 
-    for review in reviews:
-        rest_stars_dict[review["business"]["name"]] += int(review["stars"])
+    #Error Checking in case of there are not enough top restaurants
+    try:
+        top_rest_infos_lst = srted_rest_infos_lst[:3]
+        bot_rest_infos_lst = srted_rest_infos_lst[-3:][::-1]
 
-    #normalizing
-    for restaurant, stars in rest_stars_dict.items():
-        rest_stars_dict[restaurant] /= len(reviews)
+    except IndexError:
+        top_rest_infos_lst = srted_rest_infos_lst
+        bot_rest_infos_lst = srted_rest_infos_lst
 
-    ranked_rest_lst = []
-    srted_lst = (sorted(rest_stars_dict, key=rest_stars_dict.get) if neg else sorted(rest_stars_dict, key=rest_stars_dict.get, reverse=True))
-    for k in srted_lst:
-        try:
-            ranked_rest_lst.append(k.encode('ascii'))
-        except:
-            pass
+    return [top_rest_infos_lst, bot_rest_infos_lst]
 
-    return ranked_rest_lst[:5]
+def compute_rest_infos_per_category(reviews, percentages, reviews_per_category):
+    """Computes the top 3 restaurants and bottom 3 restaurants for each category in [reviews]
+    that has review percentage over [LIMIT]
 
-def compute_top_rest_per_category(reviews, neg, percentages):
-    """Computes the top restaurant list for each category in [reviews] that has
-    review percentage over 1%
+    Returns a list in format [[top 3,bot 3]] where top 3 and bot 3 is [(rest, stars, address, (later chosen))]"""
 
-    Returns a dicitonary in format {\cuisine category: lst of top 5 restaurants}
+    rest_per_category = []
 
-    If neg == True, then finding the bottom 5 restaurants"""
-
-    rest_per_category_dict = defaultdict(list)
-
-    for category,percentage in percentages:
+    for category, percentage in percentages:
         if percentage >= LIMIT:
-            reviews_of_category = filter_reviews_category(reviews,category)
-            top_rest_list = compute_top_rest(reviews_of_category,neg)
-            rest_per_category_dict[category] = top_rest_list
+            reviews_of_category = reviews_per_category[category]
+            rest_per_category.append(compute_rest_infos(reviews_of_category))
 
-    return rest_per_category_dict
+    return rest_per_category
+
+###############################COMPUTING POSITIVE AND NEGATIVE PERCENTAGES##################################
+def compute_pos_neg_percentages(reviews_per_category, percentages_per_category):
+    """Computes percentage of positive/negative/neutral reviews per category (if its percentage >= LIMIT).
+    Returns a list in format [[pos percentage, neg percentage]]. """
+
+    pos_neg_percantages_per_category = []
+
+    for category, percentage in percentages_per_category:
+        pos = 0.0
+        neg = 0.0
+        neutral = 0.0
+
+        if percentage >= LIMIT:
+            reviews = reviews_per_category[category]
+            #Counting how many of the reviews are positive or negative
+            for review in reviews:
+                if (review["sentiment_score"]>=POS_SCORE_LIMIT):
+                    #pos_reviews.append(review)
+                    pos += 1.0
+                elif (review["sentiment_score"]<-NEG_SCORE_LIMIT):
+                    #neg_reviews.append(review)
+                    neg += 1.0
+                else:
+                    neutral += 1.0
+
+            #Normalizing by number of neutral
+            normalize = len(reviews)-neutral
+            pos_percentage = round((pos / normalize)*100,0)
+            neg_percentage = round((neg / normalize)*100,0)
+
+            pos_neg_percantages_per_category.append([pos_percentage, neg_percentage])
+
+    return pos_neg_percantages_per_category
 
 # j = load_json("pittsburgh")
-# all_reviews = filter_reviews(j, "shadyside", 0, 0)
-# percentages_all_reviews = compute_percentage_per_category(all_reviews)
-# top_rest_all_reviews = compute_top_rest_per_category(all_reviews)
-#
-# label, data = format_for_html(percentages_all_reviews, top_rest_all_reviews)
-# print(percentages_all_reviews)
-# print(top_rest_all_reviews)
-# print(label)
-# print(data)
+# all_reviews = filter_reviews(j, "shadyside", 0, 6)
+# reviews_per_category, percentages_per_category = filter_reviews_calc_percentage_by_category(all_reviews)
+# labels,_ = format_percentage_for_html(percentages_per_category)
+# pos_neg_percentages_per_category = compute_pos_neg_percentages(reviews_per_category, percentages_per_category)
+# restaurants_infos_per_category = compute_rest_infos_per_category(all_reviews, percentages_per_category, reviews_per_category)
+
+#print("Percentages by Category:")
+#print(percentages_per_category)
+# print(labels[0])
+# print("\n")
+# print("Positive and Negative Percentages by Category:")
+# print(pos_neg_percentages_per_category[labels[0].lower()])
+# print("\n")
+#print("Restaurants with Infos by Category:")
+#print(restaurants_infos_per_category)
