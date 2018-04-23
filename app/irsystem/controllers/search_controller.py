@@ -44,7 +44,7 @@ def search():
 
 		#Calculating the top ranked restaurants per category [[top3,bot3]] where top3 = [(rest,star,address)]
 		#***ASSUME THAT THE ORDER IS IN THE ORDER SAME AS percentages_per_CATEGORY
-		restaurants_infos_per_category = compute_rest_infos_per_category(all_reviews, percentages_per_category, reviews_per_category)
+		top_restaurants_infos_per_category, bot_restaurants_infos_per_category = compute_rest_infos_per_category(all_reviews, percentages_per_category, reviews_per_category)
 
 		#If no reviews available, then return unfortunate page
 		if all_reviews == []:
@@ -59,5 +59,6 @@ def search():
 			return render_template('result.html', labels = labels, data = data, \
 									top_category = top_category, top_pos_percentage = top_pos, top_neg_percentage = top_neg, \
 									pos_neg_percentages_per_category = pos_neg_percentages_per_category, \
-									restaurants_infos_per_category = restaurants_infos_per_category, \
+									top_restaurants_infos_per_category = top_restaurants_infos_per_category, \
+									bot_restaurants_infos_per_category = bot_restaurants_infos_per_category, \
 								    neighborhood = neighborhood, time = time, credibility = credibility, city = city)

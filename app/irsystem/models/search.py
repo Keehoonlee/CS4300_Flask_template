@@ -158,24 +158,27 @@ def compute_rest_infos(reviews):
 
     except IndexError:
         top_rest_infos_lst = srted_rest_infos_lst
-        bot_rest_infos_lst = srted_rest_infos_lst
+        bot_rest_infos_lst = srted_rest_infos_lst[::-1]
 
-    return [top_rest_infos_lst, bot_rest_infos_lst]
+    return (top_rest_infos_lst, bot_rest_infos_lst)
 
 def compute_rest_infos_per_category(reviews, percentages, reviews_per_category):
     """Computes the top 3 restaurants and bottom 3 restaurants for each category in [reviews]
     that has review percentage over [LIMIT]
 
-    Returns a list in format [[top 3,bot 3]] where top 3 and bot 3 is [(rest, stars, address, (later chosen))]"""
+    Returns a tuple (top 3,bot 3) where top 3 and bot 3 is [(rest, stars, address, (later chosen))]"""
 
-    rest_per_category = []
+    top_rest_infos_per_category = []
+    bot_rest_infos_per_category = []
 
     for category, percentage in percentages:
         if percentage >= LIMIT:
             reviews_of_category = reviews_per_category[category]
-            rest_per_category.append(compute_rest_infos(reviews_of_category))
+            top, bot = compute_rest_infos(reviews_of_category)
+            top_rest_infos_per_category.append(top)
+            bot_rest_infos_per_category.append(bot)
 
-    return rest_per_category
+    return top_rest_infos_per_category, bot_rest_infos_per_category
 
 ###############################COMPUTING POSITIVE AND NEGATIVE PERCENTAGES##################################
 def compute_pos_neg_percentages(reviews_per_category, percentages_per_category):
@@ -216,14 +219,13 @@ def compute_pos_neg_percentages(reviews_per_category, percentages_per_category):
 # reviews_per_category, percentages_per_category = filter_reviews_calc_percentage_by_category(all_reviews)
 # labels,_ = format_percentage_for_html(percentages_per_category)
 # pos_neg_percentages_per_category = compute_pos_neg_percentages(reviews_per_category, percentages_per_category)
-# restaurants_infos_per_category = compute_rest_infos_per_category(all_reviews, percentages_per_category, reviews_per_category)
-
-#print("Percentages by Category:")
-#print(percentages_per_category)
-# print(labels[0])
-# print("\n")
+# top_restaurants_infos_per_category, bot_restaurants_infos_per_category = compute_rest_infos_per_category(all_reviews, percentages_per_category, reviews_per_category)
+#
+#
 # print("Positive and Negative Percentages by Category:")
-# print(pos_neg_percentages_per_category[labels[0].lower()])
+# print(pos_neg_percentages_per_category)
 # print("\n")
-#print("Restaurants with Infos by Category:")
-#print(restaurants_infos_per_category)
+# print("Restaurants with Infos by Category:")
+# print(top_restaurants_infos_per_category)
+# print("\n")
+# print(bot_restaurants_infos_per_category)
