@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
   <link href="{{url_for('static', filename='style.css')}}" rel="stylesheet">
   <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-
+  <link href="https://fonts.googleapis.com/css?family=Arapey|Cherry+Swash|Josefin+Slab|Oldenburg|Pacifico|Patrick+Hand+SC|Pompiere|Rancho|Salsa|Sofia" rel="stylesheet">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
   <link rel="shortcut icon" type="image/x-icon" href="{{url_for('static', filename='image/iconletter.png')}}">
@@ -30,19 +30,72 @@
   </nav>
   <div class="search-container" background-color="white">
     <div class="search-slide" id="search-slide">
-      <div class="container" style="padding-top:20vh">
+      <div class="container-fluid">
+        <div class="row">
+          <!-- Search Bar -->
+          <div class="col-sm-5">
+            <div style="background-color: black; opacity: 0.8; border-radius: 25px; margin:10%;padding: 5%;">
+              <div class="text-center">
+                <img src="{{url_for('static', filename='image/logo2.png')}}" style="width: 90%; height: auto">
+                <p class="under-logo-text" style="  font-family: 'Pacifico', cursive; color: white; font-size: 20px;">Helping Restaurant Owners Open Successful Restaurants since 2018</p>
+              </div>
+              <hr/>
+              <div class="row">
+                <form class="form-group col-md-12">
+                  <p class="information" style="  font-family: 'Rancho', cursive; color: white !important;font-size: 25px; line-height: 1;">Where would you like to open the restaurant?</p>
+                  <div class = "input-group">
+                    <select class="form-control" name = "city">
+                      <option value="" selected disabled hidden>Choose Your City</option>
+                      <option value="san_francisco">San Francisco</option>
+                      <option value="las_vegas">Las Vegas</option>
+                      <option value="pittsburgh">Pittsburgh</option>
+                    </select>
+                    <input id="neighborhood" type="text" class="form-control" name = "neigh" placeholder="Neighborhood">
+                  </div>
+                  <div class = "input-group">
+                    <p class="information" style="  font-family: 'Rancho', cursive; color: white !important;font-size: 25px; line-height: 1;"><br>How Recent Would You Like the Reviews to be?</p>
+                    <select class="form-control" name = "time">
+                      <option value="0">Any Time</option>
+                      <option value="6">Past Six Months</option>
+                      <option value="12">Past Year</option>
+                    </select>
+                  </div>
+                  <div class = "input-group">
+                    <p class="information" style="  font-family: 'Rancho', cursive; color: white !important;font-size: 25px; line-height: 1;"><br>Credibility of the Users</p>
+                    <select class="form-control" name = "cred">
+                      <option value="All Users">All Users</option>
+                      <option value="Elite Users">Only Elite</option>
+                    </select>
+                    <p class="information" style="font-family: 'Rancho', cursive;color: red; font-size: 20px">**Elite Users give more credible reviews**<br><br></p>
+                  </div>
+                  <button type="submit" class="btn btn-info btn-lg" style = "  background-color: #68BEA4; display: block; margin-left: auto; margin-right: auto; width: 40%;"> Go! </button>
+                  <br>
+                  <br>
+                </form>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-7">
+            <!-- Interactive Map style="background-color: black; opacity: 0.8; border-radius: 25px"-->
+            <div class="map-container" style="margin: 10%">
+              <img src="{{url_for('static', filename='image/pitts_map_demo.png')}}" usemap="#image-map" style="max-width : 100%; max-height:100%">
+              <map name="image-map">
+                <area target="" alt="DownTown" title="DownTown" href="#" coords="250,236,304,217,309,224,320,221,319,229,312,237,325,230,331,239,336,247,333,251,309,251,305,260,302,266,293,264,284,256,262,246" shape="poly">
+              </map>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- <div class="container" style="padding-top:20vh">
         <div class="text-center">
           <img src="{{url_for('static', filename='image/logo2.png')}}" style="width: inherit; height: auto">
-          <!-- <h3 style="font-size: 120px; color: white">
-            FOODIES
-          </h3> -->
+
         </div>
         <div class="row">
           <div class="text-center">
             <form>
               <div class="form-group form-inline">
                 <div class = "input-group">
-                  <!-- <span class="input-group-addon" id="basic-addon1"></span> -->
                   <select class="form-control" name = "city">
                     <option value="" selected disabled hidden>Choose Your City</option>
                     <option value="san_francisco">San Francisco</option>
@@ -51,11 +104,9 @@
                   </select>
                 </div>
                 <div class = "input-group">
-                  <!-- <span class="input-group-addon" id="basic-addon1">@</span> -->
                   <input style="width: 300px;" id="neighborhood" type="text" class="form-control" name = "neigh" placeholder="Neighborhood/Zipcode">
                 </div>
-                <!-- <input id="input" type="text" name="price" class="form-control" placeholder="Price Range"> -->
-                <!-- <div class = "input-group">
+                <div class = "input-group">
                   <select class="form-control" name = "price">
                     <option value="0">Any Price</option>
                     <option value="1">Less than $10</option>
@@ -63,10 +114,8 @@
                     <option value="3">$31 - $60</option>
                     <option value="4">More than $60</option>
                   </select>
-                </div> -->
-                <!-- <input id="input" type="text" name="cred" class="form-control" placeholder="Credibility"> -->
+                </div>
                 <div class = "input-group">
-                  <!-- <span class="input-group-addon" id="basic-addon1">@</span> -->
                   <select class="form-control" name = "time">
                     <option value="0">Any Time</option>
                     <option value="6">Past Six Months</option>
@@ -74,18 +123,16 @@
                   </select>
                 </div>
                 <div class = "input-group">
-                  <!-- <span class="input-group-addon" id="basic-addon1">@</span> -->
                   <select class="form-control" name = "cred">
                     <option value="All Users">All Users</option>
                     <option value="Elite Users">Only Elite</option>
                   </select>
                 </div>
-                <!-- <input id="input" type="text" name="time" class="form-control" placeholder="Recent"> -->
                 <button type="submit" class="btn btn-info"> Go! </button>
               </div>
             </form>
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
 
