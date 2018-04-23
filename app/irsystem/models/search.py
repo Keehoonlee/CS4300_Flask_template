@@ -3,6 +3,7 @@ from collections import defaultdict
 import json
 from datetime import datetime
 import os
+import re
 
 
 ##########################################HELPERS#################################################
@@ -128,37 +129,67 @@ def filter_reviews_calc_percentage_by_category(reviews):
 
     return reviews_per_category, srted_category_percentages_lst
 
+
+
 def compute_rest_infos(reviews):
     """Computes the top 3 and bottom 3 restaurants and respective stars and address for [reviews]."""
 
     rest_infos_dict = defaultdict(float)
     review_count_per_business = defaultdict(float)
     address_dict = defaultdict()
+    sentiment_review_dict = defaultdict(list)
 
-    #Counting the stars given to the business
+    #Counting the stars and otheri nfos given to the business
     for review in reviews:
         rest_infos_dict[review["business"]["name"]] += float(review["stars"])
         review_count_per_business[review["business"]["name"]] += 1
         address_dict[review["business"]["name"]] = review["business"]["address"]
+        parsed_review = re.sub(r'[\n\r]+', '', review['sentiment_sentence'])
+        #parsed_review = '.'.join(review["sentiment_sentence"].split("\n")) #Required as newline characters cause error in html
+        sentiment_review_dict[review["business"]["name"]] += [(review["sentiment_score"], parsed_review)]
+
+    #Only using the top 2 reviews that have the highest sentiment score and lowest sentiment score
+    for restaurant, lst_of_reviews in sentiment_review_dict.items():
+        srted_reviews = []
+        for _, review in sorted(lst_of_reviews,key=lambda x: x[0]):
+            srted_reviews.append(review)
+
+        sentiment_review_dict[restaurant] = srted_reviews
 
     #Normalizing the stars
     for restaurant, stars in rest_infos_dict.items():
         rest_infos_dict[restaurant] = round(rest_infos_dict[restaurant]/review_count_per_business[restaurant],1)
 
-    srted_rest_infos_lst = []
-
-    #Creating a list of (restaurant, star)
+    top_rest_infos_lst = []
+    bot_rest_infos_lst = []
+    #Creating a list of (restaurant, star, and other infos) for top restaurants
+    #Error checking in case of there are not enough reviews to display
     for rest in sorted(rest_infos_dict, key=rest_infos_dict.get, reverse=True):
-        srted_rest_infos_lst.append((rest, rest_infos_dict[rest], address_dict[rest]))
+        if len(sentiment_review_dict[rest]) >= 2:
+            top_rest_infos_lst.append((rest, rest_infos_dict[rest], address_dict[rest], sentiment_review_dict[rest][-1], sentiment_review_dict[rest][-2]))
+        elif len(sentiment_review_dict[rest]) == 1:
+            top_rest_infos_lst.append((rest, rest_infos_dict[rest], address_dict[rest], sentiment_review_dict[rest][-1], ""))
+        else:
+            top_rest_infos_lst.append((rest, rest_infos_dict[rest], address_dict[rest], "", ""))
+
+    #Creating a list of (restaurant, star, and other infos) for bot restaurants
+    #Error checking in case of there are not enough reviews to display
+    for rest in sorted(rest_infos_dict, key=rest_infos_dict.get):
+        if len(sentiment_review_dict[rest]) >= 2:
+            bot_rest_infos_lst.append((rest, rest_infos_dict[rest], address_dict[rest], sentiment_review_dict[rest][0], sentiment_review_dict[rest][1]))
+        elif len(sentiment_review_dict[rest]) == 1:
+            bot_rest_infos_lst.append((rest, rest_infos_dict[rest], address_dict[rest], sentiment_review_dict[rest][0], ""))
+        else:
+            bot_rest_infos_lst.append((rest, rest_infos_dict[rest], address_dict[rest], "", ""))
 
     #Error Checking in case of there are not enough top restaurants
     try:
-        top_rest_infos_lst = srted_rest_infos_lst[:3]
-        bot_rest_infos_lst = srted_rest_infos_lst[-3:][::-1]
+        top_rest_infos_lst = top_rest_infos_lst[:3]
+        bot_rest_infos_lst = bot_rest_infos_lst[:3]
 
     except IndexError:
-        top_rest_infos_lst = srted_rest_infos_lst
-        bot_rest_infos_lst = srted_rest_infos_lst[::-1]
+        top_rest_infos_lst = top_rest_infos_lst
+        bot_rest_infos_lst = bot_rest_infos_lst
 
     return (top_rest_infos_lst, bot_rest_infos_lst)
 
@@ -220,12 +251,12 @@ def compute_pos_neg_percentages(reviews_per_category, percentages_per_category):
 # labels,_ = format_percentage_for_html(percentages_per_category)
 # pos_neg_percentages_per_category = compute_pos_neg_percentages(reviews_per_category, percentages_per_category)
 # top_restaurants_infos_per_category, bot_restaurants_infos_per_category = compute_rest_infos_per_category(all_reviews, percentages_per_category, reviews_per_category)
-#
-#
+
+
 # print("Positive and Negative Percentages by Category:")
 # print(pos_neg_percentages_per_category)
 # print("\n")
-# print("Restaurants with Infos by Category:")
-# print(top_restaurants_infos_per_category)
+#print("Restaurants with Infos by Category:")
+#print(top_restaurants_infos_per_category)
 # print("\n")
 # print(bot_restaurants_infos_per_category)
