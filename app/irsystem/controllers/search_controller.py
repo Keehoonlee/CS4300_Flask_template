@@ -2,6 +2,7 @@ from . import *
 from app.irsystem.models.helpers import *
 from app.irsystem.models.helpers import NumpyEncoder as NumpyEncoder
 from app.irsystem.models.search import *
+from app.irsystem.models.neural_net import *
 
 def top_percentage_category(pos_neg_percentages, percentages_per_category):
 	max_pos = 0
@@ -62,3 +63,22 @@ def search():
 									top_restaurants_infos_per_category = top_restaurants_infos_per_category, \
 									bot_restaurants_infos_per_category = bot_restaurants_infos_per_category, \
 								    neighborhood = neighborhood, time = time, credibility = credibility, city = city)
+
+@irsystem.route('pred_stars', methods=['POST'])
+def pred_stars():
+	"""return the predicted stars from the input"""
+	test = [34,24.0,29.7,96]
+	res = request.get_json()
+
+
+	name = res['rest_name']
+	name_chars = name[:5]
+	name_value = 0
+	for i in name_chars:
+		name_value += ord(i) - 69
+	name_value = name_value / 5
+	test[0] = name_value
+
+	test[3] = int(res['rest_reviews'].strip())
+
+	return pred(test)
