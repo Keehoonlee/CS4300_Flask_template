@@ -8,13 +8,15 @@ def top_percentage_category(pos_neg_percentages, percentages_per_category):
 	max_pos = 0
 	max_pos_category = None
 
-	for idx, (pos,neg) in enumerate(pos_neg_percentages):
+	for idx, lst in enumerate(pos_neg_percentages):
+		pos = lst[0]
+		neg = lst[1]
 		if pos > max_pos:
 			max_pos = pos
 			max_pos_category_idx = idx
 
 	category,_ = percentages_per_category[max_pos_category_idx]
-	return (category,pos_neg_percentages[idx])
+	return (category,pos_neg_percentages[max_pos_category_idx])
 
 #Probably now need this function for each different city page
 @irsystem.route('/', methods=['GET'])
@@ -53,12 +55,12 @@ def search():
 
 		else:
 			labels, data = format_percentage_for_html(percentages_per_category)
-			top_category, (top_pos, top_neg) = top_percentage_category(pos_neg_percentages_per_category, percentages_per_category)
+			top_category, lst = top_percentage_category(pos_neg_percentages_per_category, percentages_per_category)
 
 			neighborhood = neighborhood[0].capitalize() + neighborhood[1:]
 			city = "Pittsburgh"
 			return render_template('result.html', labels = labels, data = data, \
-									top_category = top_category, top_pos_percentage = top_pos, top_neg_percentage = top_neg, \
+									top_category = top_category, top_pos_percentage = lst[0], top_neg_percentage = lst[1], \
 									pos_neg_percentages_per_category = pos_neg_percentages_per_category, \
 									top_restaurants_infos_per_category = top_restaurants_infos_per_category, \
 									bot_restaurants_infos_per_category = bot_restaurants_infos_per_category, \

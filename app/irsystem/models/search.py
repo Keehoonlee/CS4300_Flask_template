@@ -8,7 +8,7 @@ import re
 
 ##########################################HELPERS#################################################
 DEFAULT = 0
-POS_SCORE_LIMIT = 0.3
+POS_SCORE_LIMIT = 0.25
 NEG_SCORE_LIMIT = -0.7
 LIMIT = 0.05
 
@@ -166,7 +166,10 @@ def compute_rest_infos(reviews):
     #Error checking in case of there are not enough reviews to display
     for rest in sorted(rest_infos_dict, key=rest_infos_dict.get, reverse=True):
         if len(sentiment_review_dict[rest]) >= 2:
-            top_rest_infos_lst.append((rest, rest_infos_dict[rest], address_dict[rest], sentiment_review_dict[rest][-1], sentiment_review_dict[rest][-2]))
+            if sentiment_review_dict[rest][-1] == sentiment_review_dict[rest][-2]:
+                top_rest_infos_lst.append((rest, rest_infos_dict[rest], address_dict[rest], sentiment_review_dict[rest][-1], ""))
+            else:
+                top_rest_infos_lst.append((rest, rest_infos_dict[rest], address_dict[rest], sentiment_review_dict[rest][-1], sentiment_review_dict[rest][-2]))
         elif len(sentiment_review_dict[rest]) == 1:
             top_rest_infos_lst.append((rest, rest_infos_dict[rest], address_dict[rest], sentiment_review_dict[rest][-1], ""))
         else:
@@ -176,7 +179,10 @@ def compute_rest_infos(reviews):
     #Error checking in case of there are not enough reviews to display
     for rest in sorted(rest_infos_dict, key=rest_infos_dict.get):
         if len(sentiment_review_dict[rest]) >= 2:
-            bot_rest_infos_lst.append((rest, rest_infos_dict[rest], address_dict[rest], sentiment_review_dict[rest][0], sentiment_review_dict[rest][1]))
+            if sentiment_review_dict[rest][0] == sentiment_review_dict[rest][1]:
+                bot_rest_infos_lst.append((rest, rest_infos_dict[rest], address_dict[rest], sentiment_review_dict[rest][0], ""))
+            else:
+                bot_rest_infos_lst.append((rest, rest_infos_dict[rest], address_dict[rest], sentiment_review_dict[rest][0], sentiment_review_dict[rest][1]))
         elif len(sentiment_review_dict[rest]) == 1:
             bot_rest_infos_lst.append((rest, rest_infos_dict[rest], address_dict[rest], sentiment_review_dict[rest][0], ""))
         else:
@@ -230,7 +236,7 @@ def compute_pos_neg_percentages(reviews_per_category, percentages_per_category):
                 if (review["sentiment_score"]>=POS_SCORE_LIMIT):
                     #pos_reviews.append(review)
                     pos += 1.0
-                elif (review["sentiment_score"]<-NEG_SCORE_LIMIT):
+                elif (review["sentiment_score"]<=-NEG_SCORE_LIMIT):
                     #neg_reviews.append(review)
                     neg += 1.0
                 else:
@@ -246,7 +252,7 @@ def compute_pos_neg_percentages(reviews_per_category, percentages_per_category):
     return pos_neg_percantages_per_category
 
 # j = load_json("pittsburgh")
-# all_reviews = filter_reviews(j, "shadyside", 0, 6)
+# all_reviews = filter_reviews(j, "downtown", 0, 6)
 # reviews_per_category, percentages_per_category = filter_reviews_calc_percentage_by_category(all_reviews)
 # labels,_ = format_percentage_for_html(percentages_per_category)
 # pos_neg_percentages_per_category = compute_pos_neg_percentages(reviews_per_category, percentages_per_category)
@@ -256,7 +262,6 @@ def compute_pos_neg_percentages(reviews_per_category, percentages_per_category):
 # print("Positive and Negative Percentages by Category:")
 # print(pos_neg_percentages_per_category)
 # print("\n")
-#print("Restaurants with Infos by Category:")
-#print(top_restaurants_infos_per_category)
+# print("Restaurants with Infos by Category:")
+# print(top_restaurants_infos_per_category)
 # print("\n")
-# print(bot_restaurants_infos_per_category)
