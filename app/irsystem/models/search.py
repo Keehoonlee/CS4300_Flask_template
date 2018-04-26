@@ -10,7 +10,10 @@ import re
 DEFAULT = 0
 POS_SCORE_LIMIT = 0.25
 NEG_SCORE_LIMIT = -0.7
-LIMIT = 0.05
+REVIEW = 0
+SCORE = 1
+
+LIMIT = 0.025
 
 def format_percentage_for_html(percentages):
     """Normalizing the percentages so we take out categories that are lower than LIMIT"""
@@ -131,13 +134,22 @@ def filter_reviews_calc_percentage_by_category(reviews):
 
 
 
-def compute_rest_infos(reviews):
-    """Computes the top 3 and bottom 3 restaurants and respective stars and address for [reviews]."""
+def compute_rest_infos(reviews, time_limit):
+    """Computes the top popular restaurants and respective stars and address and
+    other infos for [reviews]."""
+
+    if time_limit == "0":
+        REVIEWS_NEEDED = 30
+    elif time_limit == "6":
+        REVIEWS_NEEDED = 5
+    elif time_limit == "12":
+        REVIEWS_NEEDED = 0
 
     rest_infos_dict = defaultdict(float)
-    review_count_per_business = defaultdict(float)
+    review_count_per_business = defaultdict(int)
     address_dict = defaultdict()
     sentiment_review_dict = defaultdict(list)
+    n_reviews = len(reviews)
 
     #Counting the stars and otheri nfos given to the business
     for review in reviews:
@@ -148,74 +160,144 @@ def compute_rest_infos(reviews):
         #parsed_review = '.'.join(review["sentiment_sentence"].split("\n")) #Required as newline characters cause error in html
         sentiment_review_dict[review["business"]["name"]] += [(review["sentiment_score"], parsed_review)]
 
-    #Only using the top 2 reviews that have the highest sentiment score and lowest sentiment score
+    #Only using the top reviews that have the highest sentiment score and lowest sentiment score
     for restaurant, lst_of_reviews in sentiment_review_dict.items():
         srted_reviews = []
-        for _, review in sorted(lst_of_reviews,key=lambda x: x[0]):
-            srted_reviews.append(review)
+        for score, review in sorted(lst_of_reviews,key=lambda x: x[0]):
+            srted_reviews.append((review, score))
 
         sentiment_review_dict[restaurant] = srted_reviews
 
+    #Taking into account number of reviews + stars in ranking the reviews
+    ranked_rest_infos_dict = defaultdict()
+    for rest, stars in rest_infos_dict.items():
+        if review_count_per_business[rest] >= REVIEWS_NEEDED:
+            ranked_rest_infos_dict[rest] = stars
+
     #Normalizing the stars
-    for restaurant, stars in rest_infos_dict.items():
-        rest_infos_dict[restaurant] = round(rest_infos_dict[restaurant]/review_count_per_business[restaurant],1)
+    for restaurant, stars in ranked_rest_infos_dict.items():
+        ranked_rest_infos_dict[restaurant] = round(ranked_rest_infos_dict[restaurant]/review_count_per_business[restaurant],1)
 
     top_rest_infos_lst = []
-    bot_rest_infos_lst = []
+
     #Creating a list of (restaurant, star, and other infos) for top restaurants
     #Error checking in case of there are not enough reviews to display
-    for rest in sorted(rest_infos_dict, key=rest_infos_dict.get, reverse=True):
+    for rest in sorted(ranked_rest_infos_dict, key=ranked_rest_infos_dict.get, reverse=True):
         if len(sentiment_review_dict[rest]) >= 2:
-            if sentiment_review_dict[rest][-1] == sentiment_review_dict[rest][-2]:
-                top_rest_infos_lst.append((rest, rest_infos_dict[rest], address_dict[rest], sentiment_review_dict[rest][-1], ""))
-            else:
-                top_rest_infos_lst.append((rest, rest_infos_dict[rest], address_dict[rest], sentiment_review_dict[rest][-1], sentiment_review_dict[rest][-2]))
+            #Setting up positive Reviews
+            first_pos_review = sentiment_review_dict[rest][-1]
+            second_pos_review = sentiment_review_dict[rest][-2]
+            i = 3
+            #Taking care of duplicates
+            while (first_pos_review[REVIEW] == second_pos_review[REVIEW]) and (i<=len(sentiment_review_dict[rest])):
+                second_pos_review = sentiment_review_dict[rest][-i]
+                i+=1
+
+            if first_pos_review[REVIEW] == second_pos_review[REVIEW]:
+                second_pos_review = ("No significant positive review", second_pos_review[SCORE])
+            #Checking if top reviews are actually positive
+            if first_pos_review[SCORE] < 0.2:
+                first_pos_review = ("No significant positive review", first_pos_review[SCORE])
+                second_pos_review = ("No significant positive review", second_pos_review[SCORE])
+            elif second_pos_review[SCORE] < 0.2:
+                second_pos_review = ("No significant positive review", second_pos_review[SCORE])
+
+            #Setting up negative reviews
+            first_neg_review = sentiment_review_dict[rest][0]
+            second_neg_review = sentiment_review_dict[rest][1]
+            i = 2
+            #Taking care of duplicates
+            while (first_neg_review[REVIEW] == second_neg_review[REVIEW]) and (i<=len(sentiment_review_dict[rest])):
+                second_neg_review = sentiment_review_dict[rest][-i]
+                i+=1
+
+            if first_neg_review[REVIEW] == second_neg_review[REVIEW]:
+                second_neg_review = ("No significant negative review", second_neg_review[SCORE])
+            #Checking if bot reviews are actually negative
+            if first_neg_review[SCORE] >= -0.025:
+                first_neg_review = ("No significant negative review", first_neg_review[SCORE])
+                second_neg_review = ("No significant negative review", second_neg_review[SCORE])
+            elif second_neg_review[SCORE] >= -0.025:
+                second_neg_review = ("No significant negative review", second_neg_review[SCORE])
+
+            #If positive review == negative review, choose the appropriate one depending on the score
+            if first_pos_review[REVIEW] == first_neg_review[REVIEW]:
+                if first_pos_review[SCORE] >= 0.2:
+                    first_neg_review = ("No significant negative review", first_neg_review[SCORE])
+                    second_neg_review = ("No significant negative review", second_neg_review[SCORE])
+                elif first_pos_review[SCORE] <= -0.025:
+                    first_pos_review = ("No significant positive review", first_pos_review[SCORE])
+                    second_pos_review = ("No significant positive review", second_pos_review[SCORE])
+                else:
+                    first_neg_review = ("No significant negative review", first_neg_review[SCORE])
+                    second_neg_review = ("No significant negative review", second_neg_review[SCORE])
+                    first_pos_review = ("No significant positive review", first_pos_review[SCORE])
+                    second_pos_review = ("No significant positive review", second_pos_review[SCORE])
+
+            elif second_pos_review[REVIEW] == second_neg_review[REVIEW]:
+                if second_pos_review[SCORE] >= 0:
+                    second_neg_review = ("No significant negative review", second_neg_review[SCORE])
+                else:
+                    second_pos_review = ("No significant positive review", second_pos_review[SCORE])
+
+            top_rest_infos_lst.append((rest, ranked_rest_infos_dict[rest], address_dict[rest], \
+                                       first_pos_review[REVIEW], second_pos_review[REVIEW], \
+                                       first_neg_review[REVIEW], second_neg_review[REVIEW], \
+                                       review_count_per_business[rest]))
+
         elif len(sentiment_review_dict[rest]) == 1:
-            top_rest_infos_lst.append((rest, rest_infos_dict[rest], address_dict[rest], sentiment_review_dict[rest][-1], ""))
-        else:
-            top_rest_infos_lst.append((rest, rest_infos_dict[rest], address_dict[rest], "", ""))
-
-    #Creating a list of (restaurant, star, and other infos) for bot restaurants
-    #Error checking in case of there are not enough reviews to display
-    for rest in sorted(rest_infos_dict, key=rest_infos_dict.get):
-        if len(sentiment_review_dict[rest]) >= 2:
-            if sentiment_review_dict[rest][0] == sentiment_review_dict[rest][1]:
-                bot_rest_infos_lst.append((rest, rest_infos_dict[rest], address_dict[rest], sentiment_review_dict[rest][0], ""))
+            if sentiment_review_dict[rest][0][SCORE] >= 0.2:
+                first_pos_review = sentiment_review_dict[rest][0]
+                first_neg_review = ("No significant negative review", first_neg_review[SCORE])
+            elif sentiment_review_dict[rest][0][SCORE] <= -0.025:
+                first_neg_review = sentiment_review_dict[rest][0]
+                first_pos_review = ("No significant positive review", first_pos_review[SCORE])
             else:
-                bot_rest_infos_lst.append((rest, rest_infos_dict[rest], address_dict[rest], sentiment_review_dict[rest][0], sentiment_review_dict[rest][1]))
-        elif len(sentiment_review_dict[rest]) == 1:
-            bot_rest_infos_lst.append((rest, rest_infos_dict[rest], address_dict[rest], sentiment_review_dict[rest][0], ""))
+                first_pos_review = ("No significant positive review", first_pos_review[SCORE])
+                first_neg_review = ("No significant negative review", first_neg_review[SCORE])
+
+            top_rest_infos_lst.append((rest, ranked_rest_infos_dict[rest], address_dict[rest], first_pos_review[REVIEW], \
+                                       "No significant positive review", first_neg_review[REVIEW], "No significant negative review", review_count_per_business[rest]))
         else:
-            bot_rest_infos_lst.append((rest, rest_infos_dict[rest], address_dict[rest], "", ""))
+            top_rest_infos_lst.append((rest, ranked_rest_infos_dict[rest], address_dict[rest], \
+                                       "No review", "No review", "No significant negative review", "No significant negative review", \
+                                       review_count_per_business[rest]))
 
-    #Error Checking in case of there are not enough top restaurants
-    try:
-        top_rest_infos_lst = top_rest_infos_lst[:3]
-        bot_rest_infos_lst = bot_rest_infos_lst[:3]
+    if len(top_rest_infos_lst) > 6:
+        top_rest_infos_lst_1 = top_rest_infos_lst[:3]
+        top_rest_infos_lst_2 = top_rest_infos_lst[3:6]
+    elif len(top_rest_infos_lst) > 3 and len(top_rest_infos_lst) <=6:
+        top_rest_infos_lst_1 = top_rest_infos_lst[:3]
+        top_rest_infos_lst_2 = top_rest_infos_lst[3:]
+    elif len(top_rest_infos_lst) == 3:
+        top_rest_infos_lst_1 = top_rest_infos_lst[:2]
+        top_rest_infos_lst_2 = top_rest_infos_lst[2:]
+    elif len(top_rest_infos_lst) == 2:
+        top_rest_infos_lst_1 = top_rest_infos_lst[:1]
+        top_rest_infos_lst_2 = top_rest_infos_lst[1:]
+    else:
+        top_rest_infos_lst_1 = top_rest_infos_lst
+        top_rest_infos_lst_2 = []
 
-    except IndexError:
-        top_rest_infos_lst = top_rest_infos_lst
-        bot_rest_infos_lst = bot_rest_infos_lst
+    return (top_rest_infos_lst_1, top_rest_infos_lst_2)
 
-    return (top_rest_infos_lst, bot_rest_infos_lst)
-
-def compute_rest_infos_per_category(reviews, percentages, reviews_per_category):
-    """Computes the top 3 restaurants and bottom 3 restaurants for each category in [reviews]
+def compute_rest_infos_per_category(reviews, percentages, reviews_per_category, time_limit):
+    """Computes the top  restaurants  for each category in [reviews]
     that has review percentage over [LIMIT]
 
-    Returns a tuple (top 3,bot 3) where top 3 and bot 3 is [(rest, stars, address, (later chosen))]"""
+    Returns lst of (rest, stars, address, (later chosen))"""
 
-    top_rest_infos_per_category = []
-    bot_rest_infos_per_category = []
+    top_rest_infos_per_category_1 = []
+    top_rest_infos_per_category_2 = []
 
     for category, percentage in percentages:
         if percentage >= LIMIT:
             reviews_of_category = reviews_per_category[category]
-            top, bot = compute_rest_infos(reviews_of_category)
-            top_rest_infos_per_category.append(top)
-            bot_rest_infos_per_category.append(bot)
+            top1,top2 = compute_rest_infos(reviews_of_category, time_limit)
+            top_rest_infos_per_category_1.append(top1)
+            top_rest_infos_per_category_2.append(top2)
 
-    return top_rest_infos_per_category, bot_rest_infos_per_category
+    return top_rest_infos_per_category_1, top_rest_infos_per_category_2
 
 ###############################COMPUTING POSITIVE AND NEGATIVE PERCENTAGES##################################
 def compute_pos_neg_percentages(reviews_per_category, percentages_per_category):
@@ -234,10 +316,8 @@ def compute_pos_neg_percentages(reviews_per_category, percentages_per_category):
             #Counting how many of the reviews are positive or negative
             for review in reviews:
                 if (review["sentiment_score"]>=POS_SCORE_LIMIT):
-                    #pos_reviews.append(review)
                     pos += 1.0
                 elif (review["sentiment_score"]<=-NEG_SCORE_LIMIT):
-                    #neg_reviews.append(review)
                     neg += 1.0
                 else:
                     neutral += 1.0
@@ -256,7 +336,8 @@ def compute_pos_neg_percentages(reviews_per_category, percentages_per_category):
 # reviews_per_category, percentages_per_category = filter_reviews_calc_percentage_by_category(all_reviews)
 # labels,_ = format_percentage_for_html(percentages_per_category)
 # pos_neg_percentages_per_category = compute_pos_neg_percentages(reviews_per_category, percentages_per_category)
-# top_restaurants_infos_per_category, bot_restaurants_infos_per_category = compute_rest_infos_per_category(all_reviews, percentages_per_category, reviews_per_category)
+# top_restaurants_infos_per_category, bot_restaurants_infos_per_category = compute_rest_infos_per_category(all_reviews, percentages_per_category, reviews_per_category, 6)
+# top_restaurants_infos_per_category_1, top_restaurants_infos_per_category_2 = compute_rest_infos_per_category(all_reviews, percentages_per_category, reviews_per_category, 6)
 
 
 # print("Positive and Negative Percentages by Category:")

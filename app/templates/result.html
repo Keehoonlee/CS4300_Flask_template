@@ -99,8 +99,9 @@
             </div>
 
             <div class="col-md-6">
-              <p class="text-left"><font size="3" color="grey" face="Arial Black"> Least popular restaurants </font></p>
-              <div id="bottom-popular-body">
+              <p class="text-left"><font size="3" color="grey" face="Arial Black">  </font></p>
+            </br>
+              <div id="top-popular-body-2">
                 <p class="text-left"><font size="2" color="black" face="Courier New"> No Information to Show </font></p>
               </div>
             </div>
@@ -257,106 +258,125 @@
 
       if (idx == 0) {
         text_body_for_top =
-        '{% for restaurant,star,address,review1, review2 in top_restaurants_infos_per_category[0] %} \
-        <font size="2" color="black" face="Arial Black"><left>{{restaurant}} ({{star}})</font> </br> \
+        '{% for restaurant,star,address,review1, review2, review3, review4, n_reviews in top_restaurants_infos_per_category_1[0] %} \
+        <font size="2" color="black" face="Arial Black"><left>{{restaurant}} ({{star}}) [{{n_reviews}} reviews] </font> </br> \
         <font size="2" color="black" face="Courier New"><left>{{address}} </br>\
-        <font size="1.5" color="grey" face="Impact"><left>REVIEWS: </left></font></br>{{review1}}</br></br>{{review2}}</left> </br></br></font>\
+        <font size="1.5" color="grey" face="Impact"><left>POSITIVE REVIEWS: </left></font>\
+        </br>{{review1}}</br></br>{{review2}}</left> </br></br>\
+        <font size="1.5" color="grey" face="Impact"><left>NEGATIVE REVIEWS: </left></font>\
+        </br>{{review3}}</br></br>{{review4}}</left> </br></br></font>\
         {% endfor %} ';
 
       } else if (idx == 1 ) {
         text_body_for_top =
-        '{% for restaurant,star,address,review1, review2 in top_restaurants_infos_per_category[1]%} \
-        <font size="2" color="black" face="Arial Black"><left>{{restaurant}} ({{star}})</font> </br> \
+        '{% for restaurant,star,address,review1, review2, review3, review4, n_reviews in top_restaurants_infos_per_category_1[1]%} \
+        <font size="2" color="black" face="Arial Black"><left>{{restaurant}} ({{star}}) [{{n_reviews}} reviews] </font> </br> \
         <font size="2" color="black" face="Courier New"><left>{{address}} </br>\
-        <font size="1.5" color="grey" face="Impact"><left>REVIEWS: </left></font></br>{{review1}}</br></br>{{review2}}</left> </br></br></font>\
+        <font size="1.5" color="grey" face="Impact"><left>POSITIVE REVIEWS: </left></font></br>{{review1}}</br></br>{{review2}}</left> </br></br>\
+        <font size="1.5" color="grey" face="Impact"><left>NEGATIVE REVIEWS: </left></font></br>{{review3}}</br></br>{{review4}}</left> </br></br></font>\
         {% endfor %} ';
 
       } else if (idx == 2) {
         text_body_for_top =
-        '{% for restaurant,star,address,review1, review2 in top_restaurants_infos_per_category[2]%} \
-        <font size="2" color="black" face="Arial Black"><left>{{restaurant}} ({{star}})</font> </br> \
+        '{% for restaurant,star,address,review1, review2, review3, review4, n_reviews in top_restaurants_infos_per_category_1[2]%} \
+        <font size="2" color="black" face="Arial Black"><left>{{restaurant}} ({{star}}) [{{n_reviews}} reviews] </font> </br> \
         <font size="2" color="black" face="Courier New"><left>{{address}} </br>\
-        <font size="1.5" color="grey" face="Impact"><left>REVIEWS: </left></font></br>{{review1}}</br></br>{{review2}}</left> </br></br></font>\
+        <font size="1.5" color="grey" face="Impact"><left>POSITIVE REVIEWS: </left></font></br>{{review1}}</br></br>{{review2}}</left> </br></br>\
+        <font size="1.5" color="grey" face="Impact"><left>NEGATIVE REVIEWS: </left></font></br>{{review3}}</br></br>{{review4}}</left> </br></br></font>\
         {% endfor %} ';
 
       } else if (idx == 3) {
         text_body_for_top =
-        '{% for restaurant,star,address,review1, review2 in top_restaurants_infos_per_category[3]%} \
-        <font size="2" color="black" face="Arial Black"><left>{{restaurant}} ({{star}})</font> </br>\
+        '{% for restaurant,star,address,review1, review2, review3, review4, n_reviews in top_restaurants_infos_per_category_1[3]%} \
+        <font size="2" color="black" face="Arial Black"><left>{{restaurant}} ({{star}}) [{{n_reviews}} reviews] </font> </br>\
         <font size="2" color="black" face="Courier New"><left>{{address}} </br>\
-        <font size="1.5" color="grey" face="Impact"><left>REVIEWS: </left></font></br>{{review1}}</br></br>{{review2}}</left> </br></br></font>\
+        <font size="1.5" color="grey" face="Impact"><left>POSITIVE REVIEWS: </left></font></br>{{review1}}</br></br>{{review2}}</left> </br></br>\
+        <font size="1.5" color="grey" face="Impact"><left>NEGATIVE REVIEWS: </left></font></br>{{review3}}</br></br>{{review4}}</left> </br></br></font>\
         {% endfor %} ';
 
       } else if (idx == 4) {
         text_body_for_top =
-        '{% for restaurant,star,address,review1, review2 in top_restaurants_infos_per_category[4] %} \
-        <font size="2" color="black" face="Arial Black"><left>{{restaurant}} ({{star}})</font> </br>\
+        '{% for restaurant,star,address,review1, review2, review3, review4, n_reviews in top_restaurants_infos_per_category_1[4] %} \
+        <font size="2" color="black" face="Arial Black"><left>{{restaurant}} ({{star}}) [{{n_reviews}} reviews] </font> </br>\
         <font size="2" color="black" face="Courier New"><left>{{address}} </br>\
-        <font size="1.5" color="grey" face="Impact"><left>REVIEWS: </left></font></br>{{review1}}</br></br>{{review2}}</left> </br></br></font>\
+        <font size="1.5" color="grey" face="Impact"><left>POSITIVE REVIEWS: </left></font></br>{{review1}}</br></br>{{review2}}</left> </br></br>\
+        <font size="1.5" color="grey" face="Impact"><left>NEGATIVE REVIEWS: </left></font></br>{{review3}}</br></br>{{review4}}</left> </br></br></font>\
         {% endfor %} ';
 
       } else if (idx == 5) {
         text_body_for_top =
-        '{% for restaurant,star,address,review1, review2 in top_restaurants_infos_per_category[5] %} \
-        <font size="2" color="black" face="Arial Black"><left>{{restaurant}} ({{star}})</font> </br>\
+        '{% for restaurant,star,address,review1, review2, review3, review4, n_reviews in top_restaurants_infos_per_category_1[5] %} \
+        <font size="2" color="black" face="Arial Black"><left>{{restaurant}} ({{star}}) [{{n_reviews}} reviews] </font> </br>\
         <font size="2" color="black" face="Courier New"><left>{{address}} </br>\
-        <font size="1.5" color="grey" face="Impact"><left>REVIEWS: </left></font></br>{{review1}}</br></br>{{review2}}</left> </br></br></font>\
+        <font size="1.5" color="grey" face="Impact"><left>POSITIVE REVIEWS: </left></font></br>{{review1}}</br></br>{{review2}}</left> </br></br>\
+        <font size="1.5" color="grey" face="Impact"><left>NEGATIVE REVIEWS: </left></font></br>{{review3}}</br></br>{{review4}}</left> </br></br></font>\
         {% endfor %} ';
 
       } else if (idx == 6) {
         text_body_for_top =
-        '{% for restaurant,star,address,review1, review2 in top_restaurants_infos_per_category[6] %} \
-        <font size="2" color="black" face="Arial Black"><left>{{restaurant}} ({{star}})</font> </br>\
+        '{% for restaurant,star,address,review1, review2, review3, review4, n_reviews in top_restaurants_infos_per_category_1[6] %} \
+        <font size="2" color="black" face="Arial Black"><left>{{restaurant}} ({{star}}) [{{n_reviews}} reviews] </font> </br>\
         <font size="2" color="black" face="Courier New"><left>{{address}} </br>\
-        <font size="1.5" color="grey" face="Impact"><left>REVIEWS: </left></font></br>{{review1}}</br></br>{{review2}}</left> </br></br></font>\
+        <font size="1.5" color="grey" face="Impact"><left>POSITIVE REVIEWS: </left></font></br>{{review1}}</br></br>{{review2}}</left> </br></br>\
+        <font size="1.5" color="grey" face="Impact"><left>NEGATIVE REVIEWS: </left></font></br>{{review3}}</br></br>{{review4}}</left> </br></br></font>\
         {% endfor %} ';
 
       } else if (idx == 7) {
         text_body_for_top =
-        '{% for restaurant,star,address,review1, review2 in top_restaurants_infos_per_category[7] %} \
-        <font size="2" color="black" face="Arial Black"><left>{{restaurant}} ({{star}})</font> </br>\
+        '{% for restaurant,star,address,review1, review2, review3, review4, n_reviews in top_restaurants_infos_per_category_1[7] %} \
+        <font size="2" color="black" face="Arial Black"><left>{{restaurant}} ({{star}}) [{{n_reviews}} reviews] </font> </br>\
         <font size="2" color="black" face="Courier New"><left>{{address}} </br>\
-        <font size="1.5" color="grey" face="Impact"><left>REVIEWS: </left></font></br>{{review1}}</br></br>{{review2}}</left> </br></br></font>\
+        <font size="1.5" color="grey" face="Impact"><left>POSITIVE REVIEWS: </left></font></br>{{review1}}</br></br>{{review2}}</left> </br></br>\
+        <font size="1.5" color="grey" face="Impact"><left>NEGATIVE REVIEWS: </left></font></br>{{review3}}</br></br>{{review4}}</left> </br></br></font>\
         {% endfor %} ';
 
       } else if (idx == 8) {
         text_body_for_top =
-        '{% for restaurant,star,address,review1, review2 in top_restaurants_infos_per_category[8] %} \
-        <font size="2" color="black" face="Arial Black"><left>{{restaurant}} ({{star}})</font> </br>\
+        '{% for restaurant,star,address,review1, review2, review3, review4, n_reviews in top_restaurants_infos_per_category_1[8] %} \
+        <font size="2" color="black" face="Arial Black"><left>{{restaurant}} ({{star}}) [{{n_reviews}} reviews] </font> </br>\
         <font size="2" color="black" face="Courier New"><left>{{address}} </br>\
-        <font size="1.5" color="grey" face="Impact"><left>REVIEWS: </left></font></br>{{review1}}</br></br>{{review2}}</left> </br></br></font>\
+        <font size="1.5" color="grey" face="Impact"><left>POSITIVE REVIEWS: </left></font></br>{{review1}}</br></br>{{review2}}</left> </br></br>\
+        <font size="1.5" color="grey" face="Impact"><left>NEGATIVE REVIEWS: </left></font></br>{{review3}}</br></br>{{review4}}</left> </br></br></font>\
         {% endfor %} ';
 
       } else if (idx == 9) {
         text_body_for_top =
-        '{% for restaurant,star,address,review1, review2 in top_restaurants_infos_per_category[9] %} \
-        <font size="2" color="black" face="Arial Black"><left>{{restaurant}} ({{star}})</font> </br>\
+        '{% for restaurant,star,address,review1, review2, review3, review4, n_reviews in top_restaurants_infos_per_category_1[9] %} \
+        <font size="2" color="black" face="Arial Black"><left>{{restaurant}} ({{star}}) [{{n_reviews}} reviews] </font> </br>\
         <font size="2" color="black" face="Courier New"><left>{{address}} </br>\
-        <font size="1.5" color="grey" face="Impact"><left>REVIEWS: </left></font></br>{{review1}}</br></br>{{review2}}</left> </br></br></font>\
+        <font size="1.5" color="grey" face="Impact"><left>POSITIVE REVIEWS: </left></font></br>{{review1}}</br></br>{{review2}}</left> </br></br>\
+        <font size="1.5" color="grey" face="Impact"><left>NEGATIVE REVIEWS: </left></font></br>{{review3}}</br></br>{{review4}}</left> </br></br></font>\
         {% endfor %} ';
 
       } else if (idx == 10) {
         text_body_for_top =
-        '{% for restaurant,star,address,review1, review2 in top_restaurants_infos_per_category[10] %} \
-        <font size="2" color="black" face="Arial Black"><left>{{restaurant}} ({{star}})</font> </br>\
+        '{% for restaurant,star,address,review1, review2, review3, review4, n_reviews in top_restaurants_infos_per_category_1[10] %} \
+        <font size="2" color="black" face="Arial Black"><left>{{restaurant}} ({{star}}) [{{n_reviews}} reviews] </font> </br>\
         <font size="2" color="black" face="Courier New"><left>{{address}} </br>\
-        <font size="1.5" color="grey" face="Impact"><left>REVIEWS: </left></font></br>{{review1}}</br></br>{{review2}}</left> </br></br></font>\
+        <font size="1.5" color="grey" face="Impact"><left>POSITIVE REVIEWS: </left></font></br>{{review1}}</br></br>{{review2}}</left> </br></br>\
+        <font size="1.5" color="grey" face="Impact"><left>NEGATIVE REVIEWS: </left></font></br>{{review3}}</br></br>{{review4}}</left> </br></br></font>\
         {% endfor %} ';
 
       } else if (idx == 11) {
         text_body_for_top =
-        '{% for restaurant,star,address,review1, review2 in top_restaurants_infos_per_category[11] %} \
-        <font size="2" color="black" face="Arial Black"><left>{{restaurant}} ({{star}})</font> </br>\
+        '{% for restaurant,star,address,review1, review2, review3, review4, n_reviews in top_restaurants_infos_per_category_1[11] %} \
+        <font size="2" color="black" face="Arial Black"><left>{{restaurant}} ({{star}}) [{{n_reviews}} reviews] </font> </br>\
         <font size="2" color="black" face="Courier New"><left>{{address}} </br>\
-        <font size="1.5" color="grey" face="Impact"><left>REVIEWS: </left></font></br>{{review1}}</br></br>{{review2}}</left> </br></br></font>\
+        <font size="1.5" color="grey" face="Impact"><left>POSITIVE REVIEWS: </left></font>\
+        </br>{{review1}}</br></br>{{review2}}</left> </br></br>\
+        <font size="1.5" color="grey" face="Impact"><left>NEGATIVE REVIEWS: </left></font>\
+        </br>{{review3}}</br></br>{{review4}}</left> </br></br></font>\
         {% endfor %} ';
 
       } else if (idx == 12) {
         text_body_for_top =
-        '{% for restaurant,star,address,review1, review2 in top_restaurants_infos_per_category[12] %} \
-        <font size="2" color="black" face="Arial Black"><left>{{restaurant}} ({{star}})</font> </br>\
+        '{% for restaurant,star,address,review1, review2, review3, review4, n_reviews in top_restaurants_infos_per_category_1[12] %} \
+        <font size="2" color="black" face="Arial Black"><left>{{restaurant}} ({{star}}) [{{n_reviews}} reviews] </font> </br>\
         <font size="2" color="black" face="Courier New"><left>{{address}} </br>\
-        <font size="1.5" color="grey" face="Impact"><left>REVIEWS: </left></font></br>{{review1}}</br></br>{{review2}}</left> </br></br></font>\
+        <font size="1.5" color="grey" face="Impact"><left>POSITIVE REVIEWS: </left></font>\
+        </br>{{review1}}</br></br>{{review2}}</left> </br></br>\
+        <font size="1.5" color="grey" face="Impact"><left>NEGATIVE REVIEWS: </left></font>\
+        </br>{{review3}}</br></br>{{review4}}</left> </br></br></font>\
         {% endfor %} ';}
 
       $("#top-popular-body").html(text_body_for_top);
@@ -364,122 +384,148 @@
       var text_body_for_bot = "";
       if (idx == 0) {
         text_body_for_bot =
-        '{% for restaurant,star,address,review1, review2 in bot_restaurants_infos_per_category[0] %} \
-        <font size="2" color="black" face="Arial Black"><left>{{restaurant}} ({{star}})</font> </br> \
+        '{% for restaurant,star,address,review1, review2, review3, review4, n_reviews in top_restaurants_infos_per_category_2[0] %} \
+        <font size="2" color="black" face="Arial Black"><left>{{restaurant}} ({{star}}) [{{n_reviews}} reviews] </font> </br> \
         <font size="2" color="black" face="Courier New"><left>{{address}} </br>\
-        <font size="1.5" color="grey" face="Impact"><left>REVIEWS: </left></font>\
-        </br>{{review1}}</br></br>{{review2}}</left> </br></br></font>\
+        <font size="1.5" color="grey" face="Impact"><left>POSITIVE REVIEWS: </left></font>\
+        </br>{{review1}}</br></br>{{review2}}</left> </br></br>\
+        <font size="1.5" color="grey" face="Impact"><left>NEGATIVE REVIEWS: </left></font>\
+        </br>{{review3}}</br></br>{{review4}}</left> </br></br></font>\
         {% endfor %} ';
 
       } else if (idx == 1 ) {
         text_body_for_bot =
-        '{% for restaurant,star,address,review1, review2 in bot_restaurants_infos_per_category[1] %} \
-        <font size="2" color="black" face="Arial Black"><left>{{restaurant}} ({{star}})</font> </br> \
+        '{% for restaurant,star,address,review1, review2, review3, review4, n_reviews in top_restaurants_infos_per_category_2[1] %} \
+        <font size="2" color="black" face="Arial Black"><left>{{restaurant}} ({{star}}) [{{n_reviews}} reviews] </font> </br> \
         <font size="2" color="black" face="Courier New"><left>{{address}} </br>\
-        <font size="1.5" color="grey" face="Impact"><left>REVIEWS: </left></font>\
-        </br>{{review1}}</br></br>{{review2}}</left> </br></br></font>\
+        <font size="1.5" color="grey" face="Impact"><left>POSITIVE REVIEWS: </left></font>\
+        </br>{{review1}}</br></br>{{review2}}</left> </br></br>\
+        <font size="1.5" color="grey" face="Impact"><left>NEGATIVE REVIEWS: </left></font>\
+        </br>{{review3}}</br></br>{{review4}}</left> </br></br></font>\
         {% endfor %} ';
 
       } else if (idx == 2 ) {
         text_body_for_bot =
-        '{% for restaurant,star,address,review1, review2 in bot_restaurants_infos_per_category[2] %} \
-        <font size="2" color="black" face="Arial Black"><left>{{restaurant}} ({{star}})</font> </br> \
+        '{% for restaurant,star,address,review1, review2, review3, review4, n_reviews in top_restaurants_infos_per_category_2[2] %} \
+        <font size="2" color="black" face="Arial Black"><left>{{restaurant}} ({{star}}) [{{n_reviews}} reviews] </font> </br> \
         <font size="2" color="black" face="Courier New"><left>{{address}} </br>\
-        <font size="1.5" color="grey" face="Impact"><left>REVIEWS: </left></font>\
-        </br>{{review1}}</br></br>{{review2}}</left> </br></br></font>\
+        <font size="1.5" color="grey" face="Impact"><left>POSITIVE REVIEWS: </left></font>\
+        </br>{{review1}}</br></br>{{review2}}</left> </br></br>\
+        <font size="1.5" color="grey" face="Impact"><left>NEGATIVE REVIEWS: </left></font>\
+        </br>{{review3}}</br></br>{{review4}}</left> </br></br></font>\
         {% endfor %} ';
 
       } else if (idx == 3 ) {
         text_body_for_bot =
-        '{% for restaurant,star,address,review1, review2 in bot_restaurants_infos_per_category[3] %} \
-        <font size="2" color="black" face="Arial Black"><left>{{restaurant}} ({{star}})</font> </br> \
+        '{% for restaurant,star,address,review1, review2, review3, review4, n_reviews in top_restaurants_infos_per_category_2[3] %} \
+        <font size="2" color="black" face="Arial Black"><left>{{restaurant}} ({{star}}) [{{n_reviews}} reviews] </font> </br> \
         <font size="2" color="black" face="Courier New"><left>{{address}} </br>\
-        <font size="1.5" color="grey" face="Impact"><left>REVIEWS: </left></font>\
-        </br>{{review1}}</br></br>{{review2}}</left> </br></br></font>\
+        <font size="1.5" color="grey" face="Impact"><left>POSITIVE REVIEWS: </left></font>\
+        </br>{{review1}}</br></br>{{review2}}</left> </br></br>\
+        <font size="1.5" color="grey" face="Impact"><left>NEGATIVE REVIEWS: </left></font>\
+        </br>{{review3}}</br></br>{{review4}}</left> </br></br></font>\
         {% endfor %} ';
 
       } else if (idx == 4 ) {
         text_body_for_bot =
-        '{% for restaurant,star,address,review1, review2 in bot_restaurants_infos_per_category[4] %} \
-        <font size="2" color="black" face="Arial Black"><left>{{restaurant}} ({{star}})</font> </br> \
+        '{% for restaurant,star,address,review1, review2, review3, review4, n_reviews in top_restaurants_infos_per_category_2[4] %} \
+        <font size="2" color="black" face="Arial Black"><left>{{restaurant}} ({{star}}) [{{n_reviews}} reviews] </font> </br> \
         <font size="2" color="black" face="Courier New"><left>{{address}} </br>\
-        <font size="1.5" color="grey" face="Impact"><left>REVIEWS: </left></font>\
-        </br>{{review1}}</br></br>{{review2}}</left> </br></br></font>\
+        <font size="1.5" color="grey" face="Impact"><left>POSITIVE REVIEWS: </left></font>\
+        </br>{{review1}}</br></br>{{review2}}</left> </br></br>\
+        <font size="1.5" color="grey" face="Impact"><left>NEGATIVE REVIEWS: </left></font>\
+        </br>{{review3}}</br></br>{{review4}}</left> </br></br></font>\
         {% endfor %} ';
 
       } else if (idx == 5 ) {
         text_body_for_bot =
-        '{% for restaurant,star,address,review1, review2 in bot_restaurants_infos_per_category[5] %} \
-        <font size="2" color="black" face="Arial Black"><left>{{restaurant}} ({{star}})</font> </br> \
+        '{% for restaurant,star,address,review1, review2, review3, review4, n_reviews in top_restaurants_infos_per_category_2[5] %} \
+        <font size="2" color="black" face="Arial Black"><left>{{restaurant}} ({{star}}) [{{n_reviews}} reviews] </font> </br> \
         <font size="2" color="black" face="Courier New"><left>{{address}} </br>\
-        <font size="1.5" color="grey" face="Impact"><left>REVIEWS: </left></font>\
-        </br>{{review1}}</br></br>{{review2}}</left> </br></br></font>\
+        <font size="1.5" color="grey" face="Impact"><left>POSITIVE REVIEWS: </left></font>\
+        </br>{{review1}}</br></br>{{review2}}</left> </br></br>\
+        <font size="1.5" color="grey" face="Impact"><left>NEGATIVE REVIEWS: </left></font>\
+        </br>{{review3}}</br></br>{{review4}}</left> </br></br></font>\
         {% endfor %} ';
 
       } else if (idx == 6 ) {
         text_body_for_bot =
-        '{% for restaurant,star,address,review1, review2 in bot_restaurants_infos_per_category[6] %} \
-        <font size="2" color="black" face="Arial Black"><left>{{restaurant}} ({{star}})</font> </br> \
+        '{% for restaurant,star,address,review1, review2, review3, review4, n_reviews in top_restaurants_infos_per_category_2[6] %} \
+        <font size="2" color="black" face="Arial Black"><left>{{restaurant}} ({{star}}) [{{n_reviews}} reviews] </font> </br> \
         <font size="2" color="black" face="Courier New"><left>{{address}} </br>\
-        <font size="1.5" color="grey" face="Impact"><left>REVIEWS: </left></font>\
-        </br>{{review1}}</br></br>{{review2}}</left> </br></br></font>\
+        <font size="1.5" color="grey" face="Impact"><left>POSITIVE REVIEWS: </left></font>\
+        </br>{{review1}}</br></br>{{review2}}</left> </br></br>\
+        <font size="1.5" color="grey" face="Impact"><left>NEGATIVE REVIEWS: </left></font>\
+        </br>{{review3}}</br></br>{{review4}}</left> </br></br></font>\
         {% endfor %} ';
 
       } else if (idx == 7 ) {
         text_body_for_bot =
-        '{% for restaurant,star,address,review1, review2 in bot_restaurants_infos_per_category[7] %} \
-        <font size="2" color="black" face="Arial Black"><left>{{restaurant}} ({{star}})</font> </br> \
+        '{% for restaurant,star,address,review1, review2, review3, review4, n_reviews in top_restaurants_infos_per_category_2[7] %} \
+        <font size="2" color="black" face="Arial Black"><left>{{restaurant}} ({{star}}) [{{n_reviews}} reviews] </font> </br> \
         <font size="2" color="black" face="Courier New"><left>{{address}} </br>\
-        <font size="1.5" color="grey" face="Impact"><left>REVIEWS: </left></font>\
-        </br>{{review1}}</br></br>{{review2}}</left> </br></br></font>\
+        <font size="1.5" color="grey" face="Impact"><left>POSITIVE REVIEWS: </left></font>\
+        </br>{{review1}}</br></br>{{review2}}</left> </br></br>\
+        <font size="1.5" color="grey" face="Impact"><left>NEGATIVE REVIEWS: </left></font>\
+        </br>{{review3}}</br></br>{{review4}}</left> </br></br></font>\
         {% endfor %} ';
 
       } else if (idx == 8 ) {
         text_body_for_bot =
-        '{% for restaurant,star,address,review1, review2 in bot_restaurants_infos_per_category[8] %} \
-        <font size="2" color="black" face="Arial Black"><left>{{restaurant}} ({{star}})</font> </br> \
+        '{% for restaurant,star,address,review1, review2, review3, review4, n_reviews in top_restaurants_infos_per_category_2[8] %} \
+        <font size="2" color="black" face="Arial Black"><left>{{restaurant}} ({{star}}) [{{n_reviews}} reviews] </font> </br> \
         <font size="2" color="black" face="Courier New"><left>{{address}} </br>\
-        <font size="1.5" color="grey" face="Impact"><left>REVIEWS: </left></font>\
-        </br>{{review1}}</br></br>{{review2}}</left> </br></br></font>\
+        <font size="1.5" color="grey" face="Impact"><left>POSITIVE REVIEWS: </left></font>\
+        </br>{{review1}}</br></br>{{review2}}</left> </br></br>\
+        <font size="1.5" color="grey" face="Impact"><left>NEGATIVE REVIEWS: </left></font>\
+        </br>{{review3}}</br></br>{{review4}}</left> </br></br></font>\
         {% endfor %} ';
 
       } else if (idx == 9 ) {
         text_body_for_bot =
-        '{% for restaurant,star,address,review1, review2 in bot_restaurants_infos_per_category[9] %} \
-        <font size="2" color="black" face="Arial Black"><left>{{restaurant}} ({{star}})</font> </br> \
+        '{% for restaurant,star,address,review1, review2, review3, review4, n_reviews in top_restaurants_infos_per_category_2[9] %} \
+        <font size="2" color="black" face="Arial Black"><left>{{restaurant}} ({{star}}) [{{n_reviews}} reviews] </font> </br> \
         <font size="2" color="black" face="Courier New"><left>{{address}} </br>\
-        <font size="1.5" color="grey" face="Impact"><left>REVIEWS: </left></font>\
-        </br>{{review1}}</br></br>{{review2}}</left> </br></br></font>\
+        <font size="1.5" color="grey" face="Impact"><left>POSITIVE REVIEWS: </left></font>\
+        </br>{{review1}}</br></br>{{review2}}</left> </br></br>\
+        <font size="1.5" color="grey" face="Impact"><left>NEGATIVE REVIEWS: </left></font>\
+        </br>{{review3}}</br></br>{{review4}}</left> </br></br></font>\
         {% endfor %} ';
 
       } else if (idx == 10 ) {
         text_body_for_bot =
-        '{% for restaurant,star,address,review1, review2 in bot_restaurants_infos_per_category[10] %} \
-        <font size="2" color="black" face="Arial Black"><left>{{restaurant}} ({{star}})</font> </br> \
+        '{% for restaurant,star,address,review1, review2, review3, review4, n_reviews in top_restaurants_infos_per_category_2[10] %} \
+        <font size="2" color="black" face="Arial Black"><left>{{restaurant}} ({{star}}) [{{n_reviews}} reviews] </font> </br> \
         <font size="2" color="black" face="Courier New"><left>{{address}} </br>\
-        <font size="1.5" color="grey" face="Impact"><left>REVIEWS: </left></font>\
-        </br>{{review1}}</br></br>{{review2}}</left> </br></br></font>\
+        <font size="1.5" color="grey" face="Impact"><left>POSITIVE REVIEWS: </left></font>\
+        </br>{{review1}}</br></br>{{review2}}</left> </br></br>\
+        <font size="1.5" color="grey" face="Impact"><left>NEGATIVE REVIEWS: </left></font>\
+        </br>{{review3}}</br></br>{{review4}}</left> </br></br></font>\
         {% endfor %} ';
 
       } else if (idx == 11 ) {
         text_body_for_bot =
-        '{% for restaurant,star,address,review1, review2 in bot_restaurants_infos_per_category[11] %} \
-        <font size="2" color="black" face="Arial Black"><left>{{restaurant}} ({{star}})</font> </br> \
+        '{% for restaurant,star,address,review1, review2, review3, review4, n_reviews in top_restaurants_infos_per_category_2[11] %} \
+        <font size="2" color="black" face="Arial Black"><left>{{restaurant}} ({{star}}) [{{n_reviews}} reviews] </font> </br> \
         <font size="2" color="black" face="Courier New"><left>{{address}} </br>\
-        <font size="1.5" color="grey" face="Impact"><left>REVIEWS: </left></font>\
-        </br>{{review1}}</br></br>{{review2}}</left> </br></br></font>\
+        <font size="1.5" color="grey" face="Impact"><left>POSITIVE REVIEWS: </left></font>\
+        </br>{{review1}}</br></br>{{review2}}</left> </br></br>\
+        <font size="1.5" color="grey" face="Impact"><left>NEGATIVE REVIEWS: </left></font>\
+        </br>{{review3}}</br></br>{{review4}}</left> </br></br></font>\
         {% endfor %} ';
 
       } else if (idx == 12 ) {
         text_body_for_bot =
-        '{% for restaurant,star,address,review1, review2 in bot_restaurants_infos_per_category[12] %} \
-        <font size="2" color="black" face="Arial Black"><left>{{restaurant}} ({{star}})</font> </br> \
+        '{% for restaurant,star,address,review1, review2, review3, review4, n_reviews in top_restaurants_infos_per_category_2[12] %} \
+        <font size="2" color="black" face="Arial Black"><left>{{restaurant}} ({{star}}) [{{n_reviews}} reviews] </font> </br> \
         <font size="2" color="black" face="Courier New"><left>{{address}} </br>\
-        <font size="1.5" color="grey" face="Impact"><left>REVIEWS: </left></font>\
-        </br>{{review1}}</br></br>{{review2}}</left> </br></br></font>\
+        <font size="1.5" color="grey" face="Impact"><left>POSITIVE REVIEWS: </left></font>\
+        </br>{{review1}}</br></br>{{review2}}</left> </br></br>\
+        <font size="1.5" color="grey" face="Impact"><left>NEGATIVE REVIEWS: </left></font>\
+        </br>{{review3}}</br></br>{{review4}}</left> </br></br></font>\
         {% endfor %} ';}
 
-      $("#bottom-popular-body").html(text_body_for_bot);
+      $("#top-popular-body-2").html(text_body_for_bot);
 
     }
   };

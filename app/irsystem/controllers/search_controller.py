@@ -45,9 +45,9 @@ def search():
 		#***ASSUME THAT THE ORDER IS IN THE ORDER SAME AS percentages_per_CATEGORY
 		pos_neg_percentages_per_category = compute_pos_neg_percentages(reviews_per_category, percentages_per_category)
 
-		#Calculating the top ranked restaurants per category [[top3,bot3]] where top3 = [(rest,star,address)]
+		#Calculating the top ranked restaurants per category [top3] where top3 = [(rest,star,address,and other infos)]
 		#***ASSUME THAT THE ORDER IS IN THE ORDER SAME AS percentages_per_CATEGORY
-		top_restaurants_infos_per_category, bot_restaurants_infos_per_category = compute_rest_infos_per_category(all_reviews, percentages_per_category, reviews_per_category)
+		top_restaurants_infos_per_category_1, top_restaurants_infos_per_category_2 = compute_rest_infos_per_category(all_reviews, percentages_per_category, reviews_per_category, time)
 
 		#If no reviews available, then return unfortunate page
 		if all_reviews == []:
@@ -62,8 +62,8 @@ def search():
 			return render_template('result.html', labels = labels, data = data, \
 									top_category = top_category, top_pos_percentage = lst[0], top_neg_percentage = lst[1], \
 									pos_neg_percentages_per_category = pos_neg_percentages_per_category, \
-									top_restaurants_infos_per_category = top_restaurants_infos_per_category, \
-									bot_restaurants_infos_per_category = bot_restaurants_infos_per_category, \
+									top_restaurants_infos_per_category_1 = top_restaurants_infos_per_category_1, \
+									top_restaurants_infos_per_category_2 = top_restaurants_infos_per_category_2, \
 								    neighborhood = neighborhood, time = time, credibility = credibility, city = city)
 
 @irsystem.route('pred_stars', methods=['POST'])
