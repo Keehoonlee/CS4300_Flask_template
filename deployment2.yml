@@ -1,0 +1,19 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: foodie
+spec:
+  selector:
+    matchLabels:
+      app: foodie
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: foodie
+    spec:
+      containers:
+      - name: foodie
+        image: gcr.io/cc-isv/4300:v5
+        ports:
+        - containerPort: 5000
