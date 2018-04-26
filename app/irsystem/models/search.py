@@ -13,7 +13,7 @@ NEG_SCORE_LIMIT = -0.7
 REVIEW = 0
 SCORE = 1
 
-LIMIT = 0.025
+LIMIT = 0.05
 
 def format_percentage_for_html(percentages):
     """Normalizing the percentages so we take out categories that are lower than LIMIT"""
@@ -214,10 +214,10 @@ def compute_rest_infos(reviews, time_limit):
             if first_neg_review[REVIEW] == second_neg_review[REVIEW]:
                 second_neg_review = ("No significant negative review", second_neg_review[SCORE])
             #Checking if bot reviews are actually negative
-            if first_neg_review[SCORE] >= -0.025:
+            if first_neg_review[SCORE] >= -0.0125:
                 first_neg_review = ("No significant negative review", first_neg_review[SCORE])
                 second_neg_review = ("No significant negative review", second_neg_review[SCORE])
-            elif second_neg_review[SCORE] >= -0.025:
+            elif second_neg_review[SCORE] >= -0.0125:
                 second_neg_review = ("No significant negative review", second_neg_review[SCORE])
 
             #If positive review == negative review, choose the appropriate one depending on the score
@@ -225,7 +225,7 @@ def compute_rest_infos(reviews, time_limit):
                 if first_pos_review[SCORE] >= 0.2:
                     first_neg_review = ("No significant negative review", first_neg_review[SCORE])
                     second_neg_review = ("No significant negative review", second_neg_review[SCORE])
-                elif first_pos_review[SCORE] <= -0.025:
+                elif first_pos_review[SCORE] <= -0.0125:
                     first_pos_review = ("No significant positive review", first_pos_review[SCORE])
                     second_pos_review = ("No significant positive review", second_pos_review[SCORE])
                 else:
@@ -249,7 +249,7 @@ def compute_rest_infos(reviews, time_limit):
             if sentiment_review_dict[rest][0][SCORE] >= 0.2:
                 first_pos_review = sentiment_review_dict[rest][0]
                 first_neg_review = ("No significant negative review", first_neg_review[SCORE])
-            elif sentiment_review_dict[rest][0][SCORE] <= -0.025:
+            elif sentiment_review_dict[rest][0][SCORE] <= -0.0125:
                 first_neg_review = sentiment_review_dict[rest][0]
                 first_pos_review = ("No significant positive review", first_pos_review[SCORE])
             else:
