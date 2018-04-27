@@ -248,13 +248,13 @@ def compute_rest_infos(reviews, time_limit):
         elif len(sentiment_review_dict[rest]) == 1:
             if sentiment_review_dict[rest][0][SCORE] >= 0.2:
                 first_pos_review = sentiment_review_dict[rest][0]
-                first_neg_review = ("No significant negative review", first_neg_review[SCORE])
+                first_neg_review = ("No significant negative review", sentiment_review_dict[rest][0][SCORE])
             elif sentiment_review_dict[rest][0][SCORE] <= -0.0125:
                 first_neg_review = sentiment_review_dict[rest][0]
-                first_pos_review = ("No significant positive review", first_pos_review[SCORE])
+                first_pos_review = ("No significant positive review", sentiment_review_dict[rest][0][SCORE])
             else:
-                first_pos_review = ("No significant positive review", first_pos_review[SCORE])
-                first_neg_review = ("No significant negative review", first_neg_review[SCORE])
+                first_pos_review = ("No significant positive review", sentiment_review_dict[rest][0][SCORE])
+                first_neg_review = ("No significant negative review", sentiment_review_dict[rest][0][SCORE])
 
             top_rest_infos_lst.append((rest, ranked_rest_infos_dict[rest], address_dict[rest], first_pos_review[REVIEW], \
                                        "No significant positive review", first_neg_review[REVIEW], "No significant negative review", review_count_per_business[rest]))
