@@ -90,11 +90,7 @@ def filter_reviews_and_filtered_review_idx_lst(j, neighborhood, credibility, tim
 
     filtered_review_idx_lst = []
 
-    print("starting")
     for idx, review in enumerate(j["reviews"]):
-#        print(idx)
-        if(idx == 19644):
-                print(review["business"]["neighborhood"])
         if (review["business"]["neighborhood"].lower() == neighborhood.lower()):
             #credibility = DEFAULT if credibility == 0 else 1
             #cond1 = ((credibility != "All Users") and (review["elite_years"]["year"] >= (how YELP does it))) or (credibility == "All Users")
@@ -362,11 +358,9 @@ def compute_similarity(query, tf, idf, doc_norm, review_idx_mapping, neighborhoo
         
         for doc_id, freq in tf[token]:
             doc_scores[doc_id] += q_tfidf * freq * idf[token] # Construct D
-    print(doc_scores)
-    print(doc_norm)
     doc_scores = doc_scores/doc_norm
     
-    idx = np.argsort(doc_scores)
+    idx = np.argsort(doc_scores)[::-1]
     neighborhood = neighborhood.lower()
     return [(review_idx_mapping[neighborhood][idx[i]], doc_scores[idx[i]]) for i in range (len(doc_scores))]
 
@@ -375,7 +369,7 @@ def compute_similarity(query, tf, idf, doc_norm, review_idx_mapping, neighborhoo
 #idf = load_json("idf")
 #doc_norm = load_json("doc_norm")
 #neigh_idx_lst = load_json("neighborhood_idx_dict")
-#query = "food"
+#query = "food is good"
 #neighborhood = "Downtown"
 #all_reviews, review_idx_lst = filter_reviews_and_filtered_review_idx_lst(j, "Downtown", 0, 6)
 #neigh_filtered_review_idx_to_all_review_idx = {filtered_idx:full_review_idx for filtered_idx,full_review_idx in (enumerate(review_idx_lst))}
