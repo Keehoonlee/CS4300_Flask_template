@@ -4,6 +4,9 @@ import json
 from datetime import datetime
 import os
 import re
+from collections import Counter
+from nltk.tokenize import TreebankWordTokenizer
+import numpy as np
 
 
 ##########################################HELPERS#################################################
@@ -77,7 +80,7 @@ def compare_timelimit_timeposted(time_limit, time_posted):
         return False
 
 #######################################FILTERING REVIEWS############################################
-def filter_reviews(j, neighborhood, credibility, time_limit):
+def filter_reviews_and_filtered_review_idx_lst(j, neighborhood, credibility, time_limit):
     """Filter the reviews that match with user inputs.
 
     Returns a list of reviews"""
@@ -85,16 +88,27 @@ def filter_reviews(j, neighborhood, credibility, time_limit):
 
     time_limit = int(time_limit)
 
-    for review in j["reviews"]:
+    filtered_review_idx_lst = []
+
+    print("starting")
+    for idx, review in enumerate(j["reviews"]):
+#        print(idx)
+        if(idx == 19644):
+                print(review["business"]["neighborhood"])
         if (review["business"]["neighborhood"].lower() == neighborhood.lower()):
             #credibility = DEFAULT if credibility == 0 else 1
             #cond1 = ((credibility != "All Users") and (review["elite_years"]["year"] >= (how YELP does it))) or (credibility == "All Users")
+            filtered_review_idx_lst.append(idx)
+
+            if(idx == 19644):
+                print(review["business"]["neighborhood"].lower())
+
             cond2 = ((time_limit != DEFAULT) and (compare_timelimit_timeposted(time_limit, review["date"]))) or (time_limit == DEFAULT)
 
             if (cond2):
                 filtered_out_reviews.append(review)
 
-    return filtered_out_reviews
+    return filtered_out_reviews, filtered_review_idx_lst
 
 ###############################COMPUTING RESTAURANTS AND PERCENTAGES PER RESTAURANTS##################################
 def filter_reviews_calc_percentage_by_category(reviews):
@@ -331,8 +345,44 @@ def compute_pos_neg_percentages(reviews_per_category, percentages_per_category):
 
     return pos_neg_percantages_per_category
 
-# j = load_json("pittsburgh")
-# all_reviews = filter_reviews(j, "downtown", 0, 6)
+
+######################COMPUTING SIMILARITY BETWEEN THE FILTERED REVIEWS AND THE QUERY#####################
+def compute_similarity(query, tf, idf, doc_norm, review_idx_mapping, neighborhood):
+    tokenizer = TreebankWordTokenizer()
+    query = query.lower()
+    tokenized_query = tokenizer.tokenize(query)
+    counter = Counter(tokenized_query)
+    counter = {token: count for (token, count) in counter.items() if token in idf}
+    query_token_to_idx = {token: idx for idx, (token, _) in enumerate(counter.items())}
+    
+    doc_scores = np.zeros(len(doc_norm)) # Initialize D
+    for token, count in counter.items():
+        cur_token_idx = query_token_to_idx[token]
+        q_tfidf = count * idf[token] # Construct q
+        
+        for doc_id, freq in tf[token]:
+            doc_scores[doc_id] += q_tfidf * freq * idf[token] # Construct D
+    print(doc_scores)
+    print(doc_norm)
+    doc_scores = doc_scores/doc_norm
+    
+    idx = np.argsort(doc_scores)
+    neighborhood = neighborhood.lower()
+    return [(review_idx_mapping[neighborhood][idx[i]], doc_scores[idx[i]]) for i in range (len(doc_scores))]
+
+#j = load_json("pittsburgh")
+#tf = load_json("tf")
+#idf = load_json("idf")
+#doc_norm = load_json("doc_norm")
+#neigh_idx_lst = load_json("neighborhood_idx_dict")
+#query = "food"
+#neighborhood = "Downtown"
+#all_reviews, review_idx_lst = filter_reviews_and_filtered_review_idx_lst(j, "Downtown", 0, 6)
+#neigh_filtered_review_idx_to_all_review_idx = {filtered_idx:full_review_idx for filtered_idx,full_review_idx in (enumerate(review_idx_lst))}
+#result_list = compute_similarity(query,tf[neighborhood],idf[neighborhood],doc_norm[neighborhood], neigh_idx_lst, neighborhood)
+#for i in result_list[:10]:
+#    print(i[1])
+
 # reviews_per_category, percentages_per_category = filter_reviews_calc_percentage_by_category(all_reviews)
 # labels,_ = format_percentage_for_html(percentages_per_category)
 # pos_neg_percentages_per_category = compute_pos_neg_percentages(reviews_per_category, percentages_per_category)

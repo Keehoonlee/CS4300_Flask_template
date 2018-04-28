@@ -26,6 +26,7 @@ def search():
 	time = request.args.get('time') #Possible options of time are default 0,1,6,12
 	credibility = request.args.get('cred') #all users or elite users
 
+	query = request.args.get('query')
 	#Initial search page
 	if not neighborhood:
 		return render_template('search.html')
@@ -35,8 +36,21 @@ def search():
 		#Load in json_data
 		json_data = load_json("pittsburgh")
 
+		tf = load_json("tf")
+
+		idf = load_json("idf")
+
+		doc_norm = load_json("doc_norm")
+
+		neigh_idx_lst = load_json("neighborhood_idx_dict")
+
 		#Getting the appropriate reviews
-		all_reviews = filter_reviews(json_data, neighborhood.lower(), credibility, time)
+		all_reviews, review_idx_lst = filter_reviews_and_filtered_review_idx_lst(json_data, neighborhood.lower(), credibility, time)
+
+		#Get the index of the filtered reviews to compute SIMILARITY SCORE between filtered review and the quer
+		#eigh_filtered_review_idx_to_all_review_idx = {filtered_idx:full_review_idx for filtered_idx,full_review_idx in (enumerate(review_idx_lst))}
+
+		result_list = compute_similarity(query,tf[neighborhood],idf[neighborhood],doc_norm[neighborhood], neigh_idx_lst, neighborhood)
 
 		#Calculating the percentages for the pie charts [(category, percentage)]
 		reviews_per_category, percentages_per_category = filter_reviews_calc_percentage_by_category(all_reviews)
