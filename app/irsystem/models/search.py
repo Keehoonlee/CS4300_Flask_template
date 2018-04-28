@@ -95,10 +95,6 @@ def filter_reviews_and_filtered_review_idx_lst(j, neighborhood, credibility, tim
             #credibility = DEFAULT if credibility == 0 else 1
             #cond1 = ((credibility != "All Users") and (review["elite_years"]["year"] >= (how YELP does it))) or (credibility == "All Users")
             filtered_review_idx_lst.append(idx)
-
-            if(idx == 19644):
-                print(review["business"]["neighborhood"].lower())
-
             cond2 = ((time_limit != DEFAULT) and (compare_timelimit_timeposted(time_limit, review["date"]))) or (time_limit == DEFAULT)
 
             if (cond2):
