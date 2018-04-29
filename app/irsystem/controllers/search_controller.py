@@ -3,6 +3,7 @@ from app.irsystem.models.helpers import *
 from app.irsystem.models.helpers import NumpyEncoder as NumpyEncoder
 from app.irsystem.models.search import *
 from app.irsystem.models.neural_net import *
+from app.irsystem.models.query_expand import query_expand
 
 def top_percentage_category(pos_neg_percentages, percentages_per_category):
 	max_pos = 0
@@ -62,6 +63,9 @@ def search():
 		#Calculating the top ranked restaurants per category [top3] where top3 = [(rest,star,address,and other infos)]
 		#***ASSUME THAT THE ORDER IS IN THE ORDER SAME AS percentages_per_CATEGORY
 		top_restaurants_infos_per_category_1, top_restaurants_infos_per_category_2 = compute_rest_infos_per_category(all_reviews, percentages_per_category, reviews_per_category, time)
+
+		# get a list expanded queries
+		expanded_query = query_expand(query)
 
 		#If no reviews available, then return unfortunate page
 		if all_reviews == []:
