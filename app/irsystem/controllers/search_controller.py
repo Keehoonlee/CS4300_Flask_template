@@ -12,7 +12,7 @@ def top_percentage_category(pos_neg_percentages, percentages_per_category):
 	for idx, lst in enumerate(pos_neg_percentages):
 		pos = lst[0]
 		neg = lst[1]
-		if pos > max_pos:
+		if pos >= max_pos:
 			max_pos = pos
 			max_pos_category_idx = idx
 
@@ -24,7 +24,7 @@ def top_percentage_category(pos_neg_percentages, percentages_per_category):
 def search():
 	neighborhood = request.args.get('neigh')
 	#price = request.args.get('price')
-	time = request.args.get('time') #Possible options of time are default 0,1,6,12
+	time = request.args.get('time') #Possible options of time are default 0,6,12
 	credibility = request.args.get('cred') #all users or elite users
 
 	query = request.args.get('query')
@@ -34,6 +34,7 @@ def search():
 
 	#After loading in the main page, executing the search
 	else:
+		neighborhood = neighborhood.lower()
 		#Load in json_data
 		json_data = load_json("pittsburgh")
 
@@ -45,13 +46,14 @@ def search():
 
 		neigh_idx_lst = load_json("neighborhood_idx_dict")
 
+		# get a list expanded queries
+		#expanded_query = query_expand(query)
+		expanded_query = query_expand("service")
+
+		result_list = compute_similarity(json_data, expanded_query,tf[neighborhood],idf[neighborhood],doc_norm[neighborhood], neigh_idx_lst, neighborhood)
+
 		#Getting the appropriate reviews
-		all_reviews, review_idx_lst = filter_reviews_and_filtered_review_idx_lst(json_data, neighborhood.lower(), credibility, time)
-
-		#Get the index of the filtered reviews to compute SIMILARITY SCORE between filtered review and the quer
-		#eigh_filtered_review_idx_to_all_review_idx = {filtered_idx:full_review_idx for filtered_idx,full_review_idx in (enumerate(review_idx_lst))}
-
-		result_list = compute_similarity(query,tf[neighborhood],idf[neighborhood],doc_norm[neighborhood], neigh_idx_lst, neighborhood)
+		all_reviews = filter_reviews(result_list, neighborhood.lower(), credibility, time)
 
 		#Calculating the percentages for the pie charts [(category, percentage)]
 		reviews_per_category, percentages_per_category = filter_reviews_calc_percentage_by_category(all_reviews)
@@ -64,11 +66,8 @@ def search():
 		#***ASSUME THAT THE ORDER IS IN THE ORDER SAME AS percentages_per_CATEGORY
 		top_restaurants_infos_per_category_1, top_restaurants_infos_per_category_2 = compute_rest_infos_per_category(all_reviews, percentages_per_category, reviews_per_category, time)
 
-		# get a list expanded queries
-		expanded_query = query_expand(query)
-
 		#If no reviews available, then return unfortunate page
-		if all_reviews == []:
+		if (all_reviews == []) or (top_restaurants_infos_per_category_1[0]==[]):
 		 	return render_template('no_result.html')
 
 		else:
@@ -77,6 +76,7 @@ def search():
 
 			neighborhood = neighborhood[0].capitalize() + neighborhood[1:]
 			city = "Pittsburgh"
+
 			return render_template('result.html', labels = labels, data = data, \
 									top_category = top_category, top_pos_percentage = lst[0], top_neg_percentage = lst[1], \
 									pos_neg_percentages_per_category = pos_neg_percentages_per_category, \
@@ -84,21 +84,21 @@ def search():
 									top_restaurants_infos_per_category_2 = top_restaurants_infos_per_category_2, \
 								    neighborhood = neighborhood, time = time, credibility = credibility, city = city)
 
-@irsystem.route('pred_stars', methods=['POST'])
-def pred_stars():
-	"""return the predicted stars from the input"""
-	test = [34,24.0,29.7,96]
-	res = request.get_json()
-
-
-	name = res['rest_name']
-	name_chars = name[:5]
-	name_value = 0
-	for i in name_chars:
-		name_value += ord(i) - 69
-	name_value = name_value / 5
-	test[0] = name_value
-
-	test[3] = int(res['rest_reviews'].strip())
-
-	return pred(test)
+# @irsystem.route('pred_stars', methods=['POST'])
+# def pred_stars():
+# 	"""return the predicted stars from the input"""
+# 	test = [34,24.0,29.7,96]
+# 	res = request.get_json()
+#
+#
+# 	name = res['rest_name']
+# 	name_chars = name[:5]
+# 	name_value = 0
+# 	for i in name_chars:
+# 		name_value += ord(i) - 69
+# 	name_value = name_value / 5
+# 	test[0] = name_value
+#
+# 	test[3] = int(res['rest_reviews'].strip())
+#
+# 	return pred(test)

@@ -1,5 +1,6 @@
 from nltk.corpus import wordnet
 from nltk import word_tokenize
+import os
 
 NUM_EXPAND = 5
 
@@ -19,10 +20,11 @@ def query_expand(queries, num=NUM_EXPAND):
     for w in words:
         all_query.append(one_query(w))
     res = []
-    for i in range(num):
+    for a in all_query:
         cur = ""
-        for a in all_query:
-            cur += a[i]
+        for s in a:
+            s = s.replace("_"," ")
+            cur += s.encode("ascii")
             cur += " "
-        res.append(cur)
-    return res
+
+    return cur

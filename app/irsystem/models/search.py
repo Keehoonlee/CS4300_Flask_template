@@ -7,6 +7,7 @@ import re
 from collections import Counter
 from nltk.tokenize import TreebankWordTokenizer
 import numpy as np
+from query_expand import *
 
 
 ##########################################HELPERS#################################################
@@ -15,6 +16,8 @@ POS_SCORE_LIMIT = 0.25
 NEG_SCORE_LIMIT = -0.7
 REVIEW = 0
 SCORE = 1
+MIN_POS_SCORE = 0.15
+MIN_NEG_SCORE = -0.00625
 
 LIMIT = 0.05
 
@@ -80,7 +83,7 @@ def compare_timelimit_timeposted(time_limit, time_posted):
         return False
 
 #######################################FILTERING REVIEWS############################################
-def filter_reviews_and_filtered_review_idx_lst(j, neighborhood, credibility, time_limit):
+def filter_reviews(reviews, neighborhood, credibility, time_limit):
     """Filter the reviews that match with user inputs.
 
     Returns a list of reviews"""
@@ -88,19 +91,17 @@ def filter_reviews_and_filtered_review_idx_lst(j, neighborhood, credibility, tim
 
     time_limit = int(time_limit)
 
-    filtered_review_idx_lst = []
+    USEFUL = 2
 
-    for idx, review in enumerate(j["reviews"]):
+    for review in (reviews):
         if (review["business"]["neighborhood"].lower() == neighborhood.lower()):
-            #credibility = DEFAULT if credibility == 0 else 1
-            #cond1 = ((credibility != "All Users") and (review["elite_years"]["year"] >= (how YELP does it))) or (credibility == "All Users")
-            filtered_review_idx_lst.append(idx)
+            cond1 = ((credibility != "All Users") and (int(review["useful"]) >= USEFUL)) or (credibility == "All Users")
             cond2 = ((time_limit != DEFAULT) and (compare_timelimit_timeposted(time_limit, review["date"]))) or (time_limit == DEFAULT)
 
-            if (cond2):
+            if (cond1 and cond2):
                 filtered_out_reviews.append(review)
 
-    return filtered_out_reviews, filtered_review_idx_lst
+    return filtered_out_reviews
 
 ###############################COMPUTING RESTAURANTS AND PERCENTAGES PER RESTAURANTS##################################
 def filter_reviews_calc_percentage_by_category(reviews):
@@ -138,23 +139,21 @@ def filter_reviews_calc_percentage_by_category(reviews):
 
     return reviews_per_category, srted_category_percentages_lst
 
-
-
 def compute_rest_infos(reviews, time_limit):
     """Computes the top popular restaurants and respective stars and address and
     other infos for [reviews]."""
 
     if time_limit == "0":
-        REVIEWS_NEEDED = 30
+        REVIEWS_NEEDED = 20
     elif time_limit == "6":
-        REVIEWS_NEEDED = 5
-    elif time_limit == "12":
         REVIEWS_NEEDED = 0
+    elif time_limit == "12":
+        REVIEWS_NEEDED = 5
 
     rest_infos_dict = defaultdict(float)
     review_count_per_business = defaultdict(int)
     address_dict = defaultdict()
-    sentiment_review_dict = defaultdict(list)
+    sentiment_sim_review_dict = defaultdict(list)
     n_reviews = len(reviews)
 
     #Counting the stars and otheri nfos given to the business
@@ -164,15 +163,15 @@ def compute_rest_infos(reviews, time_limit):
         address_dict[review["business"]["name"]] = review["business"]["address"]
         parsed_review = re.sub(r'[\n\r]+', '', review['sentiment_sentence'])
         #parsed_review = '.'.join(review["sentiment_sentence"].split("\n")) #Required as newline characters cause error in html
-        sentiment_review_dict[review["business"]["name"]] += [(review["sentiment_score"], parsed_review)]
+        sentiment_sim_review_dict[review["business"]["name"]] += [(review["sentiment_score"]*review["sim_score"], parsed_review)]
 
     #Only using the top reviews that have the highest sentiment score and lowest sentiment score
-    for restaurant, lst_of_reviews in sentiment_review_dict.items():
+    for restaurant, lst_of_reviews in sentiment_sim_review_dict.items():
         srted_reviews = []
         for score, review in sorted(lst_of_reviews,key=lambda x: x[0]):
             srted_reviews.append((review, score))
 
-        sentiment_review_dict[restaurant] = srted_reviews
+        sentiment_sim_review_dict[restaurant] = srted_reviews
 
     #Taking into account number of reviews + stars in ranking the reviews
     ranked_rest_infos_dict = defaultdict()
@@ -189,49 +188,49 @@ def compute_rest_infos(reviews, time_limit):
     #Creating a list of (restaurant, star, and other infos) for top restaurants
     #Error checking in case of there are not enough reviews to display
     for rest in sorted(ranked_rest_infos_dict, key=ranked_rest_infos_dict.get, reverse=True):
-        if len(sentiment_review_dict[rest]) >= 2:
+        if len(sentiment_sim_review_dict[rest]) >= 2:
             #Setting up positive Reviews
-            first_pos_review = sentiment_review_dict[rest][-1]
-            second_pos_review = sentiment_review_dict[rest][-2]
+            first_pos_review = sentiment_sim_review_dict[rest][-1]
+            second_pos_review = sentiment_sim_review_dict[rest][-2]
             i = 3
             #Taking care of duplicates
-            while (first_pos_review[REVIEW] == second_pos_review[REVIEW]) and (i<=len(sentiment_review_dict[rest])):
-                second_pos_review = sentiment_review_dict[rest][-i]
+            while (first_pos_review[REVIEW] == second_pos_review[REVIEW]) and (i<=len(sentiment_sim_review_dict[rest])):
+                second_pos_review = sentiment_sim_review_dict[rest][-i]
                 i+=1
 
             if first_pos_review[REVIEW] == second_pos_review[REVIEW]:
                 second_pos_review = ("No significant positive review", second_pos_review[SCORE])
             #Checking if top reviews are actually positive
-            if first_pos_review[SCORE] < 0.2:
+            if first_pos_review[SCORE] < MIN_POS_SCORE:
                 first_pos_review = ("No significant positive review", first_pos_review[SCORE])
                 second_pos_review = ("No significant positive review", second_pos_review[SCORE])
-            elif second_pos_review[SCORE] < 0.2:
+            elif second_pos_review[SCORE] < MIN_POS_SCORE:
                 second_pos_review = ("No significant positive review", second_pos_review[SCORE])
 
             #Setting up negative reviews
-            first_neg_review = sentiment_review_dict[rest][0]
-            second_neg_review = sentiment_review_dict[rest][1]
+            first_neg_review = sentiment_sim_review_dict[rest][0]
+            second_neg_review = sentiment_sim_review_dict[rest][1]
             i = 2
             #Taking care of duplicates
-            while (first_neg_review[REVIEW] == second_neg_review[REVIEW]) and (i<=len(sentiment_review_dict[rest])):
-                second_neg_review = sentiment_review_dict[rest][-i]
+            while (first_neg_review[REVIEW] == second_neg_review[REVIEW]) and (i<=len(sentiment_sim_review_dict[rest])):
+                second_neg_review = sentiment_sim_review_dict[rest][-i]
                 i+=1
 
             if first_neg_review[REVIEW] == second_neg_review[REVIEW]:
                 second_neg_review = ("No significant negative review", second_neg_review[SCORE])
             #Checking if bot reviews are actually negative
-            if first_neg_review[SCORE] >= -0.0125:
+            if first_neg_review[SCORE] >= MIN_NEG_SCORE:
                 first_neg_review = ("No significant negative review", first_neg_review[SCORE])
                 second_neg_review = ("No significant negative review", second_neg_review[SCORE])
-            elif second_neg_review[SCORE] >= -0.0125:
+            elif second_neg_review[SCORE] >= MIN_NEG_SCORE:
                 second_neg_review = ("No significant negative review", second_neg_review[SCORE])
 
             #If positive review == negative review, choose the appropriate one depending on the score
             if first_pos_review[REVIEW] == first_neg_review[REVIEW]:
-                if first_pos_review[SCORE] >= 0.2:
+                if first_pos_review[SCORE] >= MIN_POS_SCORE:
                     first_neg_review = ("No significant negative review", first_neg_review[SCORE])
                     second_neg_review = ("No significant negative review", second_neg_review[SCORE])
-                elif first_pos_review[SCORE] <= -0.0125:
+                elif first_pos_review[SCORE] <= MIN_NEG_SCORE:
                     first_pos_review = ("No significant positive review", first_pos_review[SCORE])
                     second_pos_review = ("No significant positive review", second_pos_review[SCORE])
                 else:
@@ -251,16 +250,16 @@ def compute_rest_infos(reviews, time_limit):
                                        first_neg_review[REVIEW], second_neg_review[REVIEW], \
                                        review_count_per_business[rest]))
 
-        elif len(sentiment_review_dict[rest]) == 1:
-            if sentiment_review_dict[rest][0][SCORE] >= 0.2:
-                first_pos_review = sentiment_review_dict[rest][0]
-                first_neg_review = ("No significant negative review", sentiment_review_dict[rest][0][SCORE])
-            elif sentiment_review_dict[rest][0][SCORE] <= -0.0125:
-                first_neg_review = sentiment_review_dict[rest][0]
-                first_pos_review = ("No significant positive review", sentiment_review_dict[rest][0][SCORE])
+        elif len(sentiment_sim_review_dict[rest]) == 1:
+            if sentiment_sim_review_dict[rest][0][SCORE] >= MIN_POS_SCORE:
+                first_pos_review = sentiment_sim_review_dict[rest][0]
+                first_neg_review = ("No significant negative review", sentiment_sim_review_dict[rest][0][SCORE])
+            elif sentiment_sim_review_dict[rest][0][SCORE] <= MIN_NEG_SCORE:
+                first_neg_review = sentiment_sim_review_dict[rest][0]
+                first_pos_review = ("No significant positive review", sentiment_sim_review_dict[rest][0][SCORE])
             else:
-                first_pos_review = ("No significant positive review", sentiment_review_dict[rest][0][SCORE])
-                first_neg_review = ("No significant negative review", sentiment_review_dict[rest][0][SCORE])
+                first_pos_review = ("No significant positive review", sentiment_sim_review_dict[rest][0][SCORE])
+                first_neg_review = ("No significant negative review", sentiment_sim_review_dict[rest][0][SCORE])
 
             top_rest_infos_lst.append((rest, ranked_rest_infos_dict[rest], address_dict[rest], first_pos_review[REVIEW], \
                                        "No significant positive review", first_neg_review[REVIEW], "No significant negative review", review_count_per_business[rest]))
@@ -339,39 +338,50 @@ def compute_pos_neg_percentages(reviews_per_category, percentages_per_category):
 
 
 ######################COMPUTING SIMILARITY BETWEEN THE FILTERED REVIEWS AND THE QUERY#####################
-def compute_similarity(query, tf, idf, doc_norm, review_idx_mapping, neighborhood):
+def compute_similarity(j, query, tf, idf, doc_norm, review_idx_mapping, neighborhood):
+    """Calculates similarity score bewteen query and each review. Returns a list of review objects with
+    similarity score attached"""
     tokenizer = TreebankWordTokenizer()
+    doc_scores = np.zeros(len(doc_norm)) # Initialize D
+
     query = query.lower()
     tokenized_query = tokenizer.tokenize(query)
     counter = Counter(tokenized_query)
     counter = {token: count for (token, count) in counter.items() if token in idf}
     query_token_to_idx = {token: idx for idx, (token, _) in enumerate(counter.items())}
-    
-    doc_scores = np.zeros(len(doc_norm)) # Initialize D
+
     for token, count in counter.items():
         cur_token_idx = query_token_to_idx[token]
         q_tfidf = count * idf[token] # Construct q
-        
+
         for doc_id, freq in tf[token]:
             doc_scores[doc_id] += q_tfidf * freq * idf[token] # Construct D
-    doc_scores = doc_scores/doc_norm
-    
-    idx = np.argsort(doc_scores)[::-1]
-    neighborhood = neighborhood.lower()
-    return [(review_idx_mapping[neighborhood][idx[i]], doc_scores[idx[i]]) for i in range (len(doc_scores))]
 
-#j = load_json("pittsburgh")
-#tf = load_json("tf")
-#idf = load_json("idf")
-#doc_norm = load_json("doc_norm")
-#neigh_idx_lst = load_json("neighborhood_idx_dict")
-#query = "food is good"
-#neighborhood = "Downtown"
-#all_reviews, review_idx_lst = filter_reviews_and_filtered_review_idx_lst(j, "Downtown", 0, 6)
-#neigh_filtered_review_idx_to_all_review_idx = {filtered_idx:full_review_idx for filtered_idx,full_review_idx in (enumerate(review_idx_lst))}
-#result_list = compute_similarity(query,tf[neighborhood],idf[neighborhood],doc_norm[neighborhood], neigh_idx_lst, neighborhood)
-#for i in result_list[:10]:
-#    print(i[1])
+    for idx in range(len(doc_norm)):
+        doc_scores[idx] = doc_scores[idx]/(doc_norm[idx]+1)
+
+    #idx = np.argsort(doc_scores)[::-1]
+    neighborhood = neighborhood.lower()
+
+    #output = [(review_idx_mapping[neighborhood][idx[i]], doc_scores[idx[i]]) for i in range (len(doc_scores))]
+    output = [(review_idx_mapping[neighborhood][i], doc_scores[i]) for i in range(len(doc_scores))]
+    new_reviews = []
+    for idx, score in output:
+        new_review = j["reviews"][idx]
+        new_review["sim_score"] = score
+        new_reviews.append(new_review)
+    return new_reviews
+
+# j = load_json("pittsburgh")
+# tf = load_json("tf")
+# idf = load_json("idf")
+# doc_norm = load_json("doc_norm")
+# neigh_idx_lst = load_json("neighborhood_idx_dict")
+# query = "food"
+# neighborhood = "downtown"
+# result_list = compute_similarity(j, query,tf[neighborhood],idf[neighborhood],doc_norm[neighborhood], neigh_idx_lst, neighborhood)
+# #all_reviews = filter_reviews(result_list, "downtown", "All Users", 6)
+# print(result_list)
 
 # reviews_per_category, percentages_per_category = filter_reviews_calc_percentage_by_category(all_reviews)
 # labels,_ = format_percentage_for_html(percentages_per_category)
