@@ -49,8 +49,8 @@ def search():
 
 		# get a list expanded queries
 		if query != None:
-			query = query.replace(",","")
-			expanded_query = query_expand(query)
+			n_query = query.replace(",","")
+			expanded_query = query_expand(n_query)
 
 		else:
 			expanded_query = ""
@@ -86,7 +86,7 @@ def search():
 									pos_neg_percentages_per_category = pos_neg_percentages_per_category, \
 									top_restaurants_infos_per_category_1 = top_restaurants_infos_per_category_1, \
 									top_restaurants_infos_per_category_2 = top_restaurants_infos_per_category_2, \
-								    neighborhood = neighborhood, time = time, credibility = credibility, city = city)
+								    neighborhood = neighborhood, time = time, credibility = credibility, city = city, criteria=query)
 
 # @irsystem.route('pred_stars', methods=['POST'])
 # def pred_stars():

@@ -34,11 +34,8 @@
     <a class="navbar-brand" onclick='history.back(-1)'>
       <img src="{{url_for('static', filename='image/icon.png')}}" width="40px" height="40px" class="d-inline-block align-top" alt="">
     </a>
-    <span class="navbar-text" style="color: white; font-size: 30px">
-      Reviews for {{neighborhood}}, {{city}} with  {% if time == "0" %} All Reviews {% else %} upto {{time}} months old {% endif %} by {{credibility}}
-    </span>
   </nav>
-  <br /><br /><br/>
+
   <div class="text-center">
     <font size="5" color="black" face="Arial Black">SEARCHED </font> <br />
     <font size="4" color="grey" face="Courier New">CITY: </font>
@@ -48,7 +45,9 @@
     <font size="4" color="grey" face="Courier New">DATE POSTED: </font>
     <font size="3" color="black" face="Courier New">{% if time == "0" %} All Reviews {% else %} upto {{time}} months old {% endif %}</font> <br />
     <font size="4" color="grey" face="Courier New">CREDIBILITY: </font>
-    <font size="3" color="black" face="Courier New">{{credibility}} </font> <br /><br /><br />
+    <font size="3" color="black" face="Courier New">{{credibility}} </font> <br />
+    <font size="4" color="grey" face="Courier New">CRITERIA: </font>
+    <font size="3" color="black" face="Courier New">{{criteria}} </font> <br /><br />
   </div>
 
   <div class="container-fluid" id="output">
