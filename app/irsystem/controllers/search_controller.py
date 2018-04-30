@@ -86,7 +86,7 @@ def search():
 			neighborhood = neighborhood[0].capitalize() + neighborhood[1:]
 			city = "Pittsburgh"
 
-			if sorting == "reviews":
+			if sorting == "review":
 				sorting_meth = "Number of Reviews"
 			else:
 				sorting_meth = "Highest Rating"
