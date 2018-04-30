@@ -92,7 +92,7 @@ def search():
 				sorting_meth = "Highest Rating"
 
 			return render_template('result.html', labels = labels, data = data, \
-									top_category = top_category, top_pos_percentage = top_category_percentages[0], top_neg_percentage = top_category_percentages[1], \
+									top_category = top_category, top_pos_percentage = top_category_percentages[0], top_neg_percentage = top_category_percentages[1], top_neutral = top_category_percentages[2], \
 									pos_neg_percentages_per_category = pos_neg_percentages_per_category, \
 									top_restaurants_infos_per_category_1 = top_restaurants_infos_per_category_1, \
 									top_restaurants_infos_per_category_2 = top_restaurants_infos_per_category_2, \

@@ -64,7 +64,7 @@
       </br></br></br>
         <font size="3" color="grey" face="Arial Black"><center>{{neighborhood}} is rated highest for its</center></font>
         <p class="text-center"><font size="5" color="black" face="Impact">{{top_category}}</font></p>
-        <canvas id="top-chart" width="200" height="180" style='display: block;margin: auto;'></canvas>
+        <canvas id="top-chart" width="300" height="240" style='display: block;margin: auto;'></canvas>
         <p class="text-center"><font size="3" color="black" face="Courier New"> Average Restaurant Rating: </font>
           <font size="3" color="black" face="Impact">
           {%if top_category_stars == 5%} ★★★★★
@@ -136,11 +136,11 @@
   var top_all_chart = new Chart(top_ctx, {
     type: 'bar',
     data: {
-      labels: ["Positive", "Negative"],
+      labels: ["Positive", "Negative", "Neutral"],
       datasets: [{
         label: "Percentage of Reviews",
-        backgroundColor: ["#85C1E9","#F48B8B"],
-        data:[{{top_pos_percentage}}, {{top_neg_percentage}}]
+        backgroundColor: ["#85C1E9","#F48B8B", "#C7E753"],
+        data:[{{top_pos_percentage}}, {{top_neg_percentage}}, {{top_neutral}}]
       }]
     },
     options: {
@@ -222,13 +222,13 @@
       var pos_neg_chart = new Chart(ctx, {
         type: 'bar',
         data: {
-          labels: ["Positive", "Negative"]
+          labels: ["Positive", "Negative", "Neutral"]
           ,
           datasets:
           [{
             label: "Percentage of Reviews",
-            backgroundColor: ["#85C1E9","#F48B8B"],
-            data: [pos_neg_percentages[idx][0], pos_neg_percentages[idx][1]]
+            backgroundColor: ["#85C1E9","#F48B8B", "#C7E753"],
+            data: [pos_neg_percentages[idx][0], pos_neg_percentages[idx][1], pos_neg_percentages[idx][2]]
           }]
         },
         options: {
@@ -251,9 +251,9 @@
         <div class="panel panel-default"> \
         <div class="panel-heading"> \
         <font size="2" color="black" face="Arial Black"><left>{{restaurant}} ({{star}}) [{{n_reviews}} reviews] </font> </br> \
+        <font size="2" color="black" face="Courier New"><left>{{address}} \
         </div> \
         <div class="panel-body">\
-        <font size="2" color="black" face="Courier New"><left>{{address}} </br>\
         <font size="1.5" color="grey" face="Impact"><left>POSITIVE REVIEWS: </left></font>\
         </br>{{review1}}</br></br>{{review2}}</left> </br></br>\
         <font size="1.5" color="grey" face="Impact"><left>NEGATIVE REVIEWS: </left></font>\
@@ -268,9 +268,9 @@
         <div class="panel panel-default"> \
         <div class="panel-heading"> \
         <font size="2" color="black" face="Arial Black"><left>{{restaurant}} ({{star}}) [{{n_reviews}} reviews] </font> </br> \
+        <font size="2" color="black" face="Courier New"><left>{{address}} \
         </div> \
         <div class="panel-body">\
-        <font size="2" color="black" face="Courier New"><left>{{address}} </br>\
         <font size="1.5" color="grey" face="Impact"><left>POSITIVE REVIEWS: </left></font></br>{{review1}}</br></br>{{review2}}</left> </br></br>\
         <font size="1.5" color="grey" face="Impact"><left>NEGATIVE REVIEWS: </left></font></br>{{review3}}</br></br>{{review4}}</left> </br></br></font>\
         </div> \
@@ -283,9 +283,9 @@
         <div class="panel panel-default"> \
         <div class="panel-heading"> \
         <font size="2" color="black" face="Arial Black"><left>{{restaurant}} ({{star}}) [{{n_reviews}} reviews] </font> </br> \
+        <font size="2" color="black" face="Courier New"><left>{{address}} \
         </div> \
         <div class="panel-body">\
-        <font size="2" color="black" face="Courier New"><left>{{address}} </br>\
         <font size="1.5" color="grey" face="Impact"><left>POSITIVE REVIEWS: </left></font></br>{{review1}}</br></br>{{review2}}</left> </br></br>\
         <font size="1.5" color="grey" face="Impact"><left>NEGATIVE REVIEWS: </left></font></br>{{review3}}</br></br>{{review4}}</left> </br></br></font>\
         </div> \
@@ -298,9 +298,9 @@
         <div class="panel panel-default"> \
         <div class="panel-heading"> \
         <font size="2" color="black" face="Arial Black"><left>{{restaurant}} ({{star}}) [{{n_reviews}} reviews] </font> </br> \
+        <font size="2" color="black" face="Courier New"><left>{{address}} \
         </div> \
         <div class="panel-body">\
-        <font size="2" color="black" face="Courier New"><left>{{address}} </br>\
         <font size="1.5" color="grey" face="Impact"><left>POSITIVE REVIEWS: </left></font></br>{{review1}}</br></br>{{review2}}</left> </br></br>\
         <font size="1.5" color="grey" face="Impact"><left>NEGATIVE REVIEWS: </left></font></br>{{review3}}</br></br>{{review4}}</left> </br></br></font>\
         </div> \
@@ -313,9 +313,9 @@
         <div class="panel panel-default"> \
         <div class="panel-heading"> \
         <font size="2" color="black" face="Arial Black"><left>{{restaurant}} ({{star}}) [{{n_reviews}} reviews] </font> </br> \
+        <font size="2" color="black" face="Courier New"><left>{{address}} \
         </div> \
         <div class="panel-body">\
-        <font size="2" color="black" face="Courier New"><left>{{address}} </br>\
         <font size="1.5" color="grey" face="Impact"><left>POSITIVE REVIEWS: </left></font></br>{{review1}}</br></br>{{review2}}</left> </br></br>\
         <font size="1.5" color="grey" face="Impact"><left>NEGATIVE REVIEWS: </left></font></br>{{review3}}</br></br>{{review4}}</left> </br></br></font>\
         </div> \
@@ -328,9 +328,9 @@
         <div class="panel panel-default"> \
         <div class="panel-heading"> \
         <font size="2" color="black" face="Arial Black"><left>{{restaurant}} ({{star}}) [{{n_reviews}} reviews] </font> </br> \
+        <font size="2" color="black" face="Courier New"><left>{{address}} \
         </div> \
         <div class="panel-body">\
-        <font size="2" color="black" face="Courier New"><left>{{address}} </br>\
         <font size="1.5" color="grey" face="Impact"><left>POSITIVE REVIEWS: </left></font></br>{{review1}}</br></br>{{review2}}</left> </br></br>\
         <font size="1.5" color="grey" face="Impact"><left>NEGATIVE REVIEWS: </left></font></br>{{review3}}</br></br>{{review4}}</left> </br></br></font>\
         </div> \
@@ -343,9 +343,9 @@
         <div class="panel panel-default"> \
         <div class="panel-heading"> \
         <font size="2" color="black" face="Arial Black"><left>{{restaurant}} ({{star}}) [{{n_reviews}} reviews] </font> </br> \
+        <font size="2" color="black" face="Courier New"><left>{{address}} \
         </div> \
         <div class="panel-body">\
-        <font size="2" color="black" face="Courier New"><left>{{address}} </br>\
         <font size="1.5" color="grey" face="Impact"><left>POSITIVE REVIEWS: </left></font></br>{{review1}}</br></br>{{review2}}</left> </br></br>\
         <font size="1.5" color="grey" face="Impact"><left>NEGATIVE REVIEWS: </left></font></br>{{review3}}</br></br>{{review4}}</left> </br></br></font>\
         </div> \
@@ -358,9 +358,9 @@
         <div class="panel panel-default"> \
         <div class="panel-heading"> \
         <font size="2" color="black" face="Arial Black"><left>{{restaurant}} ({{star}}) [{{n_reviews}} reviews] </font> </br> \
+        <font size="2" color="black" face="Courier New"><left>{{address}} \
         </div> \
         <div class="panel-body">\
-        <font size="2" color="black" face="Courier New"><left>{{address}} </br>\
         <font size="1.5" color="grey" face="Impact"><left>POSITIVE REVIEWS: </left></font></br>{{review1}}</br></br>{{review2}}</left> </br></br>\
         <font size="1.5" color="grey" face="Impact"><left>NEGATIVE REVIEWS: </left></font></br>{{review3}}</br></br>{{review4}}</left> </br></br></font>\
         </div> \
@@ -373,9 +373,9 @@
         <div class="panel panel-default"> \
         <div class="panel-heading"> \
         <font size="2" color="black" face="Arial Black"><left>{{restaurant}} ({{star}}) [{{n_reviews}} reviews] </font> </br> \
+        <font size="2" color="black" face="Courier New"><left>{{address}} \
         </div> \
         <div class="panel-body">\
-        <font size="2" color="black" face="Courier New"><left>{{address}} </br>\
         <font size="1.5" color="grey" face="Impact"><left>POSITIVE REVIEWS: </left></font></br>{{review1}}</br></br>{{review2}}</left> </br></br>\
         <font size="1.5" color="grey" face="Impact"><left>NEGATIVE REVIEWS: </left></font></br>{{review3}}</br></br>{{review4}}</left> </br></br></font>\
         </div> \
@@ -388,9 +388,9 @@
         <div class="panel panel-default"> \
         <div class="panel-heading"> \
         <font size="2" color="black" face="Arial Black"><left>{{restaurant}} ({{star}}) [{{n_reviews}} reviews] </font> </br> \
+        <font size="2" color="black" face="Courier New"><left>{{address}} \
         </div> \
         <div class="panel-body">\
-        <font size="2" color="black" face="Courier New"><left>{{address}} </br>\
         <font size="1.5" color="grey" face="Impact"><left>POSITIVE REVIEWS: </left></font></br>{{review1}}</br></br>{{review2}}</left> </br></br>\
         <font size="1.5" color="grey" face="Impact"><left>NEGATIVE REVIEWS: </left></font></br>{{review3}}</br></br>{{review4}}</left> </br></br></font>\
         </div> \
@@ -403,9 +403,9 @@
         <div class="panel panel-default"> \
         <div class="panel-heading"> \
         <font size="2" color="black" face="Arial Black"><left>{{restaurant}} ({{star}}) [{{n_reviews}} reviews] </font> </br> \
+        <font size="2" color="black" face="Courier New"><left>{{address}} \
         </div> \
         <div class="panel-body">\
-        <font size="2" color="black" face="Courier New"><left>{{address}} </br>\
         <font size="1.5" color="grey" face="Impact"><left>POSITIVE REVIEWS: </left></font></br>{{review1}}</br></br>{{review2}}</left> </br></br>\
         <font size="1.5" color="grey" face="Impact"><left>NEGATIVE REVIEWS: </left></font></br>{{review3}}</br></br>{{review4}}</left> </br></br></font>\
         </div> \
@@ -418,9 +418,9 @@
         <div class="panel panel-default"> \
         <div class="panel-heading"> \
         <font size="2" color="black" face="Arial Black"><left>{{restaurant}} ({{star}}) [{{n_reviews}} reviews] </font> </br> \
+        <font size="2" color="black" face="Courier New"><left>{{address}} \
         </div> \
         <div class="panel-body">\
-        <font size="2" color="black" face="Courier New"><left>{{address}} </br>\
         <font size="1.5" color="grey" face="Impact"><left>POSITIVE REVIEWS: </left></font>\
         </br>{{review1}}</br></br>{{review2}}</left> </br></br>\
         <font size="1.5" color="grey" face="Impact"><left>NEGATIVE REVIEWS: </left></font>\
@@ -435,9 +435,9 @@
         <div class="panel panel-default"> \
         <div class="panel-heading"> \
         <font size="2" color="black" face="Arial Black"><left>{{restaurant}} ({{star}}) [{{n_reviews}} reviews] </font> </br> \
+        <font size="2" color="black" face="Courier New"><left>{{address}} \
         </div> \
         <div class="panel-body">\
-        <font size="2" color="black" face="Courier New"><left>{{address}} </br>\
         <font size="1.5" color="grey" face="Impact"><left>POSITIVE REVIEWS: </left></font>\
         </br>{{review1}}</br></br>{{review2}}</left> </br></br>\
         <font size="1.5" color="grey" face="Impact"><left>NEGATIVE REVIEWS: </left></font>\
@@ -455,9 +455,9 @@
         <div class="panel panel-default"> \
         <div class="panel-heading"> \
         <font size="2" color="black" face="Arial Black"><left>{{restaurant}} ({{star}}) [{{n_reviews}} reviews] </font> </br> \
+        <font size="2" color="black" face="Courier New"><left>{{address}} \
         </div> \
         <div class="panel-body">\
-        <font size="2" color="black" face="Courier New"><left>{{address}} </br>\
         <font size="1.5" color="grey" face="Impact"><left>POSITIVE REVIEWS: </left></font>\
         </br>{{review1}}</br></br>{{review2}}</left> </br></br>\
         <font size="1.5" color="grey" face="Impact"><left>NEGATIVE REVIEWS: </left></font>\
@@ -472,9 +472,9 @@
         <div class="panel panel-default"> \
         <div class="panel-heading"> \
         <font size="2" color="black" face="Arial Black"><left>{{restaurant}} ({{star}}) [{{n_reviews}} reviews] </font> </br> \
+        <font size="2" color="black" face="Courier New"><left>{{address}} \
         </div> \
         <div class="panel-body">\
-        <font size="2" color="black" face="Courier New"><left>{{address}} </br>\
         <font size="1.5" color="grey" face="Impact"><left>POSITIVE REVIEWS: </left></font>\
         </br>{{review1}}</br></br>{{review2}}</left> </br></br>\
         <font size="1.5" color="grey" face="Impact"><left>NEGATIVE REVIEWS: </left></font>\
@@ -489,9 +489,9 @@
         <div class="panel panel-default"> \
         <div class="panel-heading"> \
         <font size="2" color="black" face="Arial Black"><left>{{restaurant}} ({{star}}) [{{n_reviews}} reviews] </font> </br> \
+        <font size="2" color="black" face="Courier New"><left>{{address}} \
         </div> \
         <div class="panel-body">\
-        <font size="2" color="black" face="Courier New"><left>{{address}} </br>\
         <font size="1.5" color="grey" face="Impact"><left>POSITIVE REVIEWS: </left></font>\
         </br>{{review1}}</br></br>{{review2}}</left> </br></br>\
         <font size="1.5" color="grey" face="Impact"><left>NEGATIVE REVIEWS: </left></font>\
@@ -506,9 +506,9 @@
         <div class="panel panel-default"> \
         <div class="panel-heading"> \
         <font size="2" color="black" face="Arial Black"><left>{{restaurant}} ({{star}}) [{{n_reviews}} reviews] </font> </br> \
+        <font size="2" color="black" face="Courier New"><left>{{address}} \
         </div> \
         <div class="panel-body">\
-        <font size="2" color="black" face="Courier New"><left>{{address}} </br>\
         <font size="1.5" color="grey" face="Impact"><left>POSITIVE REVIEWS: </left></font>\
         </br>{{review1}}</br></br>{{review2}}</left> </br></br>\
         <font size="1.5" color="grey" face="Impact"><left>NEGATIVE REVIEWS: </left></font>\
@@ -523,9 +523,9 @@
         <div class="panel panel-default"> \
         <div class="panel-heading"> \
         <font size="2" color="black" face="Arial Black"><left>{{restaurant}} ({{star}}) [{{n_reviews}} reviews] </font> </br> \
+        <font size="2" color="black" face="Courier New"><left>{{address}} \
         </div> \
         <div class="panel-body">\
-        <font size="2" color="black" face="Courier New"><left>{{address}} </br>\
         <font size="1.5" color="grey" face="Impact"><left>POSITIVE REVIEWS: </left></font>\
         </br>{{review1}}</br></br>{{review2}}</left> </br></br>\
         <font size="1.5" color="grey" face="Impact"><left>NEGATIVE REVIEWS: </left></font>\
@@ -540,9 +540,9 @@
         <div class="panel panel-default"> \
         <div class="panel-heading"> \
         <font size="2" color="black" face="Arial Black"><left>{{restaurant}} ({{star}}) [{{n_reviews}} reviews] </font> </br> \
+        <font size="2" color="black" face="Courier New"><left>{{address}} \
         </div> \
         <div class="panel-body">\
-        <font size="2" color="black" face="Courier New"><left>{{address}} </br>\
         <font size="1.5" color="grey" face="Impact"><left>POSITIVE REVIEWS: </left></font>\
         </br>{{review1}}</br></br>{{review2}}</left> </br></br>\
         <font size="1.5" color="grey" face="Impact"><left>NEGATIVE REVIEWS: </left></font>\
@@ -557,9 +557,9 @@
         <div class="panel panel-default"> \
         <div class="panel-heading"> \
         <font size="2" color="black" face="Arial Black"><left>{{restaurant}} ({{star}}) [{{n_reviews}} reviews] </font> </br> \
+        <font size="2" color="black" face="Courier New"><left>{{address}} \
         </div> \
         <div class="panel-body">\
-        <font size="2" color="black" face="Courier New"><left>{{address}} </br>\
         <font size="1.5" color="grey" face="Impact"><left>POSITIVE REVIEWS: </left></font>\
         </br>{{review1}}</br></br>{{review2}}</left> </br></br>\
         <font size="1.5" color="grey" face="Impact"><left>NEGATIVE REVIEWS: </left></font>\
@@ -574,9 +574,9 @@
         <div class="panel panel-default"> \
         <div class="panel-heading"> \
         <font size="2" color="black" face="Arial Black"><left>{{restaurant}} ({{star}}) [{{n_reviews}} reviews] </font> </br> \
+        <font size="2" color="black" face="Courier New"><left>{{address}} \
         </div> \
         <div class="panel-body">\
-        <font size="2" color="black" face="Courier New"><left>{{address}} </br>\
         <font size="1.5" color="grey" face="Impact"><left>POSITIVE REVIEWS: </left></font>\
         </br>{{review1}}</br></br>{{review2}}</left> </br></br>\
         <font size="1.5" color="grey" face="Impact"><left>NEGATIVE REVIEWS: </left></font>\
@@ -591,9 +591,9 @@
         <div class="panel panel-default"> \
         <div class="panel-heading"> \
         <font size="2" color="black" face="Arial Black"><left>{{restaurant}} ({{star}}) [{{n_reviews}} reviews] </font> </br> \
+        <font size="2" color="black" face="Courier New"><left>{{address}} \
         </div> \
         <div class="panel-body">\
-        <font size="2" color="black" face="Courier New"><left>{{address}} </br>\
         <font size="1.5" color="grey" face="Impact"><left>POSITIVE REVIEWS: </left></font>\
         </br>{{review1}}</br></br>{{review2}}</left> </br></br>\
         <font size="1.5" color="grey" face="Impact"><left>NEGATIVE REVIEWS: </left></font>\
@@ -608,9 +608,9 @@
         <div class="panel panel-default"> \
         <div class="panel-heading"> \
         <font size="2" color="black" face="Arial Black"><left>{{restaurant}} ({{star}}) [{{n_reviews}} reviews] </font> </br> \
+        <font size="2" color="black" face="Courier New"><left>{{address}} \
         </div> \
         <div class="panel-body">\
-        <font size="2" color="black" face="Courier New"><left>{{address}} </br>\
         <font size="1.5" color="grey" face="Impact"><left>POSITIVE REVIEWS: </left></font>\
         </br>{{review1}}</br></br>{{review2}}</left> </br></br>\
         <font size="1.5" color="grey" face="Impact"><left>NEGATIVE REVIEWS: </left></font>\
@@ -625,9 +625,9 @@
         <div class="panel panel-default"> \
         <div class="panel-heading"> \
         <font size="2" color="black" face="Arial Black"><left>{{restaurant}} ({{star}}) [{{n_reviews}} reviews] </font> </br> \
+        <font size="2" color="black" face="Courier New"><left>{{address}} \
         </div> \
         <div class="panel-body">\
-        <font size="2" color="black" face="Courier New"><left>{{address}} </br>\
         <font size="1.5" color="grey" face="Impact"><left>POSITIVE REVIEWS: </left></font>\
         </br>{{review1}}</br></br>{{review2}}</left> </br></br>\
         <font size="1.5" color="grey" face="Impact"><left>NEGATIVE REVIEWS: </left></font>\
@@ -642,9 +642,9 @@
         <div class="panel panel-default"> \
         <div class="panel-heading"> \
         <font size="2" color="black" face="Arial Black"><left>{{restaurant}} ({{star}}) [{{n_reviews}} reviews] </font> </br> \
+        <font size="2" color="black" face="Courier New"><left>{{address}} \
         </div> \
         <div class="panel-body">\
-        <font size="2" color="black" face="Courier New"><left>{{address}} </br>\
         <font size="1.5" color="grey" face="Impact"><left>POSITIVE REVIEWS: </left></font>\
         </br>{{review1}}</br></br>{{review2}}</left> </br></br>\
         <font size="1.5" color="grey" face="Impact"><left>NEGATIVE REVIEWS: </left></font>\
@@ -659,9 +659,9 @@
         <div class="panel panel-default"> \
         <div class="panel-heading"> \
         <font size="2" color="black" face="Arial Black"><left>{{restaurant}} ({{star}}) [{{n_reviews}} reviews] </font> </br> \
+        <font size="2" color="black" face="Courier New"><left>{{address}} \
         </div> \
         <div class="panel-body">\
-        <font size="2" color="black" face="Courier New"><left>{{address}} </br>\
         <font size="1.5" color="grey" face="Impact"><left>POSITIVE REVIEWS: </left></font>\
         </br>{{review1}}</br></br>{{review2}}</left> </br></br>\
         <font size="1.5" color="grey" face="Impact"><left>NEGATIVE REVIEWS: </left></font>\

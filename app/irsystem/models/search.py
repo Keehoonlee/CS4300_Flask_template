@@ -12,12 +12,12 @@ from query_expand import *
 
 ##########################################HELPERS#################################################
 DEFAULT = 0
-POS_SCORE_LIMIT = 0.5
-NEG_SCORE_LIMIT = - 0.05
+POS_SCORE_LIMIT = 0.4
+NEG_SCORE_LIMIT = - 0.025
 REVIEW = 0
 SCORE = 1
-MIN_POS_SCORE = 0.1
-MIN_NEG_SCORE = - 0.001
+MIN_POS_SCORE = 0.08
+MIN_NEG_SCORE = - 0.005
 
 LIMIT = 0.05
 
@@ -335,17 +335,17 @@ def compute_rest_infos_and_pos_neg_per_category(reviews, percentages, reviews_pe
                     neutral += 1.0
 
             #Normalizing by number of neutral
-            normalize = len(reviews_of_category)-neutral
-            pos_percentage = round((pos / (normalize+1))*100,0)
-            neg_percentage = round((neg / (normalize+1))*100,0)
+            neutral = round((neutral / len(reviews_of_category))*100,0)
+            pos_percentage = round((pos / len(reviews_of_category))*100,0)
+            neg_percentage = round((neg / len(reviews_of_category))*100,0)
 
-            pos_neg_percentages_per_category.append([pos_percentage, neg_percentage])
+            pos_neg_percentages_per_category.append([pos_percentage, neg_percentage, neutral])
 
             #Calculating the top category with highest average ratings overall
             if category_stars >= top_stars:
                 top_stars = category_stars
                 top_category = category
-                top_category_percentages = [pos_percentage, neg_percentage]
+                top_category_percentages = [pos_percentage, neg_percentage, neutral]
 
     return top_rest_infos_per_category_1, top_rest_infos_per_category_2, top_category, top_stars, top_category_percentages, pos_neg_percentages_per_category
 
