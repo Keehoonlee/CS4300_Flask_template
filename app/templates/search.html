@@ -1,20 +1,19 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <title> Foodicity </title>
 
-
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
   <!--
   Import
   -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-  <link href="{{url_for('static', filename='style.css')}}" rel="stylesheet">
-  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <link href="{{url_for('static', filename='bootstrap.min.css')}}" rel="stylesheet" type="text/css">
   <link href="https://fonts.googleapis.com/css?family=Arapey|Cherry+Swash|Josefin+Slab|Oldenburg|Pacifico|Patrick+Hand+SC|Pompiere|Rancho|Salsa|Sofia" rel="stylesheet">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <link href="{{url_for('static', filename='jquery.autocompleter.css')}}" rel="stylesheet" type="text/css">
+  <link href="{{url_for('static', filename='bootstrap-tokenfield.css')}}" rel="stylesheet" type="text/css">
+  <link href="{{url_for('static', filename='style.css')}}" rel="stylesheet" type="text/css">
+
   <link rel="shortcut icon" type="image/x-icon" href="{{url_for('static', filename='image/iconletter.png')}}">
 </head>
 
@@ -23,18 +22,19 @@
     <div class="nav-container">
       <div class="navbar-header">
         <a class="navbar-brand" href="#">
-          <img src="{{url_for('static', filename='image/icon.png')}}" alt="asdf">
+          <img src="{{url_for('static', filename='image/icon.png')}}"  width="40px" height="40px" class="d-inline-block align-top" alt="">
         </a>
       </div>
     </div>
   </nav>
+
   <div class="search-container" background-color="white">
     <div class="search-slide" id="search-slide">
       <div class="container-fluid">
         <div class="row">
           <!-- Search Bar -->
-          <div class="col-sm-5">
-            <div style="background-color: black; opacity: 0.8; border-radius: 25px; margin:10%;padding: 5%;">
+          <div class="col-sm-4">
+            <div style="background-color: black; opacity: 0.8; border-radius: 25px; margin-top:5vh; margin-left:3vw; margin-bottom: :3vh;padding: 5%;">
               <div class="text-center">
                 <img src="{{url_for('static', filename='image/logo2.png')}}" style="width: 90%; height: auto">
                 <p class="under-logo-text" style="  font-family: 'Pacifico', cursive; color: white; font-size: 20px;">Helping Restaurant Owners Open Successful Restaurants since 2018</p>
@@ -43,21 +43,19 @@
               <div class="row">
                 <form class="form-group col-md-12">
                   <p class="information" style="  font-family: 'Rancho', cursive; color: white !important;font-size: 25px; line-height: 1;">Where would you like to open the restaurant?</p>
+                  <p class="information" style="  font-family: 'Rancho', cursive; color: white !important;font-size: 25px; line-height: 1;">City : Pittsburgh</p>
+
                   <div class = "input-group">
-                    <select class="form-control" name = "city">
-                      <option value="" selected disabled hidden>Choose Your City</option>
-                      <option value="san_francisco">San Francisco</option>
-                      <option value="las_vegas">Las Vegas</option>
-                      <option value="pittsburgh">Pittsburgh</option>
-                    </select>
-                    <input id="neighborhood" type="text" class="form-control" name = "neigh" placeholder="Neighborhood">
+                    <input id="neighborhood" type="text" class="form-control" name = "neigh" placeholder="Neighborhood" data-provide="typeahead" autocomplete="off"
+                    data-source='["Allentown","Arlington","Aspinwall","Avalon","Banksville","Beechview","Bellevue","Ben Avon","Bloomfield","Bon Air","Brighton Heights","Brookline","Carnegie","Carrick","Crafton Heights","Dormont","Downtown","Duquesne Heights","East Carnegie","East Liberty","Emsworth","Etna","Fairywood","Friendship","Garfield","Greenfield","Greentree","Hays","Hazelwood","Highland Park","Homestead","Homewood","Knoxville","Larimer","Lawrenceville","Lincoln","Millvale","Morningside","Mt. Oliver","Mt. Washington","North Side","Oakland","Observatory Hill","Overbrook","Point Breeze","Polish Hill","Regent Square","Sewickley","Shadyside","Sharpsburg","Sheraden","South Side","South Side Slopes","Squirrel Hill","Stanton Heights","Strip District","The Hill District","Troy Hill","West End","West View","Windgap"]'>
                   </div>
                   <div class = "input-group">
                     <p class="information" style="  font-family: 'Rancho', cursive; color: white !important;font-size: 25px; line-height: 1;"><br>How Recent Would You Like the Reviews to be?</p>
                     <select class="form-control" name = "time">
                       <option value="0">Any Time</option>
-                      <option value="6">Past Six Months</option>
                       <option value="12">Past Year</option>
+                      <option value="24">Past 2 Years</option>
+                      <option value="36">Past 3 Years</option>
                     </select>
                   </div>
                   <div class = "input-group">
@@ -66,82 +64,161 @@
                       <option value="All Users">All Users</option>
                       <option value="Elite Users">Only Elite</option>
                     </select>
-                    <p class="information" style="font-family: 'Rancho', cursive;color: red; font-size: 20px">**Elite Users give more credible reviews**<br><br></p>
+                    <p class="information" style="font-family: 'Rancho', cursive;color: red; font-size: 20px; line-height: 1;">**Elite Users give more credible reviews**<br><br></p>
                   </div>
-                  <button type="submit" class="btn btn-info btn-lg" style = "  background-color: #68BEA4; display: block; margin-left: auto; margin-right: auto; width: 40%;"> Go! </button>
-                  <br>
-                  <br>
+                  <div class = "input-group">
+                    <p class="information" style="  font-family: 'Rancho', cursive; color: white !important;font-size: 25px; line-height: 1;">What Criterias Do You Want to Focus on?</p>
+                    <input type="text" class="form-control" id="criteria" name="criteria" placeholder = "Examples: Service, Food, Ambience (Enter to add)">
+                  </div>
+                  <button type="submit" class="btn btn-info btn-lg" style = "background-color: #68BEA4; display: block; margin-left: auto; margin-right: auto; width: 40%;"> Go! </button>
+
                 </form>
               </div>
             </div>
           </div>
-          <div class="col-sm-7">
+          <div class="col-sm-8">
             <!-- Interactive Map style="background-color: black; opacity: 0.8; border-radius: 25px"-->
-            <div class="map-container" style="margin: 10%">
-              <img src="{{url_for('static', filename='image/pitts_map_demo.png')}}" usemap="#image-map" style="max-width : 100%; max-height:100%">
-              <map name="image-map">
-                <area target="" alt="DownTown" title="DownTown" href="#" coords="250,236,304,217,309,224,320,221,319,229,312,237,325,230,331,239,336,247,333,251,309,251,305,260,302,266,293,264,284,256,262,246" shape="poly">
-              </map>
+            <div class="row" style="padding-top :5%">
+              <div class="col-sm-12">
+                <p id="selected-neigh" class="text-center" style="font-size: 20px; color : black;"> Pittsburgh Map : You can click the white-color neighborhood!</p>
+              </div>
+            </div>
+            <div class="map-container">
+              <!-- Image Map Generated by http://www.image-map.net/ -->
+              <img src="{{url_for('static', filename='image/pittsburgh_map.png')}}" style="margin-left : 15%"usemap="#image-map">
+              <div>
+                <map name="image-map">
+                  <area class="map-area" data-toggle = "tooltip" alt="Squirrel Hill" data-placement = "auto" title="Squirrel Hill" href="#" coords="511,328,546,326,597,301,598,331,600,349,612,346,619,336,630,334,625,378,652,380,660,374,669,384,669,403,666,418,663,435,652,440,644,438,642,447,640,454,633,453,626,465,620,474,612,479,604,492,611,497,599,512,588,512,576,476,579,440,574,429,560,424,540,426,529,418,518,416,515,421,507,425,500,425,498,408,498,390,502,382,499,363,513,338" shape="poly"/>
+                  <area class="map-area" data-toggle = "tooltip" alt="Point Breeze" title="Point Breeze" href="#" coords="598,301,629,296,637,282,692,318,692,331,684,371,661,372,652,379,626,376,630,334,619,335,613,345,600,348,596,333,600,311" shape="poly"/>
+                  <area class="map-area" data-toggle = "tooltip" alt="Regent Square" title="Regent Square" href="#" coords="663,374,684,374,678,435,685,436,696,440,691,447,678,445,663,436,672,390" shape="poly"/>
+                  <area class="map-area" data-toggle = "tooltip" alt="Homestead" title="Homestead" href="#" coords="558,629,555,655,574,683,591,689,604,681,608,669,602,657,607,647,600,631,610,625,615,613,603,607,619,596,617,584,608,587,602,582,582,603,567,629" shape="poly"/>
+                  <area class="map-area" data-toggle = "tooltip" alt="Hays" title="Hays" href="#" coords="448,534,436,543,430,553,427,563,433,570,442,572,449,573,448,582,456,584,464,584,461,596,467,600,471,630,488,627,498,621,502,628,511,626,520,635,528,637,539,634,540,647,539,671,535,679,521,682,515,684,517,691,508,701,513,706,522,699,530,710,566,708,573,687,554,656,558,630,553,619,553,600,535,594,535,615,516,604,491,575,482,543,475,537,475,522,469,524,465,536" shape="poly"/>
+                  <area class="map-area" data-toggle = "tooltip" alt="Lawrenceville" title="Lawrenceville" href="#" coords="544,106,519,114,497,123,481,134,467,152,461,165,454,180,447,197,439,209,430,221,426,227,439,247,448,252,449,262,479,257,490,242,478,238,479,232,489,227,498,225,515,228,510,209,519,199,530,195,547,191,554,197,542,186,530,174,517,166,515,155,515,146,521,138,528,139,516,125,544,114" shape="poly">
+                  <area class="map-area" data-toggle = "tooltip" alt="Stanton Heights" title="Stanton Heights" href="#" coords="549,116,553,145,561,179,565,198,562,206,548,188,521,166,518,153,524,143,530,143,520,128" shape="poly"/>
+                  <area class="map-area" data-toggle = "tooltip" alt="Morningside" title="Morningside" href="#" coords="546,102,564,101,584,106,600,112,625,125,602,124,596,131,592,143,584,151,582,164,579,173,578,191,575,200,565,194" shape="poly"/>
+                  <area class="map-area" data-toggle = "tooltip" alt="Highland Park" title="Highland Park" href="#" coords="576,200,607,216,618,208,639,210,638,173,644,145,653,133,637,127,610,126,601,126,591,139,581,153" shape="poly"/>
+                  <area class="map-area" data-toggle = "tooltip" alt="Lincoln" title="Lincoln" href="#" coords="655,131,666,135,681,139,688,144,703,149,720,148,721,170,713,174,702,256,681,244,667,242,654,247,640,227,640,208,639,173,644,144" shape="poly"/>
+                  <area class="map-area" data-toggle = "tooltip" alt="Homewood" title="Homewood" href="#" coords="652,252,638,282,707,331,716,335,721,325,717,292,724,288,731,290,740,283,739,272,706,261,687,251,683,245,678,239" shape="poly"/>
+                  <area class="map-area" data-toggle = "tooltip" alt="Larimer" title="Larimer" href="#" coords="610,215,617,227,606,233,612,247,617,262,615,275,627,297,649,251,642,225,639,212,621,208" shape="poly"/>
+                  <area class="map-area" data-toggle = "tooltip" alt="Garfield" title="Garfield" href="#" coords="514,228,534,238,551,237,566,243,578,219,560,204,543,193,521,193,514,211" shape="poly"/>
+                  <area class="map-area" data-toggle = "tooltip" alt="East Liberty" title="East Liberty" href="#" coords="562,206,569,196,611,220,604,235,613,246,618,263,611,276,598,264,557,278,581,218" shape="poly"/>
+                  <area class="map-area" data-toggle = "tooltip" alt="Friendship" title="Friendship" href="#" coords="553,238,545,261,547,276,555,278,566,246" shape="poly"/>
+                  <area class="map-area" data-toggle = "tooltip" alt="Bloomfield" title="Bloomfield" href="#" coords="489,244,478,240,482,230,496,226,511,229,533,238,551,238,545,275,538,282,531,283,520,284,508,293,498,269,484,261" shape="poly"/>
+                  <area class="map-area" data-toggle = "tooltip" alt="Shadyside" title="Shadyside" href="#" coords="507,296,515,326,543,327,591,303,624,294,598,264,533,284,529,278,520,283,525,291" shape="poly"/>
+                  <area class="map-area" data-toggle = "tooltip" alt="Oakland" title="Oakland" href="#" coords="481,262,475,267,484,292,481,307,471,320,470,330,463,335,451,342,447,347,441,349,442,363,445,375,429,372,424,360,417,367,425,376,424,392,442,400,453,408,459,418,468,417,474,426,480,435,490,437,499,428,499,385,502,357,512,335,507,297,497,272" shape="poly"/>
+                  <area class="map-area" data-toggle = "tooltip" alt="Hill District" title="Hill District" href="#" coords="360,354,365,336,398,309,416,306,426,293,443,284,469,274,480,265,484,294,469,319,463,336,443,349,444,372,424,355,416,369,387,369,380,343" shape="poly"/>
+                  <area class="map-area" data-toggle = "tooltip" alt="Strip District" title="Strip District" href="#" coords="427,231,351,320,356,329,365,329,396,308,413,304,422,293,426,273,442,254" shape="poly"/>
+                  <area class="map-area" data-toggle = "tooltip" alt="Polish Hill" title="Polish Hill" href="#" coords="445,254,427,272,424,291,466,276,480,257,453,261" shape="poly"/>
+                  <area class="map-area" data-toggle = "tooltip" alt="Greenfield" title="Greenfield" href="#" coords="491,439,501,452,511,465,522,473,552,474,574,476,576,449,573,430,548,428,524,419,503,427" shape="poly"/>
+                  <area class="map-area" data-toggle = "tooltip" alt="Hazelwood" title="Hazelwood" href="#" coords="467,418,483,449,491,475,492,512,496,546,506,566,520,580,540,582,538,570,545,543,533,533,540,519,557,515,563,519,584,516,578,479,525,476" shape="poly"/>
+                  <area class="map-area" data-toggle = "tooltip" alt="Downtown" title="Downtown" href="#" coords="351,324,322,337,292,344,290,353,306,363,328,375,340,387,351,383,352,365,382,366,380,349,358,356,362,335" shape="poly"/>
+                  <area class="map-area" data-toggle = "tooltip" alt="Arlington" title="Arlington" href="#" coords="475,510,462,509,464,499,449,496,444,483,415,482,403,480,394,482,389,488,393,494,406,498,427,510,448,521,463,524" shape="poly"/>
+                  <area class="map-area" data-toggle = "tooltip" alt="South Side Slopes" title="South Side Slopes" href="#" coords="457,461,447,447,376,437,339,415,363,438,373,448,372,456,376,474,409,478,426,480,445,482" shape="poly"/>
+                  <area class="map-area" data-toggle = "tooltip" alt="South Side" title="South Side" href="#" coords="342,416,345,407,413,403,442,415,462,431,476,456,480,485,482,517,475,478,448,446,379,437" shape="poly"/>
+                  <area class="map-area" data-toggle = "tooltip" alt="Allentown" title="Allentown" href="#" coords="344,424,334,424,324,420,319,426,337,430,340,475,367,480,372,452,373,445" shape="poly"/>
+                  <area class="map-area" data-toggle = "tooltip" alt="Mt. Oliver" title="Mt. Oliver" href="#" coords="394,499,392,519,393,531,403,534,404,517,404,500" shape="poly"/>
+                  <area class="map-area" data-toggle = "tooltip" alt="Knoxville" title="Knoxville" href="#" coords="342,476,341,498,342,506,342,513,343,527,357,527,376,493,370,481,360,479,351,476" shape="poly"/>
+                  <area class="map-area" data-toggle = "tooltip" alt="Bon Air" title="Bon Air" href="#" coords="300,503,309,513,321,510,333,513,339,508,338,558,326,560,317,539,310,533,315,519" shape="poly"/>
+                  <area class="map-area" data-toggle = "tooltip" alt="Carrick" title="Carrick" href="#" coords="344,528,373,542,389,542,393,535,406,545,404,556,397,569,399,590,408,606,416,606,416,625,409,634,417,652,401,651,403,665,390,670,378,661,374,654,352,652,362,646,357,636,362,621,351,608,337,592,325,558,343,558" shape="poly"/>
+                  <area class="map-area" data-toggle = "tooltip" alt="Overbrook" title="Overbrook" href="#" coords="338,597,335,621,324,628,304,627,307,646,319,673,304,697,316,702,327,697,343,696,352,682,369,685,382,669,370,655,346,656,355,643,354,633,360,622" shape="poly"/>
+                  <area class="map-area" data-toggle = "tooltip" alt="Brookline" title="Brookline" href="#" coords="294,503,287,512,270,522,270,537,263,553,222,581,230,608,274,639,283,638,284,666,298,665,302,652,307,627,336,620,334,590,315,538,313,520" shape="poly"/>
+                  <area class="map-area" data-toggle = "tooltip" alt="Mt. Washington" title="Mt. Washington" href="#" coords="275,366,333,419,324,416,317,422,335,431,337,455,306,464,293,474,290,497,279,483,272,445,288,410" shape="poly"/>
+                  <area class="map-area" data-toggle = "tooltip" alt="Beechview" title="Beechview" href="#" coords="240,418,250,445,270,443,279,485,292,504,275,517,266,542,246,565,226,576,218,557,207,562,209,540,219,527,228,499,235,425" shape="poly"/>
+                  <area class="map-area" data-toggle = "tooltip" alt="Banksville" title="Banksville" href="#" coords="194,463,209,466,222,460,231,451,218,519,209,538,184,564,172,566,163,552" shape="poly"/>
+                  <area class="map-area" data-toggle = "tooltip" alt="Duquesne Heights" title="Duquesne Heights" href="#" coords="249,443,271,443,284,412,273,363,242,344,230,354,225,375,244,390,249,404,240,412" shape="poly"/>
+                  <area class="map-area" data-toggle = "tooltip" alt="West End" title="West End" href="#" coords="237,343,222,346,213,352,215,364,213,376,212,388,233,403,229,391,222,382,220,369,226,354" shape="poly"/>
+                  <area class="map-area" data-toggle = "tooltip" alt="East Carnegie" title="East Carnegie" href="#" coords="85,429,104,452,111,473,101,481,90,481,85,491,70,475,82,454,51,456,44,436" shape="poly"/>
+                  <area class="map-area" data-toggle = "tooltip" alt="Crafton Heights" title="Crafton Heights" href="#" coords="184,303,187,319,191,331,178,338,178,352,166,365,145,365,133,348,131,340,138,333,130,304,145,297,156,291" shape="poly"/>
+                  <area class="map-area" data-toggle = "tooltip" alt="Sheraden" title="Sheraden" href="#" coords="126,308,94,282,107,271,113,272,112,253,106,245,131,246,144,252,156,249,174,263,191,285,196,292,185,299,156,289" shape="poly"/>
+                  <area class="map-area" data-toggle = "tooltip" alt="Windgap" title="Windgap" href="#" coords="124,310,96,285,91,272,89,246,82,239,90,231,82,229,67,234,61,247,53,248,61,265,79,282,87,299,103,311" shape="poly"/>
+                  <area class="map-area" data-toggle = "tooltip" alt="Fairywood" title="Fairywood" href="#" coords="101,310,76,284,52,252,19,248,20,273,19,288,32,289,38,299,35,311,34,325,44,333,50,338,56,347,61,353,67,347,79,345,73,315,82,302" shape="poly"/>
+                  <area class="map-area" data-toggle = "tooltip" alt="Troy Hill" title="Troy Hill" href="#" coords="360,288,356,282,364,278,363,265,383,255,389,240,387,226,396,226,401,204,413,200,417,211,396,263" shape="poly"/>
+                  <area class="map-area" data-toggle = "tooltip" alt="Brighton Heights" title="Brighton Heights" href="#" coords="243,94,251,120,244,156,221,169,216,181,199,151,181,154,172,127,175,117,202,94,225,91" shape="poly"/>
+                </map>
+              </div>
+
+              </div>
             </div>
           </div>
         </div>
       </div>
-      <!-- <div class="container" style="padding-top:20vh">
-        <div class="text-center">
-          <img src="{{url_for('static', filename='image/logo2.png')}}" style="width: inherit; height: auto">
-
-        </div>
-        <div class="row">
-          <div class="text-center">
-            <form>
-              <div class="form-group form-inline">
-                <div class = "input-group">
-                  <select class="form-control" name = "city">
-                    <option value="" selected disabled hidden>Choose Your City</option>
-                    <option value="san_francisco">San Francisco</option>
-                    <option value="las_vegas">Las Vegas</option>
-                    <option value="pittsburgh">Pittsburgh</option>
-                  </select>
-                </div>
-                <div class = "input-group">
-                  <input style="width: 300px;" id="neighborhood" type="text" class="form-control" name = "neigh" placeholder="Neighborhood/Zipcode">
-                </div>
-                <div class = "input-group">
-                  <select class="form-control" name = "price">
-                    <option value="0">Any Price</option>
-                    <option value="1">Less than $10</option>
-                    <option value="2">$11 - $30</option>
-                    <option value="3">$31 - $60</option>
-                    <option value="4">More than $60</option>
-                  </select>
-                </div>
-                <div class = "input-group">
-                  <select class="form-control" name = "time">
-                    <option value="0">Any Time</option>
-                    <option value="6">Past Six Months</option>
-                    <option value="12">Past Year</option>
-                  </select>
-                </div>
-                <div class = "input-group">
-                  <select class="form-control" name = "cred">
-                    <option value="All Users">All Users</option>
-                    <option value="Elite Users">Only Elite</option>
-                  </select>
-                </div>
-                <button type="submit" class="btn btn-info"> Go! </button>
-              </div>
-            </form>
-        </div>
-      </div> -->
+      <div id="group-info" style="z-index: 100; position: absolute; bottom:0; right:0; margin-right: 10px;">
+        <p class = "Names" style = "font-family: 'Rancho', cursive; color: #343641; font-size: 15px; white-space: nowrap;">
+          Foodicity <br> Jae Min Cha (jc988), Jung Yun Park (jp862), Chong Tian (ct465), Kee Hoon Lee (kl546), Woo Kyung Lee (wl357) </p>
+      </div>
     </div>
-  </div>
 
 
 
 
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-  <script src="{{url_for('static', filename='main.js')}}" type="text/javascript"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='jquery.min.js') }}" ></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='bootstrap3-typeahead.min.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename = 'bootstrap-tokenfield.js') }}"></script>
+
+  <script type="text/javascript">
+    $(document).ready(function(){
+
+    	// $("div").css("border", "3px solid red");
+      $(".map-area").on("click", function(e){
+          e.preventDefault();
+          document.getElementById("neighborhood").setAttribute('value', $(this).attr("title"));
+          // document.getElementById("neighborhood").setAttribute('text', $(this).attr("title"));
+
+          $('#selected-neigh').html("You've selected " + $(this).attr("title"));
+      });
+
+      // $('[data-toggle="tooltip"]').tooltip();
+      $('#criteria').tokenfield();
+      // $("div").css("border", "3px solid red");
+
+      $("#tag-input-33").tokenfield();
+
+    });
+    // $(".map-area").on("click", function(e){
+    //     e.preventDefault();
+    //     document.getElementById("neighborhood").setAttribute('value', $(this).attr("title"));
+    //     document.getElementById("neighborhood").setAttribute('text', $(this).attr("title"));
+    //
+    //     $('#selected-neigh').html("You've selected " + $(this).attr("title"));
+    // });
+
+  </script>
+  <!-- <script>
+      // $(document).ready(function() {
+      //     // Workaround for bug in mouse item selection
+      //     $.fn.typeahead.Constructor.prototype.blur = function() {
+      //         var that = this;
+      //         setTimeout(function () { that.hide() }, 250);
+      //     };
+      //
+      //     $('#neighborhood').typeahead({
+      //         source: function(query, process) {
+      //             return ["Deluxe Bicycle", "Super Deluxe Trampoline", "Super Duper Scooter"];
+      //         }
+      //     });
+      //     // $('area').click(function(event){
+      //     //
+      //     //   event.preventDefault();
+      //     //   alert("hellO");
+      //     //   // $('#neighborhood').val($(this).attr("title"));
+      //     //   // $('#neighborhood').text($(this).attr("title"));
+      //     //   document.getElementById("neighborhood").setAttribute('value', "Hello");
+      //     // });
+      //
+      // });
+
+      $('.map-area').on("click", (function(event){
+        event.preventDefault();
+        document.getElementById("neighborhood").setAttribute('value', "Hello");
+      });
+  </script> -->
+
+
+  <!-- <script src="{{url_for('static', filename='main.js')}}" type="text/javascript"></script> -->
+
+  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
+  <!-- <script src="{{url_for('static', filename='main.js')}}" type="text/javascript"></script> -->
+
 
 </body>
 

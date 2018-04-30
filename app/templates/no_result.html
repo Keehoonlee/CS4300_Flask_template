@@ -1,17 +1,42 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-  </head>
-  <body>
+<head>
+  <title> Foodicity </title>
 
-    <div class="container">
-      <div class="row">
-        <div class="col-md-4 col-md-offset-4">
-          <h1 style="font-size: 80px">Sorry, no result!</h1>
-          <img src="{{url_for('static', filename='image/meme.png')}}"> </img>
-        </div>
-      </div>
-    </div>
-  </body>
+
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+  <!--
+  Import
+  -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link href="{{url_for('static', filename='style.css')}}" rel="stylesheet">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+
+  <link rel="shortcut icon" type="image/x-icon" href="{{url_for('static', filename='image/iconletter.png')}}">
+</head>
+
+<body>
+
+  <nav class="navbar fixed-top navbar-dark" style="background-color: #092638; border: none; height: 70px;">
+    <a class="navbar-brand" onclick='history.back(-1)'>
+      <img src="{{url_for('static', filename='image/icon.png')}}" width="40px" height="40px" class="d-inline-block align-top" alt="">
+    </a>
+
+  </nav>
+  <br /><br />
+  <div class="text-center">
+    <font size="3" color="grey" face="Courier New">Sorry, No available results due to lack of data. </font> <br />
+    <font size="3" color="grey" face="Courier New">To try other inputs, click on the logo </font> <br /><br />
+    <img src="{{url_for('static', filename='image/meme.png')}}"></img>
+
+  </div>
+
+
+
+
+</body>
+
 </html>

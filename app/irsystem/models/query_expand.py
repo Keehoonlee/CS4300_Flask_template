@@ -20,6 +20,7 @@ def query_expand(queries, num=NUM_EXPAND):
     for w in words:
         all_query.append(one_query(w))
     res = []
+    cur = ""
     for a in all_query:
         cur = ""
         for s in a:

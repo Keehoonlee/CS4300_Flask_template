@@ -27,14 +27,15 @@ def search():
 	time = request.args.get('time') #Possible options of time are default 0,6,12
 	credibility = request.args.get('cred') #all users or elite users
 
-	query = request.args.get('query')
+	query = request.args.get('criteria')
 	#Initial search page
 	if not neighborhood:
 		return render_template('search.html')
 
 	#After loading in the main page, executing the search
 	else:
-		neighborhood = neighborhood.lower()
+		neighborhood = neighborhood.lower().encode("ascii")
+
 		#Load in json_data
 		json_data = load_json("pittsburgh")
 
@@ -47,11 +48,14 @@ def search():
 		neigh_idx_lst = load_json("neighborhood_idx_dict")
 
 		# get a list expanded queries
-		#expanded_query = query_expand(query)
-		expanded_query = query_expand("service")
+		if query != None:
+			query = query.replace(",","")
+			expanded_query = query_expand(query)
+
+		else:
+			expanded_query = ""
 
 		result_list = compute_similarity(json_data, expanded_query,tf[neighborhood],idf[neighborhood],doc_norm[neighborhood], neigh_idx_lst, neighborhood)
-
 		#Getting the appropriate reviews
 		all_reviews = filter_reviews(result_list, neighborhood.lower(), credibility, time)
 

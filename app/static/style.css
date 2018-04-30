@@ -40,7 +40,7 @@ nav .navbar .navbar-inverse .navbar-fixed-top{
 .search-container{
     width: 100%;
     height: 100%;
-    padding: 60px;
+    /* padding: 60px; */
     /*
     margin-left: 0;
     margin-right: 0;
@@ -66,8 +66,17 @@ p .information {
   font-size: 25px;
   line-height: 1;
 }
-
-
+.row {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display:         flex;
+  flex-wrap: wrap;
+}
+.row > [class*='col-'] {
+  display: flex;
+  flex-direction: column;
+}
 /* [type="submit"] {
   background-color: #68BEA4;
   display: block;

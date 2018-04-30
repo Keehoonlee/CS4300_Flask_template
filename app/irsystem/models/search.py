@@ -145,10 +145,12 @@ def compute_rest_infos(reviews, time_limit):
 
     if time_limit == "0":
         REVIEWS_NEEDED = 20
-    elif time_limit == "6":
-        REVIEWS_NEEDED = 0
     elif time_limit == "12":
         REVIEWS_NEEDED = 5
+    elif time_limit == "24":
+        REVIEWS_NEEDED = 10
+    elif time_limit == "36":
+        REVIEWS_NEEDED = 15
 
     rest_infos_dict = defaultdict(float)
     review_count_per_business = defaultdict(int)
@@ -267,10 +269,12 @@ def compute_rest_infos(reviews, time_limit):
             top_rest_infos_lst.append((rest, ranked_rest_infos_dict[rest], address_dict[rest], \
                                        "No review", "No review", "No significant negative review", "No significant negative review", \
                                        review_count_per_business[rest]))
-
-    if len(top_rest_infos_lst) > 6:
-        top_rest_infos_lst_1 = top_rest_infos_lst[:3]
-        top_rest_infos_lst_2 = top_rest_infos_lst[3:6]
+    if len(top_rest_infos_lst) > 10:
+        top_rest_infos_lst_1 = top_rest_infos_lst[:5]
+        top_rest_infos_lst_2 = top_rest_infos_lst[5:10]
+    elif len(top_rest_infos_lst) > 6 and len(top_rest_infos_lst) <=8:
+        top_rest_infos_lst_1 = top_rest_infos_lst[:4]
+        top_rest_infos_lst_2 = top_rest_infos_lst[4:]
     elif len(top_rest_infos_lst) > 3 and len(top_rest_infos_lst) <=6:
         top_rest_infos_lst_1 = top_rest_infos_lst[:3]
         top_rest_infos_lst_2 = top_rest_infos_lst[3:]
@@ -341,6 +345,14 @@ def compute_pos_neg_percentages(reviews_per_category, percentages_per_category):
 def compute_similarity(j, query, tf, idf, doc_norm, review_idx_mapping, neighborhood):
     """Calculates similarity score bewteen query and each review. Returns a list of review objects with
     similarity score attached"""
+    if query == "":
+        new_reviews = []
+        for review in j["reviews"]:
+            new_review = review
+            new_review["sim_score"] = 1
+            new_reviews.append(new_review)
+        return new_reviews
+
     tokenizer = TreebankWordTokenizer()
     doc_scores = np.zeros(len(doc_norm)) # Initialize D
 

@@ -8,3 +8,7 @@ vagrant/a4keypair.pem
 preprocess
 venv
 .gitignore
+app/irsystem/models/doc_norm.json
+app/irsystem/models/idf.json
+app/irsystem/models/neighborhood_idx_dict.json
+app/irsystem/models/tf.json
