@@ -38,8 +38,6 @@
 
   <div class="text-center">
     <font size="5" color="black" face="Arial Black">SEARCHED </font> <br />
-    <font size="4" color="grey" face="Courier New">CITY: </font>
-    <font size="3" color="black" face="Courier New">{{city}} </font> <br />
     <font size="4" color="grey" face="Courier New">NEIGHBORHOOD: </font>
     <font size="3" color="black" face="Courier New">{{neighborhood}} </font> <br />
     <font size="4" color="grey" face="Courier New">DATE POSTED: </font>
@@ -47,7 +45,9 @@
     <font size="4" color="grey" face="Courier New">CREDIBILITY: </font>
     <font size="3" color="black" face="Courier New">{{credibility}} </font> <br />
     <font size="4" color="grey" face="Courier New">CRITERIA: </font>
-    <font size="3" color="black" face="Courier New">{% if criteria == "" %} None {% else %} {{criteria}} {% endif %} </font> <br /><br />
+    <font size="3" color="black" face="Courier New">{% if criteria == "" %} None {% else %} {{criteria}} {% endif %} </font> <br />
+    <font size="4" color="grey" face="Courier New">SORT BY: </font>
+    <font size="3" color="black" face="Courier New">{{sorting}} </font> <br /><br />
   </div>
 
   <div class="container-fluid" id="output">
@@ -61,10 +61,26 @@
       </div>
 
       <div class="col-md-6">
-      </br></br></br></br></br>
+      </br></br></br>
         <font size="3" color="grey" face="Arial Black"><center>{{neighborhood}} is rated highest for its</center></font>
         <p class="text-center"><font size="5" color="black" face="Impact">{{top_category}}</font></p>
         <canvas id="top-chart" width="200" height="180" style='display: block;margin: auto;'></canvas>
+        <p class="text-center"><font size="3" color="black" face="Courier New"> Average Restaurant Rating: </font>
+          <font size="3" color="black" face="Impact">
+          {%if top_category_stars == 5%} ★★★★★
+          {%elif top_category_stars < 5 and top_category_stars >=4.5 %} ★★★★½
+          {%elif top_category_stars < 4.5 and top_category_stars >=4 %} ★★★★☆
+          {%elif top_category_stars < 4 and top_category_stars >=3.5 %} ★★★½☆
+          {%elif top_category_stars < 3.5 and top_category_stars >=3 %} ★★★☆☆
+          {%elif top_category_stars < 3 and top_category_stars >=2.5 %} ★★½☆☆
+          {%elif top_category_stars < 2.5 and top_category_stars >=2 %} -
+          {%elif top_category_stars < 2 and top_category_stars >=1.5 %} -
+          {%elif top_category_stars < 1.5 and top_category_stars >=1 %} -
+          {%elif top_category_stars < 1 and top_category_stars >=0.5 %} -
+          {%elif top_category_stars < 0.5 and top_category_stars >=0 %} -
+          {%endif%}
+        </font></p>
+
       </div>
 
     </div><br/><br/>

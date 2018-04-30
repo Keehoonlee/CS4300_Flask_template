@@ -42,14 +42,14 @@
               <hr/>
               <div class="row">
                 <form class="form-group col-md-12">
-                  <p class="information" style="  font-family: 'Rancho', cursive; color: white !important;font-size: 25px; line-height: 1;">Where would you like to open the restaurant?</p>
+                  <p class="information" style="  font-family: 'Rancho', cursive; color: white !important;font-size: 20px; line-height: 0.9;">Where would you like to open the restaurant?</p>
 
                   <div class = "input-group">
                     <input id="neighborhood" type="text" class="form-control" name = "neigh" placeholder="Type/Select Neighborhood from Map" data-provide="typeahead" autocomplete="off"
                     data-source='["Allentown","Arlington","Banksville","Beechview","Bloomfield","Bon Air","Brighton Heights","Brookline","Carrick","Downtown","Duquesne Heights","East Carnegie","East Liberty","Friendship","Garfield","Greenfield","Hazelwood","Highland Park","Homestead","Homewood","Knoxville","Larimer","Lawrenceville","Morningside","Mt. Oliver","Mt. Washington","North Side","Oakland","Observatory Hill","Overbrook","Point Breeze","Polish Hill","Regent Square","Shadyside","South Side","South Side Slopes","Squirrel Hill","Strip District","The Hill District","Troy Hill","West End"]'>
                   </div>
                   <div class = "input-group">
-                    <p class="information" style="  font-family: 'Rancho', cursive; color: white !important;font-size: 25px; line-height: 1;"><br>How Recent Would You Like the Reviews to be?</p>
+                    <p class="information" style="  font-family: 'Rancho', cursive; color: white !important;font-size: 20px; line-height: 0.9;"><br>How Recent Would You Like the Reviews to be?</p>
                     <select class="form-control" name = "time">
                       <option value="0">Any Time</option>
                       <option value="12">Past Year</option>
@@ -58,16 +58,23 @@
                     </select>
                   </div>
                   <div class = "input-group">
-                    <p class="information" style="  font-family: 'Rancho', cursive; color: white !important;font-size: 25px; line-height: 1;"><br>Credibility of the Users</p>
+                    <p class="information" style="  font-family: 'Rancho', cursive; color: white !important;font-size: 20px; line-height: 0.9;"><br>Credibility of the Users</p>
                     <select class="form-control" name = "cred">
                       <option value="All Users">All Users</option>
                       <option value="Elite Users">Only Elite</option>
                     </select>
-                    <p class="information" style="font-family: 'Rancho', cursive;color: red; font-size: 20px; line-height: 1;">**Elite Users give more credible reviews**<br><br></p>
+                    <p class="information" style="font-family: 'Rancho', cursive;color: red; font-size: 15px; line-height: 1;">**Elite Users give more credible reviews**<br></p>
                   </div>
                   <div class = "input-group">
-                    <p class="information" style="  font-family: 'Rancho', cursive; color: white !important;font-size: 25px; line-height: 1;">What Criterias Do You Want to Focus on?</p>
+                    <p class="information" style="  font-family: 'Rancho', cursive; color: white !important;font-size: 20px; line-height: 0.9;">What Criterias Do You Want to Focus on?</p>
                     <input type="text" class="form-control" id="criteria" name="criteria" placeholder = "Examples: Service, Food, Ambience (Enter to add)">
+                  </div>
+                  <div class = "input-group">
+                    <p class="information" style="  font-family: 'Rancho', cursive; color: white !important;font-size: 20px; line-height: 0.9;"><br>Sort top restaurants by</p>
+                    <select class="form-control" name = "sorting">
+                      <option value="review">Number of Reviews</option>
+                      <option value="rating">Highest Rating</option>
+                    </select>
                   </div>
                   <br>
                   <button type="submit" class="btn btn-info btn-lg" style = "background-color: #68BEA4; display: block; margin-left: auto; margin-right: auto; width: 40%;"> Go! </button>
