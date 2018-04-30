@@ -336,8 +336,8 @@ def compute_rest_infos_and_pos_neg_per_category(reviews, percentages, reviews_pe
 
             #Normalizing by number of neutral
             normalize = len(reviews_of_category)-neutral
-            pos_percentage = round((pos / normalize)*100,0)
-            neg_percentage = round((neg / normalize)*100,0)
+            pos_percentage = round((pos / (normalize+1))*100,0)
+            neg_percentage = round((neg / (normalize+1))*100,0)
 
             pos_neg_percentages_per_category.append([pos_percentage, neg_percentage])
 
