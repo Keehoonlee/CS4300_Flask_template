@@ -84,6 +84,7 @@ def search():
 			labels, data = format_percentage_for_html(percentages_per_category)
 
 			neighborhood = neighborhood[0].capitalize() + neighborhood[1:]
+			top_category = top_category[0].capitalize() + top_category[1:]
 			city = "Pittsburgh"
 
 			if sorting == "review":
