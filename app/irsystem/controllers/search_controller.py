@@ -59,7 +59,11 @@ def search():
 		else:
 			expanded_query = ""
 
-		result_list = compute_similarity(json_data, expanded_query,tf[neighborhood],idf[neighborhood],doc_norm[neighborhood], neigh_idx_lst, neighborhood)
+		try:
+			result_list = compute_similarity(json_data, expanded_query,tf[neighborhood],idf[neighborhood],doc_norm[neighborhood], neigh_idx_lst, neighborhood)
+		except:
+			return render_template('no_result.html')
+		
 		#Getting the appropriate reviews
 		all_reviews = filter_reviews(result_list, neighborhood.lower(), credibility, time)
 
